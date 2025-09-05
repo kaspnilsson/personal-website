@@ -254,6 +254,59 @@ export default function CasaGuide() {
               </div>
             </CardContent>
           </Card>
+
+          <Card>
+            <CardHeader className="px-4 sm:px-6 pb-4">
+              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
+                Pull-Out Couch Setup
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 sm:px-6">
+              <div className="flex flex-col gap-4">
+                <div className="text-sm/6 opacity-90 mb-3">
+                  Your couch is a <strong>Koala Byron Sofa Bed</strong> - it transforms from sofa to queen-size bed in seconds with no tools required!
+                </div>
+                
+                <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+                  <h3 className="font-mono text-xs font-semibold mb-3 tracking-[-.01em] opacity-70">SETUP STEPS:</h3>
+                  <ol className="list-decimal list-inside space-y-2 text-sm/6">
+                    <li>Remove the back cushions and set aside</li>
+                    <li>Pull out the hidden base frame (it slides out smoothly)</li>
+                    <li>Unfold the mattress so it sits flat on the pull-out frame</li>
+                    <li>That&apos;s it - you now have a queen-size bed!</li>
+                  </ol>
+                </div>
+                
+                <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+                  <h3 className="font-mono text-xs font-semibold mb-3 tracking-[-.01em] opacity-70">TO CONVERT BACK:</h3>
+                  <ol className="list-decimal list-inside space-y-2 text-sm/6">
+                    <li>Fold the mattress back in half</li>
+                    <li>Push the base frame back under the sofa</li>
+                    <li>Replace the back cushions</li>
+                  </ol>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                  <a
+                    href="https://assets.ctfassets.net/uvwd10ivtduz/4JlT1FFXjfjCV9r7lp1XYj/f58ff363c8006b8095efd1984ed5af7c/20240410_Assembly_Instructions_Byron_Sofa_Bed_V2_Digital__1_.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                  >
+                    📖 View Setup Manual
+                  </a>
+                  <a
+                    href="https://www.youtube.com/results?search_query=koala+byron+sofa+bed+setup"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+                  >
+                    🎥 Search Setup Videos
+                  </a>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </header>
 
         <div className="flex flex-col gap-[32px]">
