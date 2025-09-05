@@ -88,9 +88,35 @@ export default function CasaGuide() {
 
   const copyPassword = async () => {
     try {
-      await navigator.clipboard.writeText("theworstshowontv");
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      // Try modern Clipboard API first (requires HTTPS)
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText("theworstshowontv");
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+        return;
+      }
+
+      // Fallback for HTTP environments (like localhost)
+      const textArea = document.createElement("textarea");
+      textArea.value = "theworstshowontv";
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      textArea.style.pointerEvents = "none";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand("copy");
+        if (successful) {
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        }
+      } catch (err) {
+        console.log("Fallback copy failed");
+      } finally {
+        document.body.removeChild(textArea);
+      }
     } catch {
       console.log("Failed to copy");
     }
@@ -109,7 +135,7 @@ export default function CasaGuide() {
       <div className="max-w-4xl mx-auto">
         <header className="mb-[32px]">
           <h1 className="text-4xl font-bold mb-[24px] tracking-[-.02em]">
-            Casa de Kasper
+            🏠 Casa de Kasper
           </h1>
 
           <Card className="mb-[32px]">
@@ -245,6 +271,65 @@ export default function CasaGuide() {
               },
             ]}
           />
+
+          <Card>
+            <CardHeader className="px-4 sm:px-6 pb-4">
+              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
+                Laundry
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 sm:px-6">
+              <div className="flex flex-col gap-6">
+                <div>
+                  <div className="flex flex-col gap-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <span className="font-medium text-sm">
+                        Building Laundry Room
+                      </span>
+                      <span className="text-xs opacity-70 font-mono">
+                        Basement level of 250 Moore St
+                      </span>
+                    </div>
+
+                    <div className="text-xs opacity-70 font-mono">
+                      24/7 access with building key
+                    </div>
+
+                    <div className="text-sm/6 opacity-90">
+                      Convenient in-building laundry facilities with washers and
+                      dryers operated through the Hercules app, laundry
+                      detergent pods provided.
+                    </div>
+
+                    <div className="text-xs font-mono opacity-70">
+                      <span className="bg-black/[.05] dark:bg-white/[.06] px-2 py-1 rounded">
+                        In-building convenience, detergent included
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                      <a
+                        href="https://apps.apple.com/us/app/hercules/id123456789"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
+                      >
+                        📱 Download on App Store
+                      </a>
+                      <a
+                        href="https://play.google.com/store/apps/details?id=com.hercules"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                      >
+                        🤖 Get it on Google Play
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <DetailedSection
             title="Groceries"
@@ -525,65 +610,6 @@ export default function CasaGuide() {
               },
             ]}
           />
-
-          <Card>
-            <CardHeader className="px-4 sm:px-6 pb-4">
-              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-                Laundry
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6">
-              <div className="flex flex-col gap-6">
-                <div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <span className="font-medium text-sm">
-                        Building Laundry Room
-                      </span>
-                      <span className="text-xs opacity-70 font-mono">
-                        Basement level of 250 Moore St
-                      </span>
-                    </div>
-
-                    <div className="text-xs opacity-70 font-mono">
-                      24/7 access with building key
-                    </div>
-
-                    <div className="text-sm/6 opacity-90">
-                      Convenient in-building laundry facilities with washers and
-                      dryers operated through the Hercules app, laundry
-                      detergent pods provided.
-                    </div>
-
-                    <div className="text-xs font-mono opacity-70">
-                      <span className="bg-black/[.05] dark:bg-white/[.06] px-2 py-1 rounded">
-                        In-building convenience, detergent included
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                      <a
-                        href="https://apps.apple.com/us/app/hercules/id123456789"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
-                      >
-                        📱 Download on App Store
-                      </a>
-                      <a
-                        href="https://play.google.com/store/apps/details?id=com.hercules"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-                      >
-                        🤖 Get it on Google Play
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
