@@ -156,7 +156,7 @@ export default function CasaGuide() {
                     rel="noopener noreferrer"
                     className="text-sm/6 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline hover:underline-offset-4 transition-colors"
                   >
-                    250 Moore St #201 →
+                    250 Moore St #203 →
                   </a>
                 </div>
                 <div>
