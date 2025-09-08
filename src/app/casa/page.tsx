@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionCard } from "@/components/section-card";
 
 export default function CasaGuide() {
   const [copied, setCopied] = useState(false);
@@ -50,7 +51,7 @@ export default function CasaGuide() {
           <Card>
             <CardContent className="px-4 py-6 sm:px-6">
               <div className="text-4xl mb-4 text-center">🏠</div>
-              <h1 className="text-2xl font-bold mb-2 tracking-[-.02em] text-center">
+              <h1 className="text-2xl font-bold mb-2 heading-tight text-center">
                 Welcome to Casa de Kasper!
               </h1>
               <p className="text-sm/6 mb-4 opacity-70 text-center">
@@ -133,10 +134,14 @@ export default function CasaGuide() {
   return (
     <div className="font-sans min-h-screen px-4 py-8 pb-20 sm:px-20 sm:py-20">
       <div className="max-w-4xl mx-auto">
-        <header className="mb-[32px]">
-          <h1 className="text-4xl font-bold mb-[24px] tracking-[-.02em]">
-            🏠 Casa de Kasper
-          </h1>
+        <header className="mb-8 sm:mb-10">
+          <div className="mb-[24px]">
+            <div className="title-eyebrow">🏠 Guest Guide</div>
+            <h1 className="title heading-tight">
+              <span className="title-prefix">Casa de</span> <span className="title-kasper">Kasper</span>
+            </h1>
+            <div className="title-rule" />
+          </div>
 
           <Card className="mb-[32px]">
             <CardHeader className="px-4 sm:px-6 pb-4">
@@ -154,7 +159,7 @@ export default function CasaGuide() {
                     href="https://maps.app.goo.gl/7f54RDcVKnRvQJxp6"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm/6 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline hover:underline-offset-4 transition-colors"
+                    className="text-sm/6 link"
                   >
                     250 Moore St #203 →
                   </a>
@@ -167,7 +172,7 @@ export default function CasaGuide() {
                     Phone:{" "}
                     <a
                       href="tel:+14435370317"
-                      className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline hover:underline-offset-4 transition-colors"
+                      className="link"
                     >
                       443-537-0317 →
                     </a>
@@ -239,6 +244,8 @@ export default function CasaGuide() {
                     src="/key_location_far_away.jpg"
                     alt="Key location - far view showing the general area"
                     className="w-full rounded-lg"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div>
@@ -249,6 +256,8 @@ export default function CasaGuide() {
                     src="/key_location_closeup.jpg"
                     alt="Key location - close-up view showing exact location"
                     className="w-full rounded-lg"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
@@ -319,7 +328,7 @@ export default function CasaGuide() {
           </Card>
         </header>
 
-        <div className="flex flex-col gap-[32px]">
+        <div className="flex flex-col gap-8 sm:gap-10">
           <DetailedSection
             title="Transportation"
             places={[
@@ -696,26 +705,20 @@ function DetailedSection({
   places: Place[];
 }) {
   return (
-    <Card>
-      <CardHeader className="px-4 sm:px-6 pb-4">
-        <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="px-4 sm:px-6">
-        <div className="flex flex-col gap-6">
+    <SectionCard title={title}>
+      <div className="flex flex-col gap-6 sm:gap-7">
           {places.map((place, index) => (
             <div
               key={index}
-              className="border-b border-black/[.08] dark:border-white/[.145] pb-4 last:border-b-0"
+              className="border-b border-black/[.08] dark:border-white/[.145] pb-5 sm:pb-6 last:border-b-0"
             >
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2.5 sm:gap-3">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                   <a
                     href={place.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline hover:underline-offset-4 transition-colors"
+                    className="font-medium text-sm link"
                   >
                     {place.name} →
                   </a>
@@ -744,9 +747,8 @@ function DetailedSection({
               </div>
             </div>
           ))}
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </SectionCard>
   );
 }
 
@@ -758,14 +760,8 @@ function Section({
   items: { name: string; url?: string }[];
 }) {
   return (
-    <Card>
-      <CardHeader className="px-4 sm:px-6 pb-4">
-        <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="px-4 sm:px-6">
-        <div className="flex flex-col gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-3">
+    <SectionCard title={title}>
+      <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-5 lg:gap-6">
           {items.map((item, index) => (
             <div key={index}>
               {item.url ? (
@@ -773,7 +769,7 @@ function Section({
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm/6 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline hover:underline-offset-4 transition-colors"
+                  className="text-sm/6 link"
                 >
                   {item.name} →
                 </a>
@@ -782,8 +778,7 @@ function Section({
               )}
             </div>
           ))}
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </SectionCard>
   );
 }

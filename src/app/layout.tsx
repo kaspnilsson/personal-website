@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Casa de Kasper",
-  description: "Guest guide for Casa de Kasper in Brooklyn",
+  title: "kasp — EPK",
+  description: "Electronic music producer and DJ — speed garage / UK 2‑step. Press, sets, releases, and booking.",
 };
 
 export default function RootLayout({
