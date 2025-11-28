@@ -4,8 +4,6 @@ import { useState, FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const LOOPS_FORM_ID = "cmii4epv4wyk92k0i8zg9ssxo";
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type FormState = "idle" | "loading" | "success" | "error";
@@ -46,7 +44,7 @@ export default function HomePage() {
     setErrorMessage("");
 
     try {
-      const response = await fetch(`https://app.loops.so/api/newsletter-form/${LOOPS_FORM_ID}`, {
+      const response = await fetch("/api/subscribe", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
