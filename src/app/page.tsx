@@ -59,18 +59,13 @@ export default function HomePage() {
         </header>
 
         {formState === "success" ? (
-          <div className="space-y-4">
-            <div className="text-sm/6 opacity-90">
-              You&apos;re in. Watch your inbox for new music, shows, and exclusive drops.
-            </div>
-            <Button variant="outline" asChild>
-              <a href="/about">Learn more about kasp →</a>
-            </Button>
+          <div className="text-sm/6 opacity-90">
+            You&apos;re in. Watch your inbox for new music, shows, and exclusive drops.
           </div>
         ) : (
           <div className="space-y-6">
             <p className="text-sm/6 opacity-90">
-              Subscribe for new releases, upcoming shows, and exclusive content.
+              Subscribe for new releases and exclusive content.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -98,12 +93,6 @@ export default function HomePage() {
                 </p>
               )}
             </form>
-
-            <div className="pt-4">
-              <a href="/about" className="link text-sm/6">
-                About kasp →
-              </a>
-            </div>
           </div>
         )}
       </div>
