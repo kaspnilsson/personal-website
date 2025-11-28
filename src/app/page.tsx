@@ -6,17 +6,37 @@ import { Input } from "@/components/ui/input";
 
 const LOOPS_FORM_ID = "cmii4epv4wyk92k0i8zg9ssxo";
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 type FormState = "idle" | "loading" | "success" | "error";
+
+function isValidEmail(email: string): boolean {
+  return EMAIL_REGEX.test(email);
+}
 
 export default function HomePage() {
   const [email, setEmail] = useState("");
+  const [touched, setTouched] = useState(false);
   const [formState, setFormState] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const showValidation = touched && email.length > 0;
+  const isValid = isValidEmail(email);
+  const showError = showValidation && !isValid;
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    if (formState === "error") {
+      setFormState("idle");
+      setErrorMessage("");
+    }
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setTouched(true);
     
-    if (!email || !email.includes("@")) {
+    if (!isValid) {
       setFormState("error");
       setErrorMessage("Please enter a valid email address.");
       return;
@@ -73,23 +93,25 @@ export default function HomePage() {
                 type="email"
                 placeholder="your@email.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => handleEmailChange(e.target.value)}
+                onBlur={() => setTouched(true)}
                 disabled={formState === "loading"}
-                className="text-center"
+                className={`text-center ${showError ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/50" : ""}`}
                 aria-label="Email address"
+                aria-invalid={showError}
               />
               
               <Button 
                 type="submit" 
                 className="w-full"
-                disabled={formState === "loading"}
+                disabled={formState === "loading" || (touched && !isValid)}
               >
                 {formState === "loading" ? "Subscribing..." : "Subscribe"}
               </Button>
 
-              {formState === "error" && errorMessage && (
+              {(showError || (formState === "error" && errorMessage)) && (
                 <p className="text-sm text-red-600 dark:text-red-400">
-                  {errorMessage}
+                  {errorMessage || "Please enter a valid email address."}
                 </p>
               )}
             </form>
