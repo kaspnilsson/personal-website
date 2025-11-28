@@ -78,7 +78,7 @@ export default function HomePage() {
 
         {formState === "success" ? (
           <div className="text-sm/6 opacity-90">
-            You&apos;re in. Watch your inbox for new music, shows, and exclusive drops.
+            You&apos;re in. Check your inbox.
           </div>
         ) : (
           <div className="space-y-6">
