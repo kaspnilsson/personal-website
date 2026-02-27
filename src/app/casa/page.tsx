@@ -403,6 +403,40 @@ export default function CasaGuide() {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader className="px-4 sm:px-6 pb-4">
+              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
+                Trash & Recycling
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 sm:px-6">
+              <div className="flex flex-col gap-4">
+                <div className="text-sm/6 opacity-90">
+                  Trash and recycling bins are located in the back of the building.
+                </div>
+
+                <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
+                  <h3 className="font-mono text-xs font-semibold mb-3 tracking-[-.01em] opacity-70">
+                    HOW TO GET THERE:
+                  </h3>
+                  <ol className="list-decimal list-inside space-y-2 text-sm/6">
+                    <li>The door to the back is by the entrance, next to the package shelf</li>
+                    <li>
+                      <strong>Bring your keys!</strong> The door locks behind you
+                    </li>
+                    <li>Use the bins in the back area for trash and recycling</li>
+                  </ol>
+                </div>
+
+                <div className="text-xs font-mono opacity-70 mt-2">
+                  <span className="bg-black/[.05] dark:bg-white/[.06] px-2 py-1 rounded">
+                    🔑 Don&apos;t forget your keys!
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <DetailedSection
             title="Groceries"
             places={[
