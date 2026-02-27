@@ -21,9 +21,7 @@ export function SectionCard({
     <Card className={className}>
       <CardHeader className="px-4 sm:px-6 pb-4">
         <div className="flex items-start justify-between gap-3">
-          <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-            {title}
-          </CardTitle>
+          <CardTitle>{title}</CardTitle>
           {action ? <div className="shrink-0">{action}</div> : null}
         </div>
       </CardHeader>
@@ -33,4 +31,3 @@ export function SectionCard({
     </Card>
   );
 }
-

@@ -68,7 +68,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="font-sans min-h-screen flex items-center justify-center px-4 py-10 sm:px-20 sm:py-16">
+    <main className="font-mono min-h-screen flex items-center justify-center px-4 py-10 sm:px-20 sm:py-16">
       <div className="max-w-md w-full text-center">
         <header className="mb-8">
           <div className="title-eyebrow">Electronic Music Producer / DJ</div>
@@ -77,12 +77,12 @@ export default function HomePage() {
         </header>
 
         {formState === "success" ? (
-          <div className="text-sm/6 opacity-90">
+          <div className="text-sm/6 text-[var(--renders-muted-foreground)]">
             You&apos;re in. Check your inbox.
           </div>
         ) : (
           <div className="space-y-6">
-            <p className="text-sm/6 opacity-90">
+            <p className="text-sm/6 text-[var(--renders-muted-foreground)]">
               Subscribe for new releases and exclusive content.
             </p>
 
@@ -94,7 +94,7 @@ export default function HomePage() {
                 onChange={(e) => handleEmailChange(e.target.value)}
                 onBlur={() => setTouched(true)}
                 disabled={formState === "loading"}
-                className={`text-center ${showError ? "border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/50" : ""}`}
+                className={`text-center bg-secondary border-border ${showError ? "border-destructive focus-visible:ring-destructive/50" : ""}`}
                 aria-label="Email address"
                 aria-invalid={showError}
               />
@@ -108,7 +108,7 @@ export default function HomePage() {
               </Button>
 
               {(showError || (formState === "error" && errorMessage)) && (
-                <p className="text-sm text-red-600 dark:text-red-400">
+                <p className="text-sm text-destructive">
                   {errorMessage || "Please enter a valid email address."}
                 </p>
               )}

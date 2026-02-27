@@ -1,10 +1,12 @@
 @import "tailwindcss";
+@import "@kaspnilsson/renders-ui/tokens/index.css";
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-heading);
+  --font-mono: var(--font-mono);
+  --font-hero: var(--font-hero);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -21,118 +23,48 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-}
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --link: #1f4cd6; /* refined, slightly desaturated blue */
-  --link-hover: #1639a8;
-  --link-underline: color-mix(in oklab, var(--link), transparent 60%);
-  --title-grad-from: #151515;
-  --title-grad-to: #3a3a3a;
-  
-  --card: #ffffff;
-  --card-foreground: #171717;
-  --popover: #ffffff;
-  --popover-foreground: #171717;
-  --primary: #171717;
-  --primary-foreground: #ffffff;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #171717;
-  --muted: #f5f5f5;
-  --muted-foreground: #737373;
-  --accent: #f5f5f5;
-  --accent-foreground: #171717;
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #737373;
-  --radius: 0.5rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ffffff;
-    --link: #7ab6ff; /* softer blue in dark */
-    --link-hover: #a0c9ff;
-    --link-underline: color-mix(in oklab, var(--link), transparent 65%);
-    --title-grad-from: #dbe4ff;
-    --title-grad-to: #9fb8ff;
-    
-    --card: #0a0a0a;
-    --card-foreground: #ffffff;
-    --popover: #0a0a0a;
-    --popover-foreground: #ffffff;
-    --primary: #ffffff;
-    --primary-foreground: #000000;
-    --secondary: #1a1a1a;
-    --secondary-foreground: #ffffff;
-    --muted: #1a1a1a;
-    --muted-foreground: #888888;
-    --accent: #1a1a1a;
-    --accent-foreground: #ffffff;
-    --destructive: #dc2626;
-    --destructive-foreground: #ffffff;
-    --border: #1a1a1a;
-    --input: #1a1a1a;
-    --ring: #888888;
-  }
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  background: var(--renders-background);
+  color: var(--renders-foreground);
+  font-family: var(--font-mono), monospace;
 }
 
-/* Minimal, tasteful link styling */
 .link {
-  color: var(--link);
+  color: var(--renders-muted-foreground);
   text-decoration: underline;
   text-underline-offset: 4px;
-  text-decoration-color: var(--link-underline);
+  text-decoration-color: var(--renders-border);
   transition: color 150ms ease, text-decoration-color 150ms ease;
 }
 .link:hover {
-  color: var(--link-hover);
+  color: var(--renders-hover);
   text-decoration-color: currentColor;
 }
 
-/* Subtle typography polish */
 .heading-tight {
-  letter-spacing: -0.02em;
-  line-height: 1.1;
+  letter-spacing: -0.025em;
+  line-height: 1;
 }
 
-/* Display heading for hero names/titles */
 .display {
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 0.98;
+  font-family: var(--font-hero), sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1;
   font-size: clamp(2.75rem, 8vw, 4rem);
 }
 
-
-/* Card polish for darker darks */
-@media (prefers-color-scheme: dark) {
-  [data-slot="card"] {
-    background-color: #0a0a0a;
-    border-color: #111111;
-  }
-}
-
-/* Casa title lockup */
 .title {
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1.08;
+  font-family: var(--font-hero), sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  line-height: 1;
   font-size: clamp(2.25rem, 7vw, 3.5rem);
 }
 .title-prefix {
@@ -143,9 +75,9 @@ body {
 }
 .title-kasper { color: inherit; }
 .title-eyebrow {
-  font-family: var(--font-geist-mono);
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   opacity: 0.7;
   margin-bottom: 0.4rem;
@@ -155,20 +87,20 @@ body {
 }
 .title-rule {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  background: var(--renders-border);
   margin-top: 0.75rem;
 }
 
-/* Minimal, single-line title variant */
 .title-inline {
+  font-family: var(--font-hero), sans-serif;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   line-height: 1.05;
   font-size: clamp(2rem, 7.5vw, 3.25rem);
   text-wrap: balance;
 }
 .title-inline .title-muted {
-  color: var(--muted-foreground);
+  color: var(--renders-muted-foreground);
   font-weight: 600;
 }
 .title-inline .title-de {
@@ -177,7 +109,6 @@ body {
   margin-inline: 0.12em;
 }
 
-/* Responsive spacing tweaks for title */
 @media (min-width: 640px) {
   .title-eyebrow { margin-bottom: 0.5rem; }
   .title-rule { margin-top: 0.875rem; }
