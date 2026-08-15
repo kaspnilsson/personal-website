@@ -5,6 +5,56 @@ import { NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
+const LOOPBACK_HOSTNAMES = new Set(["localhost", "127.0.0.1", "::1"]);
+
+type TrustedProxy = "vercel" | "replit";
+
+function forwardedAddress(
+  request: Request,
+  header: string,
+  side: "first" | "last",
+): string {
+  const addresses =
+    request.headers
+      .get(header)
+      ?.split(",")
+      .map((value) => value.trim())
+      .filter(Boolean) ?? [];
+  const address = side === "first" ? addresses[0] : addresses.at(-1);
+  if (!address || address.length > 128) {
+    throw new Error("Trusted proxy did not provide a client address.");
+  }
+  return address;
+}
+
+function trustedProxy(): TrustedProxy | null {
+  const configured = process.env.EMAIL_TRUSTED_PROXY?.trim();
+  if (configured === "vercel" || configured === "replit") return configured;
+  if (configured) throw new Error("Unsupported trusted proxy.");
+  if (process.env.VERCEL) return "vercel";
+  if (process.env.REPLIT_DEPLOYMENT === "1") return "replit";
+  return null;
+}
+
+function trustedClientAddress(request: Request): string {
+  const proxy = trustedProxy();
+  if (proxy === "vercel") {
+    return forwardedAddress(request, "x-vercel-forwarded-for", "first");
+  }
+  if (proxy === "replit") {
+    return forwardedAddress(request, "x-forwarded-for", "last");
+  }
+
+  const requestUrl = new URL(request.url);
+  if (!LOOPBACK_HOSTNAMES.has(requestUrl.hostname)) {
+    throw new Error("A trusted proxy must be configured.");
+  }
+  return (
+    request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
+    "local"
+  );
+}
+
 function isSameOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
   if (!origin) return false;
@@ -14,9 +64,9 @@ function isSameOrigin(request: Request): boolean {
     const configured = process.env.SITE_ORIGIN?.trim();
     if (configured && parsed.origin === new URL(configured).origin) return true;
 
-    const loopback = new Set(["localhost", "127.0.0.1", "::1"]);
     return (
-      process.env.NODE_ENV !== "production" && loopback.has(parsed.hostname)
+      process.env.NODE_ENV !== "production" &&
+      LOOPBACK_HOSTNAMES.has(parsed.hostname)
     );
   } catch {
     return false;
@@ -24,18 +74,10 @@ function isSameOrigin(request: Request): boolean {
 }
 
 function signedProxyFingerprint(request: Request, secret: string) {
-  const requestUrl = new URL(request.url);
-  const isLocal = new Set(["localhost", "127.0.0.1", "::1"]).has(
-    requestUrl.hostname,
-  );
-  const clientIp = process.env.VERCEL
-    ? request.headers.get("x-vercel-forwarded-for")
-    : isLocal
-      ? request.headers.get("x-forwarded-for")
-      : null;
+  const clientAddress = trustedClientAddress(request);
   const userAgent = request.headers.get("user-agent")?.slice(0, 256) ?? "";
   const fingerprint = createHash("sha256")
-    .update(`${clientIp?.trim() || "unknown"}\n${userAgent}`)
+    .update(`${clientAddress}\n${userAgent}`)
     .digest("hex");
 
   return {
@@ -46,9 +88,7 @@ function signedProxyFingerprint(request: Request, secret: string) {
 
 function signupEndpoint(value: string): string {
   const endpoint = new URL(value);
-  const loopback = new Set(["localhost", "127.0.0.1", "::1"]).has(
-    endpoint.hostname,
-  );
+  const loopback = LOOPBACK_HOSTNAMES.has(endpoint.hostname);
   if (
     endpoint.protocol !== "https:" &&
     !(endpoint.protocol === "http:" && loopback)
