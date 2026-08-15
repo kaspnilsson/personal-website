@@ -30,7 +30,7 @@ export default function HomePage() {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setTouched(true);
     
@@ -49,17 +49,18 @@ export default function HomePage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          website: new FormData(e.currentTarget).get("website"),
+        }),
       });
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (response.ok) {
         setFormState("success");
         setEmail("");
       } else {
         setFormState("error");
-        setErrorMessage(data.message || "Something went wrong. Please try again.");
+        setErrorMessage("Something went wrong. Please try again.");
       }
     } catch {
       setFormState("error");
@@ -78,7 +79,7 @@ export default function HomePage() {
 
         {formState === "success" ? (
           <div className="text-sm/6 text-[var(--renders-muted-foreground)]">
-            You&apos;re in. Check your inbox.
+            Check your inbox to confirm your email.
           </div>
         ) : (
           <div className="space-y-6">
@@ -87,6 +88,14 @@ export default function HomePage() {
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              <input
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="sr-only"
+              />
               <Input
                 type="email"
                 placeholder="your@email.com"
