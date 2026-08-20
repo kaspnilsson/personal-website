@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Anybody, JetBrains_Mono, Darker_Grotesque } from "next/font/google";
+import { Anybody, Darker_Grotesque, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const anybody = Anybody({
@@ -18,8 +18,16 @@ const darkerGrotesque = Darker_Grotesque({
 });
 
 export const metadata: Metadata = {
-  title: "kasp — EPK",
-  description: "Electronic music producer and DJ — speed garage / UK 2‑step. Press, sets, releases, and booking.",
+  metadataBase: new URL("https://kasptrax.com"),
+  title: "kasp — Brooklyn producer / DJ",
+  description:
+    "Kasp is a Brooklyn-based producer and DJ channeling Y2K eurodance, vocal trance, UKG, speed garage, and modern club pressure.",
+  openGraph: {
+    title: "kasp — Brooklyn producer / DJ",
+    description:
+      "Brooklyn-based producer and DJ channeling Y2K eurodance, vocal trance, UKG, speed garage, and modern club pressure.",
+    images: ["/assets/kasp/promo-shots/selected/kasp-primary-bw-headphones.jpg"],
+  },
 };
 
 export default function RootLayout({
@@ -29,9 +37,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${anybody.variable} ${jetbrainsMono.variable} ${darkerGrotesque.variable}`}>
-      <body className="antialiased">
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
