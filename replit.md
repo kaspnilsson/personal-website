@@ -7,7 +7,8 @@ This is a Next.js 15 application built with React 19, TypeScript, and Tailwind C
 
 ## Project Structure
 - `src/app/` - Next.js app router pages
-  - `page.tsx` - Newsletter subscription landing page (Loops.so integration)
+  - `page.tsx` - Newsletter subscription landing page
+  - `api/subscribe/route.ts` - Signed proxy to the Renders email control plane
   - `about/page.tsx` - Full EPK with gallery, releases, sets, and contact
   - `casa/page.tsx` - Guest guide page (password protected)
   - `layout.tsx` - Root layout with fonts and metadata
@@ -27,10 +28,10 @@ This is a Next.js 15 application built with React 19, TypeScript, and Tailwind C
 - **Styling**: Tailwind CSS 4 with custom theme
 - **UI Components**: Radix UI primitives, Shadcn UI pattern
 - **Icons**: Lucide React
-- **Newsletter**: Loops.so API integration
+- **Newsletter**: Provider-neutral Renders email control plane
 
 ## Pages
-- `/` - Newsletter subscription form (Loops.so form ID: cmii4epv4wyk92k0i8zg9ssxo)
+- `/` - Newsletter subscription form for Kasp updates
 - `/about` - Full EPK with bio, gallery, releases, sets, and contact
 - `/casa` - Guest guide (password protected)
 
@@ -54,13 +55,16 @@ To customize this site for your own use:
 2. Replace placeholder images in the gallery section
 3. Modify content in `src/app/about/page.tsx` (bio, releases, sets, etc.)
 4. Adjust theme colors in `src/app/globals.css`
-5. Update Loops.so form ID in `src/app/page.tsx` if using a different form
+5. Keep public signups fixed to the `kasp_updates` topic
 
 ## Deployment
 The project is configured for Replit's autoscale deployment:
 - Build command: `npm run build`
 - Run command: `npm run start`
 - Deployment type: autoscale (stateless)
+
+Set `EMAIL_TRUSTED_PROXY=replit` alongside the server-only signup variables
+documented in `.env.example`. The current Vercel deployment uses `vercel`.
 
 ## Recent Changes
 - **2025-11-28**: Newsletter landing page
