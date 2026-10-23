@@ -6,7 +6,7 @@ import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-
 export const runtime = 'nodejs';
 export async function POST(request: Request) {
   try {
-    if (!sameOrigin(request)) return html(landing('invalid'), 403);
+    if (!sameOrigin(request)) return html(landing('origin'), 403);
     if (!request.headers.get('content-type')?.startsWith('application/x-www-form-urlencoded')) return html(landing('invalid'), 415);
     const { key, master, record, store } = await authentication();
     if (!await allowLoginAttempt(store, master, request)) return html(landing('limited', !record), 429, { 'Retry-After': '900' });
