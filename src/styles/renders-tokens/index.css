@@ -1,0 +1,16 @@
+/**
+ * RENDERS Design Tokens
+ *
+ * Import this file to get all tokens.
+ *
+ * @example
+ * import '@kaspnilsson/renders-ui/tokens'
+ * // or in CSS:
+ * @import '@kaspnilsson/renders-ui/tokens/colors.css';
+ */
+
+@import './colors.css';
+@import './typography.css';
+@import './spacing.css';
+@import './animations.css';
+@import './effects.css';

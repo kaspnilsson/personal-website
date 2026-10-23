@@ -1,0 +1,146 @@
+/**
+ * RENDERS Typography Tokens
+ *
+ * Typography carries the entire visual load.
+ * The site is 90% type. Everything else is secondary.
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════
+   * Font Families
+ *
+ * Hero:    Anybody — ultra-extended, dramatically stretched
+ * Body:    JetBrains Mono — technical precision, monospace
+ * Heading: Darker Grotesque — industrial, equipment-like
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /*
+   * These should be set by the consuming app via next/font/google
+   * and mapped to these CSS variables:
+   *
+   * const anybody = Anybody({ subsets: ['latin'], variable: '--font-hero' })
+   * const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
+   * const darkerGrotesque = Darker_Grotesque({ subsets: ['latin'], variable: '--font-heading' })
+   */
+
+  --font-hero: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --font-heading: ui-sans-serif, system-ui, sans-serif;
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Font Sizes
+   *
+   * Aggressive size contrast: Hero is 10-12x larger than labels.
+   * No middle sizes. Hierarchy through extreme contrast.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /* Hero — Viewport-relative, dramatically scaled */
+  --text-hero-mobile: 12vw;
+  --text-hero-desktop: 14vw;
+
+  /* Section headings — Small, uppercase, wide tracking */
+  --text-section-heading: 0.75rem;    /* 12px */
+
+  /* Body text — Readable, comfortable */
+  --text-body: 1.125rem;              /* 18px */
+  --text-body-sm: 1rem;               /* 16px */
+  --text-body-lg: 1.25rem;            /* 20px */
+
+  /* Labels / Specs — Small, uppercase, wide tracking */
+  --text-label: 0.75rem;              /* 12px */
+  --text-label-xs: 0.625rem;          /* 10px */
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Font Weights
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;           /* Hero only */
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Letter Spacing (Tracking)
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --tracking-tight: -0.025em;         /* Hero — letters nearly touch */
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;           /* Labels — letters spread wide */
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Line Heights
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Hero Treatment
+   *
+   * The word "RENDERS" stretched to near-illegibility.
+   * A visual logo, not a readable word.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --hero-width: 200;                   /* Anybody wdth axis */
+  --hero-scale-x: 1.15;                /* Additional stretch via transform */
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Typography Utility Classes
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+.text-hero {
+  font-family: var(--font-hero);
+  font-size: var(--text-hero-mobile);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  line-height: var(--leading-none);
+  font-variation-settings: 'wdth' var(--hero-width);
+  transform: scaleX(var(--hero-scale-x));
+  transform-origin: left center;
+}
+
+@media (min-width: 768px) {
+  .text-hero {
+    font-size: var(--text-hero-desktop);
+  }
+}
+
+.text-section-heading {
+  font-family: var(--font-mono);
+  font-size: var(--text-section-heading);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.text-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  font-weight: var(--font-weight-normal);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.text-body {
+  font-family: var(--font-mono);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--leading-relaxed);
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Selection
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+::selection {
+  background-color: rgba(229, 229, 229, 0.2);
+}

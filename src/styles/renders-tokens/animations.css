@@ -1,0 +1,80 @@
+/**
+ * RENDERS Animation Tokens
+ *
+ * Mechanical motion. Precise, sharp, functional.
+ * No playful bounces, no elastic easing.
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════
+   * Durations
+   *
+   * 400-800ms range. Not slow, not instant.
+   * Deliberate timing that feels mechanical.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 400ms;
+  --duration-hero: 600ms;
+  --duration-reveal: 800ms;
+
+  /* GSAP timing references */
+  --gsap-hero-entrance: 800ms;
+  --gsap-scroll-reveal: 600ms;
+  --gsap-stagger: 40ms;           /* Between characters */
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Easing Functions
+   *
+   * Power curves only. Sharp deceleration.
+   * No elastic, no bounce.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /* CSS cubic-bezier equivalents of GSAP power curves */
+  --ease-power1-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-power2-out: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-power3-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-power4-out: cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  /* Standard eases for specific use cases */
+  --ease-hover: ease-out;
+  --ease-transform: var(--ease-power2-out);
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Transition Presets
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --transition-colors: color var(--duration-fast) ease-out;
+  --transition-transform: transform var(--duration-slow) var(--ease-power2-out);
+  --transition-opacity: opacity var(--duration-normal) ease-out;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Hover Transitions
+ * CSS transitions for hover states (not GSAP)
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+.hover-transform {
+  transition: transform var(--duration-slow) var(--ease-power2-out);
+}
+
+.hover-color {
+  transition: color var(--duration-fast) ease-out;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Reduced Motion
+ * All animations respect prefers-reduced-motion
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
