@@ -1,5 +1,5 @@
 import { accessCode, sameOrigin, sameSecret, sessionHeader } from '@/lib/fieldnotes/auth.mjs';
-import { boundedBody, html, landing, privateHeaders } from '@/lib/fieldnotes/http.mjs';
+import { boundedBody, html, landing, notice, privateHeaders } from '@/lib/fieldnotes/http.mjs';
 import { allowLoginAttempt, verifyPassword } from '@/lib/fieldnotes/password.mjs';
 import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
@@ -15,5 +15,5 @@ export async function POST(request: Request) {
     const valid = record ? await verifyPassword(form.get('password'), record) : sameSecret(form.get('access'), accessCode(master));
     if (!valid) return html(landing('invalid', !record), 401);
     return new Response(null, { status: 303, headers: { ...privateHeaders, Location: record ? '/fieldnotes' : '/fieldnotes/password', 'Set-Cookie': sessionHeader(key, request) } });
-  } catch { return html('<h1>Fieldnotes</h1><p>Login is temporarily unavailable. Please try again.</p>', 503); }
+  } catch { return html(notice('Login is unavailable', 'Fieldnotes could not check your password. Try again in a moment.', 'Try again'), 503); }
 }

@@ -1,0 +1,70 @@
+/**
+ * RENDERS Warm Charcoal Theme
+ *
+ * Optional theme variant for long-form reading surfaces. The renders default
+ * (#0a0a0a + #e5e5e5) is correct for short-session tool UIs — it reads as
+ * "server dashboard." Warm charcoal is a reading-surface choice: same
+ * brutalist contract, warmer ground, ink-wash secondaries.
+ *
+ * Activation: add `data-theme="warm-charcoal"` to the root element, or import
+ * this file in a tree scoped by that attribute. Not the default — consumers
+ * opt in.
+ *
+ * Derivation rule:
+ *   1. Start from the ground hue (#14130e), not a near-black.
+ *   2. Pick the ink foreground (#d4d0c3).
+ *   3. Express every other surface token (secondary, muted, border, border-
+ *      strong) as an opacity wash of that ink. Do NOT introduce new hues —
+ *      those are volume changes, not color changes.
+ *
+ * `--destructive` is the only other hue permitted: a warm terracotta
+ * (#c47a66) rather than the default cold red, tuned to the ground.
+ */
+
+[data-theme='warm-charcoal'] {
+  /* Renders-namespaced raws — same shape as tokens/colors.css */
+  --renders-background: #14130e;
+  --renders-foreground: #d4d0c3;
+  --renders-muted-foreground: rgba(212, 208, 195, 0.42);
+  --renders-border: rgba(212, 208, 195, 0.10);
+  --renders-border-strong: rgba(212, 208, 195, 0.22);
+  --renders-secondary: rgba(212, 208, 195, 0.05);
+  --renders-hover: #ffffff;
+
+  /* Semantic mappings */
+  --background: var(--renders-background);
+  --foreground: var(--renders-foreground);
+
+  --card: var(--renders-background);
+  --card-foreground: var(--renders-foreground);
+
+  --popover: var(--renders-background);
+  --popover-foreground: var(--renders-foreground);
+
+  --primary: var(--renders-foreground);
+  --primary-foreground: var(--renders-background);
+
+  --secondary: var(--renders-secondary);
+  --secondary-foreground: var(--renders-foreground);
+
+  --muted: rgba(212, 208, 195, 0.035);
+  --muted-foreground: var(--renders-muted-foreground);
+
+  /**
+   * `--accent` is mapped to a monochrome wash here, consistent with SKILL.md
+   * §2a's "no default accent hex" rule. Consumers wanting the sanctioned
+   * live-state / active-selection cue still need to override `--accent`
+   * themselves with their chosen reserved hue (twin uses `#b8a3ff`; another
+   * consumer might pick warm amber). The theme deliberately does not pick
+   * for them.
+   */
+  --accent: var(--renders-secondary);
+  --accent-foreground: var(--renders-foreground);
+
+  --destructive: #c47a66;
+
+  --border: var(--renders-border);
+  --border-strong: var(--renders-border-strong);
+  --input: var(--renders-border);
+  --ring: var(--renders-foreground);
+}

@@ -2,14 +2,17 @@
 
 import { FormEvent, useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 type SubmissionState = "idle" | "submitting" | "success" | "error";
+
+const failureMessages: Record<number, string> = {
+  400: "That address was not accepted. Check it and try again.",
+  503: "Email signup is unavailable right now. Try again later.",
+};
 
 export function NewsletterSignup() {
   const [submissionState, setSubmissionState] =
     useState<SubmissionState>("idle");
+  const [failure, setFailure] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -20,6 +23,7 @@ export function NewsletterSignup() {
     const email = formData.get("email");
 
     if (typeof email !== "string" || !email.trim()) {
+      setFailure("Enter an email address.");
       setSubmissionState("error");
       return;
     }
@@ -39,12 +43,18 @@ export function NewsletterSignup() {
       });
 
       if (!response.ok) {
-        throw new Error(`Signup request failed with ${response.status}`);
+        setFailure(
+          failureMessages[response.status] ??
+            "The signup did not go through. Try again.",
+        );
+        setSubmissionState("error");
+        return;
       }
 
       form.reset();
       setSubmissionState("success");
     } catch {
+      setFailure("The signup did not go through. Check your connection and try again.");
       setSubmissionState("error");
     }
   }
@@ -52,16 +62,18 @@ export function NewsletterSignup() {
   if (submissionState === "success") {
     return (
       <p className="signup-status" role="status">
-        Check your inbox if confirmation is needed.
+        Thanks. If a confirmation email arrives, open its link to finish signing up.
       </p>
     );
   }
+
+  const submitting = submissionState === "submitting";
 
   return (
     <form
       className="signup-form"
       onSubmit={handleSubmit}
-      aria-busy={submissionState === "submitting"}
+      aria-busy={submitting}
     >
       <input
         name="website"
@@ -71,25 +83,31 @@ export function NewsletterSignup() {
         aria-hidden="true"
         className="sr-only"
       />
-      <Input
+      <label className="site-label" htmlFor="signup-email">
+        Email address
+      </label>
+      <input
+        id="signup-email"
+        className="field-input"
         name="email"
         type="email"
         autoComplete="email"
-        placeholder="your@email.com"
-        aria-label="Email address"
+        inputMode="email"
+        placeholder="you@example.com"
+        aria-describedby={submissionState === "error" ? "signup-error" : undefined}
         required
-        className="h-11 text-center bg-secondary border-border placeholder:text-[#969696]"
       />
-      <Button
+      <button
         type="submit"
-        className="h-11 w-full"
-        aria-disabled={submissionState === "submitting"}
+        className="editorial-link signup-submit"
+        aria-disabled={submitting}
       >
-        {submissionState === "submitting" ? "Subscribing..." : "Subscribe"}
-      </Button>
+        <span>{submitting ? "Subscribing" : "Subscribe"}</span>
+        <span aria-hidden="true">⟶</span>
+      </button>
       {submissionState === "error" && (
-        <p className="signup-status" role="alert" aria-live="polite">
-          That did not go through. Please try again.
+        <p id="signup-error" className="signup-status signup-status--error" role="alert">
+          {failure}
         </p>
       )}
     </form>

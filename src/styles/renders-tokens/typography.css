@@ -41,10 +41,8 @@
   /* Section headings — Small, uppercase, wide tracking */
   --text-section-heading: 0.75rem;    /* 12px */
 
-  /* Body text — Readable, comfortable */
+  /* Body text — Readable, comfortable. One size. */
   --text-body: 1.125rem;              /* 18px */
-  --text-body-sm: 1rem;               /* 16px */
-  --text-body-lg: 1.25rem;            /* 20px */
 
   /* Labels / Specs — Small, uppercase, wide tracking */
   --text-label: 0.75rem;              /* 12px */
@@ -68,7 +66,8 @@
   --tracking-normal: 0;
   --tracking-wide: 0.025em;
   --tracking-wider: 0.05em;
-  --tracking-widest: 0.1em;           /* Labels — letters spread wide */
+  --tracking-widest: 0.1em;           /* Small labels — moderate spread */
+  --tracking-label: 0.2em;            /* Primary label tracking — matches button/chrome usage */
 
   /* ═══════════════════════════════════════════════════════════════
    * Line Heights

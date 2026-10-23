@@ -1,0 +1,336 @@
+/* Casa de Kasper: a purpose-built shell on the Renders chassis, like the
+   renders.nyc SMS and legal routes. The guide reads as a record system. */
+
+.casa-gate {
+  display: grid;
+  min-height: 100svh;
+  align-items: center;
+  padding: 80px 5vw;
+}
+.casa-gate-form {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 460px);
+}
+.casa-gate-form h1,
+.casa-intro h1,
+.casa-section h2 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+}
+.casa-gate-form h1 {
+  margin: 0 0 14px -0.04em;
+  font-size: clamp(48px, 9vw, 96px);
+}
+.casa-gate-intro {
+  max-width: 40ch;
+  margin-bottom: 26px;
+  color: #b8b8b8;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.casa-gate-form .site-label {
+  color: #b8b8b8;
+}
+.casa-gate-submit {
+  width: 100%;
+  margin-top: 6px;
+}
+
+.casa-page {
+  min-height: 100svh;
+}
+.casa-intro {
+  padding: 64px 5vw 0;
+}
+.casa-intro > .site-label {
+  margin-bottom: 18px;
+  color: #b8b8b8;
+}
+.casa-intro h1 {
+  margin: 0 0 56px -0.04em;
+  font-size: clamp(56px, 9vw, 150px);
+}
+.casa-facts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--border-strong);
+}
+.casa-facts > div {
+  min-width: 0;
+  padding: 18px 24px 26px 0;
+}
+.casa-facts > div + div {
+  padding-left: 24px;
+  box-shadow: inset 1px 0 0 var(--border);
+}
+.casa-facts dt {
+  margin-bottom: 12px;
+  color: #b8b8b8;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.casa-facts dd {
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.casa-facts a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.casa-code {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.casa-facts .casa-code {
+  font-size: 30px;
+  line-height: 1;
+}
+.casa-wifi {
+  display: grid;
+  gap: 2px;
+}
+.casa-wifi-label {
+  color: #b8b8b8;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.casa-wifi code {
+  font-family: inherit;
+}
+.casa-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 26px;
+  margin-top: 10px;
+}
+.casa-actions button {
+  cursor: pointer;
+}
+.casa-contents {
+  margin-top: 8px;
+  padding: 14px 0 18px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border-strong);
+}
+.casa-contents ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 26px;
+}
+.casa-contents a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.casa-contents a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.casa-section {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.42fr) minmax(0, 1fr);
+  gap: 5vw;
+  padding: 56px 5vw 64px;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 12px;
+}
+.casa-section h2 {
+  font-size: clamp(30px, 3.4vw, 52px);
+}
+.casa-section-body {
+  min-width: 0;
+  max-width: 820px;
+}
+.casa-text {
+  max-width: 62ch;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.casa-text .casa-code {
+  font-size: 18px;
+}
+.casa-photos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2vw;
+  margin-top: 28px;
+}
+.casa-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--secondary);
+}
+.casa-photo img {
+  object-fit: cover;
+}
+.casa-photos figcaption {
+  padding-top: 10px;
+  color: #b8b8b8;
+}
+.casa-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 28px 5vw;
+  margin-top: 30px;
+}
+.casa-steps h3 {
+  margin-bottom: 10px;
+  color: #b8b8b8;
+}
+.casa-steps ol {
+  counter-reset: step;
+  border-top: 1px solid var(--border);
+}
+.casa-steps li {
+  position: relative;
+  padding: 12px 0 12px 2.6em;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.65;
+  counter-increment: step;
+}
+.casa-steps li::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  top: 12px;
+  left: 0;
+  color: #858585;
+  font-size: 11px;
+  line-height: 1.95;
+}
+.casa-steps strong {
+  font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.casa-section-body > .casa-actions {
+  margin-top: 30px;
+  column-gap: 30px;
+}
+
+.casa-places {
+  border-top: 1px solid var(--border);
+}
+.casa-place {
+  display: grid;
+  gap: 8px;
+  padding: 22px 0 24px;
+  border-bottom: 1px solid var(--border);
+}
+.casa-place-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 24px;
+}
+.casa-place h3 {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+.casa-place h3 a {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+}
+.casa-place h3 a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.casa-place-address,
+.casa-place-hours {
+  color: #b8b8b8;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+.casa-place-description {
+  max-width: 68ch;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.casa-place-note {
+  color: #858585;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+.casa-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  min-height: 88px;
+  padding: 20px 5vw;
+  color: #b8b8b8;
+}
+
+@media (max-width: 899px) {
+  .casa-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .casa-facts > div:nth-child(3) {
+    padding-left: 0;
+    box-shadow: none;
+  }
+  .casa-facts > div:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+  .casa-section {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+}
+
+@media (max-width: 599px) {
+  .casa-gate {
+    align-items: end;
+    padding: 56px 22px 72px;
+  }
+  .casa-intro {
+    padding: 48px 22px 0;
+  }
+  .casa-intro h1 {
+    margin-bottom: 36px;
+  }
+  .casa-facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .casa-facts > div,
+  .casa-facts > div + div {
+    padding: 16px 0 20px;
+    box-shadow: none;
+  }
+  .casa-facts > div + div {
+    border-top: 1px solid var(--border);
+  }
+  .casa-contents ul {
+    column-gap: 18px;
+  }
+  .casa-section {
+    padding: 44px 22px 48px;
+  }
+  .casa-photos {
+    gap: 12px;
+  }
+  .casa-footer {
+    padding: 20px 22px;
+  }
+}
