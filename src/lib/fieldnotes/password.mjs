@@ -57,7 +57,7 @@ export async function allowLoginAttempt(store, master, request, now = Date.now()
     }
     const state = current && current.until > now ? current : { attempts: 0, until: now + duration };
     if (state.attempts >= 10) return false;
-    if (await store.compareAndSwap(key, previous, JSON.stringify({ ...state, attempts: state.attempts + 1 }))) return true;
+    if (await store.compareAndSwap(key, previous, JSON.stringify({ ...state, attempts: state.attempts + 1 }), Math.ceil((state.until - now) / 1000))) return true;
   }
   return false;
 }

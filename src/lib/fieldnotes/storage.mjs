@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 const queues = new Map();
 export function reviewStorageKey(inventory) { return `fieldnotes:v1:review:${createHash('sha256').update(inventory).digest('hex')}`; }
 const CAS = "local value=redis.call('GET',KEYS[1]); if (not value and ARGV[1]=='__ABSENT__') or value==ARGV[1] then redis.call('SET',KEYS[1],ARGV[2]); return 1 end; return 0";
+const EXPIRING_CAS = "local value=redis.call('GET',KEYS[1]); if (not value and ARGV[1]=='__ABSENT__') or value==ARGV[1] then redis.call('SET',KEYS[1],ARGV[2],'EX',ARGV[3]); return 1 end; return 0";
 
 export class RedisStore {
   constructor(url, token, transport = fetch) { this.url = url; this.token = token; this.transport = transport; }
@@ -17,7 +18,12 @@ export class RedisStore {
   }
   async get(key) { return this.command(['GET', key]); }
   async getMany(keys) { return keys.length ? this.command(['MGET', ...keys]) : []; }
-  async compareAndSwap(key, previous, next) { return await this.command(['EVAL', CAS, '1', key, previous ?? '__ABSENT__', next]) === 1; }
+  async compareAndSwap(key, previous, next, ttlSeconds = null) {
+    if (ttlSeconds !== null && (!Number.isSafeInteger(ttlSeconds) || ttlSeconds < 1)) throw new Error('Invalid storage expiry.');
+    const command = ['EVAL', ttlSeconds === null ? CAS : EXPIRING_CAS, '1', key, previous ?? '__ABSENT__', next];
+    if (ttlSeconds !== null) command.push(String(ttlSeconds));
+    return await this.command(command) === 1;
+  }
 }
 
 // Development only. Production always requires the durable Redis binding.
