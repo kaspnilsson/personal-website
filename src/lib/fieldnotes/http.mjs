@@ -17,7 +17,7 @@ function accountPage(content) {
 const arrow = '<span aria-hidden="true">⟶</span>';
 export function landing(error = '', bootstrap = false) {
   const field = bootstrap ? 'access' : 'password', label = bootstrap ? 'Access code' : 'Password';
-  const message = error === 'limited' ? 'Too many attempts. Try again in 15 minutes.' : bootstrap ? 'That access code did not match. Check it and try again.' : 'That password did not match. Check it and try again.';
+  const message = error === 'origin' ? 'This sign-in request could not be verified. Reload Fieldnotes and try again.' : error === 'limited' ? 'Too many attempts. Try again in 15 minutes.' : bootstrap ? 'That access code did not match. Check it and try again.' : 'That password did not match. Check it and try again.';
   return accountPage(`<h1>Your private clothing archive</h1><p>${bootstrap ? 'Open your private setup link, or enter your existing access code to choose a password.' : 'Log in with your Fieldnotes password.'}</p><form method="post" action="/fieldnotes/unlock"><label for="${field}">${label}</label><input id="${field}" name="${field}" type="password" autocomplete="current-password" maxlength="256" required${error ? ' aria-describedby="account-error"' : ''}><button type="submit"><span>Open Fieldnotes</span>${arrow}</button></form>${error ? `<p id="account-error" role="alert">${message}</p>` : ''}`);
 }
 export function passwordSetup(token, error = '') {
