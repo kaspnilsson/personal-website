@@ -50,7 +50,11 @@ export async function allowLoginAttempt(store, master, request, now = Date.now()
   const identity = createHmac('sha256', master).update(`fieldnotes/login/v1:${address}`).digest('hex');
   const key = `fieldnotes:v1:login:${identity}`, duration = 15 * 60 * 1000;
   for (let retry = 0; retry < 8; retry++) {
-    const previous = await store.get(key), current = previous ? JSON.parse(previous) : null;
+    const previous = await store.get(key), current = previous === null ? null : JSON.parse(previous);
+    if (previous !== null && (!current || Array.isArray(current) || !Number.isInteger(current.attempts) || current.attempts < 0 ||
+        current.attempts > 10 || !Number.isSafeInteger(current.until) || current.until < 0)) {
+      throw new Error('Login attempt storage is unavailable.');
+    }
     const state = current && current.until > now ? current : { attempts: 0, until: now + duration };
     if (state.attempts >= 10) return false;
     if (await store.compareAndSwap(key, previous, JSON.stringify({ ...state, attempts: state.attempts + 1 }))) return true;
