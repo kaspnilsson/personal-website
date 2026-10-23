@@ -1,6 +1,7 @@
 import { cookieValue, csrfToken, sessionHeader, validForm, validSession } from '@/lib/fieldnotes/auth.mjs';
 import { boundedBody, html, passwordReady, passwordSetup, privateHeaders } from '@/lib/fieldnotes/http.mjs';
-import { acceptablePassword, authentication, passwordSessionKey, setInitialPassword } from '@/lib/fieldnotes/password.mjs';
+import { acceptablePassword, passwordSessionKey, setInitialPassword } from '@/lib/fieldnotes/password.mjs';
+import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

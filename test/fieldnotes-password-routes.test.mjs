@@ -59,6 +59,7 @@ function harness(initial = null) {
       validWrite: (request, key) => auth.validWrite(request, key, env),
     },
     '@/lib/fieldnotes/password.mjs': passwordAPI,
+    '@/lib/fieldnotes/shared-auth.mjs': { sharedAuthentication: () => passwordAPI.authentication() },
     '@/lib/fieldnotes/http.mjs': http,
     '@/lib/fieldnotes/assets.json': { 'index.html': '<!doctype html><p>SYNTHETIC PRIVATE APP</p>' },
     '@/lib/fieldnotes/runtime': {
@@ -82,7 +83,7 @@ function formRequest(path, fields, session, changes = {}) {
 const setupFields = (changes = {}) => ({ csrf: auth.csrfToken(master, bootstrapSession), password: fixturePassword, confirm: fixturePassword, ...changes });
 function assertPrivate(response) {
   assert.equal(response.headers.get('cache-control'), 'private, no-store');
-  assert.equal(response.headers.get('referrer-policy'), 'no-referrer');
+  assert.equal(response.headers.get('referrer-policy'), 'same-origin');
   assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
 }
 

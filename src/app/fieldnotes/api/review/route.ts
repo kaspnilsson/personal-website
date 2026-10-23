@@ -3,7 +3,7 @@ import { boundedBody, json } from '@/lib/fieldnotes/http.mjs';
 import { configuredStore } from '@/lib/fieldnotes/storage.mjs';
 import { saveReview, validateReview } from '@/lib/fieldnotes/reviews.mjs';
 import { snapshot } from '@/lib/fieldnotes/runtime';
-import { authentication } from '@/lib/fieldnotes/password.mjs';
+import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
 export const runtime = 'nodejs';
 export async function POST(request: Request) {
