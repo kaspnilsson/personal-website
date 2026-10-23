@@ -4,7 +4,18 @@ import { configuredStore, reviewStorageKey } from './storage.mjs';
 import { browserRow } from './browser-catalog.mjs';
 import { expireStock } from './freshness.mjs';
 
-let cached: { catalog: { items: any[]; [key: string]: any }; manifest: any } | null = null;
+type CatalogRow = {
+  reviewKey: string;
+  status: string;
+  reviewNote: string;
+  candidate: { id: string; [key: string]: unknown };
+  [key: string]: unknown;
+};
+type CatalogSnapshot = {
+  catalog: { items: CatalogRow[]; [key: string]: unknown };
+  manifest: Record<string, unknown>;
+};
+let cached: CatalogSnapshot | null = null;
 export function snapshot() {
   cached ??= decryptCatalog(encrypted, masterSecret());
   return cached!;
