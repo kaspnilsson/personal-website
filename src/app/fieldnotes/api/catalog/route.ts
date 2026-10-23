@@ -1,7 +1,7 @@
 import { cookieValue, csrfToken, validSession } from '@/lib/fieldnotes/auth.mjs';
 import { json } from '@/lib/fieldnotes/http.mjs';
 import { browserCatalog } from '@/lib/fieldnotes/runtime';
-import { authentication } from '@/lib/fieldnotes/password.mjs';
+import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

@@ -1,6 +1,6 @@
 import { expiredSessionHeader, validForm } from '@/lib/fieldnotes/auth.mjs';
 import { boundedBody, html, privateHeaders } from '@/lib/fieldnotes/http.mjs';
-import { authentication } from '@/lib/fieldnotes/password.mjs';
+import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
 export const runtime = 'nodejs';
 export async function POST(request: Request) {

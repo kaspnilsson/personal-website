@@ -15,7 +15,7 @@ export async function makePasswordRecord(password) {
   const salt = randomBytes(16), digest = await scrypt(password, salt, 64, options);
   return { version: 1, algorithm: 'scrypt', salt: salt.toString('base64url'), digest: digest.toString('base64url'), epoch: randomBytes(16).toString('base64url') };
 }
-function parseRecord(raw) {
+export function parsePasswordRecord(raw) {
   if (raw === null) return null;
   const record = JSON.parse(raw);
   if (record?.version !== 1 || record.algorithm !== 'scrypt' || ![record.salt, record.digest, record.epoch].every(value => typeof value === 'string') || !/^[A-Za-z0-9_-]{22}$/.test(record.salt) ||
@@ -33,7 +33,7 @@ export function passwordSessionKey(master, record) {
   return record ? createHmac('sha256', master).update(`fieldnotes/password-session/v1:${record.epoch}`).digest() : master;
 }
 export async function authentication(store = configuredStore(), master = masterSecret()) {
-  const record = parseRecord(await store.get(passwordRecordKey));
+  const record = parsePasswordRecord(await store.get(passwordRecordKey));
   return { store, master, record, key: passwordSessionKey(master, record) };
 }
 export async function setInitialPassword(store, password) {

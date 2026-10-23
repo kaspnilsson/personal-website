@@ -1,7 +1,7 @@
 import assets from '@/lib/fieldnotes/assets.json';
 import { accessCode, cookieValue, sameSecret, sessionHeader, validSession } from '@/lib/fieldnotes/auth.mjs';
 import { html, landing, privateHeaders } from '@/lib/fieldnotes/http.mjs';
-import { authentication } from '@/lib/fieldnotes/password.mjs';
+import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';

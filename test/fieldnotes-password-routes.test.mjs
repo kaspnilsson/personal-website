@@ -59,6 +59,7 @@ function harness(initial = null) {
       validWrite: (request, key) => auth.validWrite(request, key, env),
     },
     '@/lib/fieldnotes/password.mjs': passwordAPI,
+    '@/lib/fieldnotes/shared-auth.mjs': { sharedAuthentication: () => passwordAPI.authentication() },
     '@/lib/fieldnotes/http.mjs': http,
     '@/lib/fieldnotes/assets.json': { 'index.html': '<!doctype html><p>SYNTHETIC PRIVATE APP</p>' },
     '@/lib/fieldnotes/runtime': {

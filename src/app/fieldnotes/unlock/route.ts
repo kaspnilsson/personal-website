@@ -1,6 +1,7 @@
 import { accessCode, sameOrigin, sameSecret, sessionHeader } from '@/lib/fieldnotes/auth.mjs';
 import { boundedBody, html, landing, privateHeaders } from '@/lib/fieldnotes/http.mjs';
-import { allowLoginAttempt, authentication, verifyPassword } from '@/lib/fieldnotes/password.mjs';
+import { allowLoginAttempt, verifyPassword } from '@/lib/fieldnotes/password.mjs';
+import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
 export const runtime = 'nodejs';
 export async function POST(request: Request) {
