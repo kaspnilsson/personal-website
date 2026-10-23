@@ -83,7 +83,7 @@ function formRequest(path, fields, session, changes = {}) {
 const setupFields = (changes = {}) => ({ csrf: auth.csrfToken(master, bootstrapSession), password: fixturePassword, confirm: fixturePassword, ...changes });
 function assertPrivate(response) {
   assert.equal(response.headers.get('cache-control'), 'private, no-store');
-  assert.equal(response.headers.get('referrer-policy'), 'no-referrer');
+  assert.equal(response.headers.get('referrer-policy'), 'same-origin');
   assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
 }
 

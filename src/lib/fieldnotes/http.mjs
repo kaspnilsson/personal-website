@@ -1,7 +1,9 @@
 export const privateHeaders = {
   'Cache-Control': 'private, no-store',
   'X-Content-Type-Options': 'nosniff',
-  'Referrer-Policy': 'no-referrer',
+  // HTML form POSTs need their same-origin Origin header. Still omit referrers
+  // entirely for external listing/image destinations.
+  'Referrer-Policy': 'same-origin',
   'X-Robots-Tag': 'noindex, nofollow',
   'Content-Security-Policy': "default-src 'self'; img-src 'self' https: http:; style-src 'self'; script-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'",
 };

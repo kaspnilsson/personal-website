@@ -76,7 +76,7 @@ test('JSON and HTML responses carry private cache, anti-indexing, and browser is
   for (const response of responses) {
     assert.equal(response.headers.get('cache-control'), 'private, no-store');
     assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
-    assert.equal(response.headers.get('referrer-policy'), 'no-referrer');
+    assert.equal(response.headers.get('referrer-policy'), 'same-origin');
     assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
     const policy = response.headers.get('content-security-policy');
     for (const directive of ["default-src 'self'", "frame-ancestors 'none'", "base-uri 'none'", "form-action 'self'"]) {
