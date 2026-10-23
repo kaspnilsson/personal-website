@@ -32,7 +32,7 @@ async function loadRoute(path, dependencies) {
   }, { filename: `synthetic-fieldnotes/${path}`, timeout: 1000 });
   return exports;
 }
-function harness(initial = null) {
+function harness(initial = null, authEnv = env) {
   const values = new Map(initial === null ? [] : [[password.passwordRecordKey, JSON.stringify(initial)]]);
   const calls = { authentication: 0, verify: 0, setup: 0, quota: 0, catalog: 0, snapshot: 0, save: 0, events: [] };
   const store = {
@@ -54,9 +54,9 @@ function harness(initial = null) {
   const dependencies = {
     '@/lib/fieldnotes/auth.mjs': {
       ...auth,
-      sameOrigin: request => auth.sameOrigin(request, env),
-      validForm: (request, key, token) => auth.validForm(request, key, token, env),
-      validWrite: (request, key) => auth.validWrite(request, key, env),
+      sameOrigin: request => auth.sameOrigin(request, authEnv),
+      validForm: (request, key, token) => auth.validForm(request, key, token, authEnv),
+      validWrite: (request, key) => auth.validWrite(request, key, authEnv),
     },
     '@/lib/fieldnotes/password.mjs': passwordAPI,
     '@/lib/fieldnotes/shared-auth.mjs': { sharedAuthentication: () => passwordAPI.authentication() },
@@ -238,6 +238,29 @@ test('login POST commits its durable quota before real verification and preserve
   assert.equal(trimmed.status, 401);
   assert.equal(trimmed.headers.has('set-cookie'), false);
   assertPrivate(response);
+});
+
+test('branch-preview login accepts the password and rejects mismatched targets before credential work', async () => {
+  const deployment = 'fixture-deployment.vercel.app', branch = 'fixture-git-branch.vercel.app';
+  const previewEnv = {NODE_ENV:'production',VERCEL_ENV:'preview',VERCEL_URL:deployment,VERCEL_BRANCH_URL:branch};
+  const h = harness(record,previewEnv), route = await h.route('unlock/route.ts');
+  const request = (origin,host) => new Request(`https://${deployment}/fieldnotes/unlock`, {
+    method:'POST', headers:{host,origin,'sec-fetch-site':'same-origin','content-type':'application/x-www-form-urlencoded'},
+    body:new URLSearchParams({password:fixturePassword}),
+  });
+  const rejected = await route.POST(request(`https://${branch}`,deployment));
+  assert.equal(rejected.status,403);
+  assert.equal(h.calls.authentication,0);
+  assert.equal(h.calls.quota,0);
+  assert.equal(h.calls.verify,0);
+  const rejection = await rejected.text();
+  assert.match(rejection,/sign-in request could not be verified/);
+  assert.doesNotMatch(rejection,/password did not match/);
+  const accepted = await route.POST(request(`https://${branch}`,branch));
+  assert.equal(accepted.status,303);
+  assert.equal(accepted.headers.get('location'),'/fieldnotes');
+  assert.equal(auth.validSession(key,accepted.headers.get('set-cookie').split(';')[0].split('=')[1]),true);
+  assert.deepEqual(h.calls.events,['durable quota','verify']);
 });
 
 test('a configured password disables access-code login and missing passwords never authenticate', async () => {

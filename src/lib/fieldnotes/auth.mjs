@@ -31,7 +31,14 @@ export function sessionHeader(key, request) {
 }
 export function csrfToken(key, session) { return digest(key, `fieldnotes/csrf/v1:${session}`); }
 export function expectedOrigin(request, env = process.env) {
-  if (env.VERCEL_ENV === 'preview' && env.VERCEL_URL) return new URL(`https://${env.VERCEL_URL}`).origin;
+  if (env.VERCEL_ENV === 'preview' && env.VERCEL_URL) {
+    // Vercel serves previews at both an immutable deployment URL and a Git
+    // branch alias. Trust only its configured hostnames, never forwarded input.
+    const host = request.headers.get('host') ?? new URL(request.url).host;
+    return [env.VERCEL_URL, env.VERCEL_BRANCH_URL].filter(Boolean).includes(host)
+      ? new URL(`https://${host}`).origin
+      : undefined;
+  }
   if (env.SITE_ORIGIN) return new URL(env.SITE_ORIGIN).origin;
   // Next's local adapter normalizes Request.url to localhost even when the
   // browser used 127.0.0.1. Accept only loopback Host values in development.
