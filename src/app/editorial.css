@@ -457,7 +457,8 @@ html:has(.photo-dialog[open]) {
 }
 .field-input:focus,
 .field-input:focus-visible {
-  outline: none;
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
   box-shadow:
     inset 0 0 0 1px var(--ring),
     0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent);
