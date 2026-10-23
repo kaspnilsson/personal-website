@@ -1,0 +1,1 @@
+Vendored unchanged CSS tokens from @kaspnilsson/renders-ui 0.1.0, owned source commit 139266e in kaspnilsson/renders. This is the version previously pinned by this website. Keeping these files local removes the expired package-registry credential dependency; the token styles are unchanged.

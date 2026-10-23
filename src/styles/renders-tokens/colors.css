@@ -1,0 +1,119 @@
+/**
+ * RENDERS Color Tokens
+ *
+ * Dark-first monochrome palette.
+ * No accent colors. Color comes from artwork/flyers only.
+ */
+
+:root {
+  /* ═══════════════════════════════════════════════════════════════
+   * Core Palette
+   * ═══════════════════════════════════════════════════════════════ */
+
+  /**
+   * Background
+   * Near-black. Always #0a0a0a. No variation, no gradients.
+   */
+  --renders-background: #0a0a0a;
+
+  /**
+   * Foreground
+   * Primary text. Off-white, never pure white (#ffffff) — too harsh.
+   */
+  --renders-foreground: #e5e5e5;
+
+  /**
+   * Muted Foreground
+   * Secondary text, labels, dates, metadata.
+   */
+  --renders-muted-foreground: #737373;
+
+  /**
+   * Border
+   * Dividers, rules. Visible but subtle. Never pure white borders.
+   */
+  --renders-border: #262626;
+
+  /**
+   * Secondary
+   * Card backgrounds, elevated surfaces.
+   */
+  --renders-secondary: #171717;
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Semantic Mappings
+   * Map to standard token names for Tailwind compatibility
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --background: var(--renders-background);
+  --foreground: var(--renders-foreground);
+
+  --card: var(--renders-background);
+  --card-foreground: var(--renders-foreground);
+
+  --popover: var(--renders-background);
+  --popover-foreground: var(--renders-foreground);
+
+  --primary: var(--renders-foreground);
+  --primary-foreground: var(--renders-background);
+
+  --secondary: var(--renders-secondary);
+  --secondary-foreground: var(--renders-foreground);
+
+  --muted: var(--renders-secondary);
+  --muted-foreground: var(--renders-muted-foreground);
+
+  --accent: var(--renders-secondary);
+  --accent-foreground: var(--renders-foreground);
+
+  --destructive: #ef4444;
+
+  --border: var(--renders-border);
+  --input: var(--renders-border);
+  --ring: var(--renders-foreground);
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Border Radius
+   * Brutalist: 0rem everywhere. No rounded corners.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --radius: 0rem;
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
+  --radius-2xl: 0rem;
+  --radius-3xl: 0rem;
+  --radius-4xl: 0rem;
+
+  /* ═══════════════════════════════════════════════════════════════
+   * Hover State
+   * Text brightens to pure white on hover. The only pure white usage.
+   * ═══════════════════════════════════════════════════════════════ */
+
+  --renders-hover: #ffffff;
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Usage Examples
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+/*
+.my-component {
+  background-color: var(--renders-background);
+  color: var(--renders-foreground);
+  border-color: var(--renders-border);
+}
+
+.my-component:hover {
+  color: var(--renders-hover);
+}
+
+.label {
+  color: var(--renders-muted-foreground);
+}
+
+.card {
+  background-color: var(--renders-secondary);
+}
+*/

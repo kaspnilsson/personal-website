@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "@kaspnilsson/renders-ui/tokens/index.css";
+@import "../styles/renders-tokens/index.css";
 
 @theme inline {
   --color-background: var(--background);
