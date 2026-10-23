@@ -1,0 +1,43 @@
+/**
+ * RENDERS Shell Utilities
+ *
+ * Chrome helpers that express 1px rules as inset box-shadow rather than the
+ * `border` property, so rules don't eat layout height. Pairs with the
+ * `--border-strong` semantic token.
+ *
+ * `.composer-shell`  — assertive frame for composers, commands, command bars.
+ *                      Picks up a focus ring on :focus-within.
+ * `.search-soft`     — quieter version for search inputs and inline filters.
+ *                      Picks up a focus ring on :focus.
+ *
+ * Focus affordance: a 3px, 14%-opacity ring on focus IS the sanctioned focus
+ * signal for the Renders system. This is the one documented exception to the
+ * "no soft shadows, no glows, no halos" rule. Do not strip it for purity —
+ * it carries the a11y contract.
+ */
+
+.composer-shell {
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--border-strong) 55%, transparent);
+  transition: box-shadow 150ms var(--ease-power2-out, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.composer-shell:focus-within {
+  box-shadow:
+    inset 0 0 0 1px var(--ring),
+    0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent);
+}
+
+.search-soft {
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--border) 70%, transparent);
+  transition: box-shadow 150ms var(--ease-power2-out, cubic-bezier(0.25, 1, 0.5, 1));
+}
+
+.search-soft:focus,
+.search-soft:focus-within {
+  box-shadow:
+    inset 0 0 0 1px var(--ring),
+    0 0 0 3px color-mix(in srgb, var(--ring) 14%, transparent);
+  outline: none;
+}

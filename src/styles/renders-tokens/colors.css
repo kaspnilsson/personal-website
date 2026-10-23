@@ -31,8 +31,19 @@
   /**
    * Border
    * Dividers, rules. Visible but subtle. Never pure white borders.
+   * Use for row-level separators (list items, subtle seams).
    */
   --renders-border: #262626;
+
+  /**
+   * Border (strong)
+   * Structural seams — section edges, composer frame, sidebar rail.
+   * Roughly 22% ink on ground; always paired with inset box-shadow at call
+   * sites so rules don't eat layout height. Rule of thumb:
+   *   --renders-border         = row separator
+   *   --renders-border-strong  = structural seam
+   */
+  --renders-border-strong: #3a3a3a;
 
   /**
    * Secondary
@@ -69,6 +80,7 @@
   --destructive: #ef4444;
 
   --border: var(--renders-border);
+  --border-strong: var(--renders-border-strong);
   --input: var(--renders-border);
   --ring: var(--renders-foreground);
 

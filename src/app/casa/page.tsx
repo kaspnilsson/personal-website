@@ -1,12 +1,25 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { SectionCard } from "@/components/section-card";
+import Image from "next/image";
+import { FormEvent, useEffect, useState } from "react";
+
+import { placeSections, transportation, type Place } from "./guide";
+
+const WIFI_NETWORK = "Bird Up";
+const WIFI_PASSWORD = "theworstshowontv";
+const KEY_CODE = "0317";
+
+const contents = [
+  { id: "key", title: "Key" },
+  { id: "couch", title: "Couch" },
+  { id: "transportation", title: "Transportation" },
+  { id: "laundry", title: "Laundry" },
+  { id: "trash", title: "Trash" },
+  ...placeSections.map(({ id, title }) => ({ id, title })),
+];
 
 export default function CasaGuide() {
+  const [ready, setReady] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState("");
@@ -14,76 +27,66 @@ export default function CasaGuide() {
 
   useEffect(() => {
     // Check if already authenticated in this session
-    const authenticated = sessionStorage.getItem("casa-authenticated");
-    if (authenticated === "true") {
+    if (sessionStorage.getItem("casa-authenticated") === "true") {
       setIsAuthenticated(true);
     }
+    setReady(true);
   }, []);
 
-  const checkPassword = () => {
+  const checkPassword = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (passwordInput === "ilovekasp") {
       setIsAuthenticated(true);
       sessionStorage.setItem("casa-authenticated", "true");
       setShowError(false);
-      // Show a cute success message briefly
-      const successMsg = document.createElement("div");
-      successMsg.innerHTML = "Welcome in! Loading the good stuff...";
-      successMsg.className =
-        "fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium z-50";
-      document.body.appendChild(successMsg);
-      setTimeout(() => successMsg.remove(), 2000);
     } else {
       setShowError(true);
-      setTimeout(() => setShowError(false), 3000);
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      checkPassword();
-    }
-  };
+  if (!ready) return <main className="casa-page" aria-busy="true" />;
 
   if (!isAuthenticated) {
     return (
-      <div className="font-sans min-h-screen px-4 py-8 pb-20 sm:px-20 sm:py-20 flex items-center justify-center">
-        <div className="max-w-md mx-auto">
-          <Card>
-            <CardContent className="px-4 py-6 sm:px-6">
-              <div className="text-4xl mb-4 text-center">🏠</div>
-              <h1 className="text-2xl font-bold mb-2 heading-tight text-center">
-                Welcome to Casa de Kasper!
-              </h1>
-              <p className="text-sm/6 mb-4 opacity-70 text-center">
-                This super secret guide is for my favorite humans only
-              </p>
-              <p className="text-xs font-mono mb-4 opacity-60 text-center">
-                psst... you know what to say
-              </p>
-
-              <Input
-                type="password"
-                value={passwordInput}
-                onChange={(e) => setPasswordInput(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="the magic words..."
-                className="mb-4"
-                autoFocus
-              />
-
-              <Button onClick={checkPassword} className="w-full">
-                Let me in! →
-              </Button>
-
-              {showError && (
-                <p className="text-sm text-red-600 dark:text-red-400 mt-3 text-center">
-                  Hmm, that&apos;s not quite right... try again!
-                </p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      <main className="casa-gate">
+        <form className="casa-gate-form" onSubmit={checkPassword}>
+          <h1>Casa de Kasper</h1>
+          <p className="casa-gate-intro">
+            This guide is for guests staying at the apartment. Enter the
+            password Kasper sent you.
+          </p>
+          <label className="site-label" htmlFor="casa-password">
+            Password
+          </label>
+          <input
+            id="casa-password"
+            className="field-input"
+            type="password"
+            value={passwordInput}
+            onChange={(e) => {
+              setPasswordInput(e.target.value);
+              setShowError(false);
+            }}
+            aria-describedby={showError ? "casa-password-error" : undefined}
+            autoFocus
+            required
+          />
+          <button type="submit" className="editorial-link casa-gate-submit">
+            <span>Open the guide</span>
+            <span aria-hidden="true">⟶</span>
+          </button>
+          {showError && (
+            <p
+              id="casa-password-error"
+              className="signup-status signup-status--error"
+              role="alert"
+            >
+              That password did not match. Check the message from Kasper and
+              try again.
+            </p>
+          )}
+        </form>
+      </main>
     );
   }
 
@@ -91,7 +94,7 @@ export default function CasaGuide() {
     try {
       // Try modern Clipboard API first (requires HTTPS)
       if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText("theworstshowontv");
+        await navigator.clipboard.writeText(WIFI_PASSWORD);
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
         return;
@@ -99,7 +102,7 @@ export default function CasaGuide() {
 
       // Fallback for HTTP environments (like localhost)
       const textArea = document.createElement("textarea");
-      textArea.value = "theworstshowontv";
+      textArea.value = WIFI_PASSWORD;
       textArea.style.position = "fixed";
       textArea.style.opacity = "0";
       textArea.style.pointerEvents = "none";
@@ -108,12 +111,11 @@ export default function CasaGuide() {
       textArea.select();
 
       try {
-        const successful = document.execCommand("copy");
-        if (successful) {
+        if (document.execCommand("copy")) {
           setCopied(true);
           setTimeout(() => setCopied(false), 2000);
         }
-      } catch (err) {
+      } catch {
         console.log("Fallback copy failed");
       } finally {
         document.body.removeChild(textArea);
@@ -124,695 +126,246 @@ export default function CasaGuide() {
   };
 
   const joinNetwork = () => {
-    const ssid = "Bird Up";
-    const password = "theworstshowontv";
-    const wifiUrl = `wifi:T:WPA;S:${ssid};P:${password};;`;
-
     // Try to open the wifi URL (works on some mobile devices)
-    window.location.href = wifiUrl;
+    window.location.href = `wifi:T:WPA;S:${WIFI_NETWORK};P:${WIFI_PASSWORD};;`;
   };
+
   return (
-    <div className="font-sans min-h-screen px-4 py-8 pb-20 sm:px-20 sm:py-20">
-      <div className="max-w-4xl mx-auto">
-        <header className="mb-8 sm:mb-10">
-          <div className="mb-[24px]">
-            <div className="title-eyebrow">🏠 Guest Guide</div>
-            <h1 className="title heading-tight">
-              <span className="title-prefix">Casa de</span> <span className="title-kasper">Kasper</span>
-            </h1>
-            <div className="title-rule" />
+    <main className="casa-page">
+      <header id="top" className="casa-intro">
+        <p className="site-label">Guest guide</p>
+        <h1>Casa de Kasper</h1>
+        <dl className="casa-facts">
+          <div>
+            <dt>Address</dt>
+            <dd>
+              <a
+                href="https://maps.app.goo.gl/7f54RDcVKnRvQJxp6"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                250 Moore St #203<span aria-hidden="true"> ↗</span>
+              </a>
+            </dd>
           </div>
+          <div>
+            <dt>Phone</dt>
+            <dd>
+              <a href="tel:+14435370317">443-537-0317</a>
+            </dd>
+          </div>
+          <div>
+            <dt>Key code</dt>
+            <dd className="casa-code">{KEY_CODE}</dd>
+          </div>
+          <div>
+            <dt>Wi-Fi</dt>
+            <dd>
+              <span className="casa-wifi">
+                <span>
+                  <span className="casa-wifi-label">Network</span> {WIFI_NETWORK}
+                </span>
+                <span>
+                  <span className="casa-wifi-label">Password</span>{" "}
+                  <code>{WIFI_PASSWORD}</code>
+                </span>
+              </span>
+              <span className="casa-actions">
+                <button type="button" className="quiet-link" onClick={copyPassword}>
+                  {copied ? "Copied" : "Copy password"}
+                </button>
+                <button type="button" className="quiet-link" onClick={joinNetwork}>
+                  Join network
+                </button>
+              </span>
+              <span className="sr-only" role="status">
+                {copied ? "Wi-Fi password copied" : ""}
+              </span>
+            </dd>
+          </div>
+        </dl>
+        <nav className="casa-contents" aria-label="Guide sections">
+          <ul>
+            {contents.map((item) => (
+              <li key={item.id}>
+                <a href={`#${item.id}`}>{item.title}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </header>
 
-          <Card className="mb-[32px]">
-            <CardHeader className="px-4 sm:px-6 pb-4">
-              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-                General Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6">
-              <div className="flex flex-col gap-6 sm:grid sm:grid-cols-2">
-                <div>
-                  <h2 className="font-mono text-sm font-semibold mb-2 tracking-[-.01em]">
-                    Address
-                  </h2>
-                  <a
-                    href="https://maps.app.goo.gl/7f54RDcVKnRvQJxp6"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm/6 link"
-                  >
-                    250 Moore St #203 →
-                  </a>
-                </div>
-                <div>
-                  <h2 className="font-mono text-sm font-semibold mb-2 tracking-[-.01em]">
-                    Contact
-                  </h2>
-                  <p className="text-sm/6">
-                    Phone:{" "}
-                    <a
-                      href="tel:+14435370317"
-                      className="link"
-                    >
-                      443-537-0317 →
-                    </a>
-                  </p>
-                </div>
-                <div>
-                  <h2 className="font-mono text-sm font-semibold mb-2 tracking-[-.01em]">
-                    Key Code
-                  </h2>
-                  <p className="text-sm/6">
-                    <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-2 py-1 rounded">
-                      0317
-                    </code>
-                  </p>
-                </div>
-                <div>
-                  <h2 className="font-mono text-sm font-semibold mb-2 tracking-[-.01em]">
-                    WiFi
-                  </h2>
-                  <p className="text-sm/6 mb-2">
-                    Network:{" "}
-                    <code className="bg-black/[.05] dark:bg-white/[.06] font-mono px-1 py-0.5 rounded">
-                      Bird Up
-                    </code>
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
-                    <p className="text-sm/6">
-                      Password:{" "}
-                      <code className="bg-black/[.05] dark:bg-white/[.06] font-mono px-1 py-0.5 rounded">
-                        theworstshowontv
-                      </code>
-                    </p>
-                    <Button
-                      onClick={copyPassword}
-                      variant="outline"
-                      size="sm"
-                      className="text-xs font-mono w-fit"
-                    >
-                      {copied ? "Copied!" : "Copy"}
-                    </Button>
-                  </div>
-                  <Button onClick={joinNetwork} className="mt-2 w-fit">
-                    Join Network →
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="px-4 sm:px-6 pb-4">
-              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-                Key Location
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6">
-              <p className="text-sm/6 mb-6">
-                Use code:{" "}
-                <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-2 py-1 rounded">
-                  0317
-                </code>
-              </p>
-              <div className="flex flex-col gap-6 sm:grid sm:grid-cols-2">
-                <div>
-                  <h3 className="font-mono text-xs font-medium mb-3 tracking-[-.01em] opacity-70">
-                    Overview
-                  </h3>
-                  <img
-                    src="/key_location_far_away.jpg"
-                    alt="Key location - far view showing the general area"
-                    className="w-full rounded-lg"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <div>
-                  <h3 className="font-mono text-xs font-medium mb-3 tracking-[-.01em] opacity-70">
-                    Close-up
-                  </h3>
-                  <img
-                    src="/key_location_closeup.jpg"
-                    alt="Key location - close-up view showing exact location"
-                    className="w-full rounded-lg"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="px-4 sm:px-6 pb-4">
-              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-                Pull-Out Couch Setup
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6">
-              <div className="flex flex-col gap-4">
-                <div className="text-sm/6 opacity-90 mb-3">
-                  Your couch is a <strong>Koala Byron Sofa Bed</strong> - it
-                  transforms from sofa to queen-size bed in seconds with no
-                  tools required!
-                </div>
-
-                <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-                  <h3 className="font-mono text-xs font-semibold mb-3 tracking-[-.01em] opacity-70">
-                    SETUP STEPS:
-                  </h3>
-                  <ol className="list-decimal list-inside space-y-2 text-sm/6">
-                    <li>Remove the back cushions and set aside</li>
-                    <li>
-                      Pull out the hidden base frame (it slides out smoothly)
-                    </li>
-                    <li>
-                      Unfold the mattress so it sits flat on the pull-out frame
-                    </li>
-                    <li>That&apos;s it - you now have a queen-size bed!</li>
-                  </ol>
-                </div>
-
-                <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-                  <h3 className="font-mono text-xs font-semibold mb-3 tracking-[-.01em] opacity-70">
-                    TO CONVERT BACK:
-                  </h3>
-                  <ol className="list-decimal list-inside space-y-2 text-sm/6">
-                    <li>Fold the mattress back in half</li>
-                    <li>Push the base frame back under the sofa</li>
-                    <li>Replace the back cushions</li>
-                  </ol>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                  <a
-                    href="https://assets.ctfassets.net/uvwd10ivtduz/4JlT1FFXjfjCV9r7lp1XYj/f58ff363c8006b8095efd1984ed5af7c/20240410_Assembly_Instructions_Byron_Sofa_Bed_V2_Digital__1_.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-                  >
-                    📖 View Setup Manual
-                  </a>
-                  <a
-                    href="https://www.youtube.com/results?search_query=koala+byron+sofa+bed+setup"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
-                  >
-                    🎥 Search Setup Videos
-                  </a>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </header>
-
-        <div className="flex flex-col gap-8 sm:gap-10">
-          <DetailedSection
-            title="Transportation"
-            places={[
-              {
-                name: "Morgan Ave (L Train)",
-                address: "Morgan Ave & Harrison Pl",
-                hours: "6-minute walk from apartment",
-                description:
-                  "Closest subway station with L train access to Manhattan and other Brooklyn neighborhoods, plus connections to J/M/Z lines nearby.",
-                specialty: "Primary subway access, frequent service",
-                url: "https://maps.app.goo.gl/aVRcqNY8x2zSKF987",
-              },
-            ]}
-          />
-
-          <Card>
-            <CardHeader className="px-4 sm:px-6 pb-4">
-              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-                Laundry
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6">
-              <div className="flex flex-col gap-6">
-                <div>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                      <span className="font-medium text-sm">
-                        Building Laundry Room
-                      </span>
-                      <span className="text-xs opacity-70 font-mono">
-                        Basement level of 250 Moore St
-                      </span>
-                    </div>
-
-                    <div className="text-xs opacity-70 font-mono">
-                      24/7 access with building key
-                    </div>
-
-                    <div className="text-sm/6 opacity-90">
-                      Convenient in-building laundry facilities with washers and
-                      dryers operated through the Hercules app, laundry
-                      detergent pods provided.
-                    </div>
-
-                    <div className="text-xs font-mono opacity-70">
-                      <span className="bg-black/[.05] dark:bg-white/[.06] px-2 py-1 rounded">
-                        In-building convenience, detergent included
-                      </span>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                      <a
-                        href="https://apps.apple.com/us/app/hercules/id123456789"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
-                      >
-                        📱 Download on App Store
-                      </a>
-                      <a
-                        href="https://play.google.com/store/apps/details?id=com.hercules"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
-                      >
-                        🤖 Get it on Google Play
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="px-4 sm:px-6 pb-4">
-              <CardTitle className="font-mono text-sm font-semibold tracking-[-.01em]">
-                Trash & Recycling
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 sm:px-6">
-              <div className="flex flex-col gap-4">
-                <div className="text-sm/6 opacity-90">
-                  Trash and recycling bins are located in the back of the building.
-                </div>
-
-                <div className="bg-black/[.05] dark:bg-white/[.06] p-4 rounded-lg">
-                  <h3 className="font-mono text-xs font-semibold mb-3 tracking-[-.01em] opacity-70">
-                    HOW TO GET THERE:
-                  </h3>
-                  <ol className="list-decimal list-inside space-y-2 text-sm/6">
-                    <li>The door to the back is by the entrance, next to the package shelf</li>
-                    <li>
-                      <strong>Bring your keys!</strong> The door locks behind you
-                    </li>
-                    <li>Use the bins in the back area for trash and recycling</li>
-                  </ol>
-                </div>
-
-                <div className="text-xs font-mono opacity-70 mt-2">
-                  <span className="bg-black/[.05] dark:bg-white/[.06] px-2 py-1 rounded">
-                    🔑 Don&apos;t forget your keys!
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <DetailedSection
-            title="Groceries"
-            places={[
-              {
-                name: "Food Story Natural Market",
-                address: "40 Bogart St",
-                hours: "24/7",
-                description:
-                  "Health-focused grocery with organic, vegan, and gluten-free products. Fresh sushi made daily.",
-                specialty: "Organic & specialty foods",
-                url: "https://maps.app.goo.gl/jEeSfyFmPNefbdxT6",
-              },
-            ]}
-          />
-
-          <DetailedSection
-            title="Coffee"
-            places={[
-              {
-                name: "Sey Coffee",
-                address: "18 Grattan St",
-                hours: "M-F 7am-5pm, Weekends 8am-5pm",
-                description:
-                  "Award-winning micro roastery focusing on washed coffees with Nordic-style roasting. Glass wall view of roasting process.",
-                specialty: "Single-origin coffee, Aeropress brewing",
-                url: "https://maps.app.goo.gl/9CUeKZkszvoZ9pLG8",
-              },
-              {
-                name: "Crossroads Cafe",
-                address: "119 Knickerbocker Ave",
-                hours: "M-F 8am-8pm, Weekends 10am-6pm",
-                description:
-                  "Community-focused cafe with exposed brick, rotating local art, and live music events.",
-                specialty: "Community events, local art",
-                url: "https://maps.app.goo.gl/caYuYpBFo3PQuL9L8",
-              },
-              {
-                name: "Swallow Cafe",
-                address: "49 Bogart St",
-                hours: "Daily 7am-7pm",
-                description:
-                  "Independent cafe with free WiFi and bike repair station. Near Roberta's pizza.",
-                specialty: "Bike-friendly, WiFi workspace",
-                url: "https://maps.app.goo.gl/usinySaJz3kTS6Dt7",
-              },
-              {
-                name: "La Cabra",
-                address: "1329 Willoughby Ave",
-                hours: "Daily 8am-6pm",
-                description:
-                  "Danish coffee roastery with visible Loring roaster and modern oak retail space.",
-                specialty: "Specialty tastings, Danish roasting",
-                url: "https://maps.app.goo.gl/FF2NxdrP81XvLVLi9",
-              },
-            ]}
-          />
-
-          <DetailedSection
-            title="Takeout"
-            places={[
-              {
-                name: "Semkeh",
-                address: "53 Morgan Ave (Rear)",
-                hours: "Daily 11am-11pm (Sun from 10am)",
-                description:
-                  "Authentic Lebanese restaurant known for perfectly cooked shawarma and crispy falafel.",
-                specialty: "Chicken shawarma, falafel",
-                url: "https://maps.app.goo.gl/PUqshYNfcv4oxLpb6",
-              },
-            ]}
-          />
-
-          <DetailedSection
-            title="Restaurants"
-            places={[
-              {
-                name: "Roberta's",
-                address: "261 Moore St",
-                hours: "M-Th 12-10pm, F 12-11pm, Weekends 11am-11pm",
-                description:
-                  "Iconic wood-fired pizza with rooftop garden ingredients. House-made pasta and cured meats.",
-                specialty: "Wood-fired pizza, house salumi",
-                url: "https://maps.app.goo.gl/vf2ACVUHYa6ma35p9",
-              },
-              {
-                name: "Ichiran",
-                address: "374 Johnson Ave",
-                hours: "Daily 11am-11pm",
-                description:
-                  "Famous Japanese ramen chain with solo dining booths and customizable tonkotsu bowls where you order via paper form and focus entirely on the rich, creamy broth.",
-                specialty: "Customizable tonkotsu ramen",
-                url: "https://maps.app.goo.gl/Dre4EG133egsBYvy6",
-              },
-              {
-                name: "Syndicated",
-                address: "40 Bogart St",
-                hours: "Daily 5pm+",
-                description:
-                  "Unique dine-in cinema and bar in a renovated warehouse where you can watch indie films while enjoying cocktails and food delivered to your seat.",
-                specialty: "Movie theater + bar",
-                url: "https://maps.app.goo.gl/nALsF3iZMDJt3Z2Q6",
-              },
-              {
-                name: "A-Un",
-                address: "156 Knickerbocker Ave",
-                hours: "M-F 5-9:30pm, Weekends 12-3:30pm & 5-9:30pm",
-                description:
-                  "Cozy Japanese restaurant by the team behind Wasan, featuring seasonal small plates, fresh sushi, and an excellent sake selection curated by their sommelier.",
-                specialty: "Seasonal Japanese dishes, sake pairings",
-                url: "https://maps.app.goo.gl/Qp88j3GReWV6oY1D7",
-              },
-              {
-                name: "Chaingmai Diner",
-                address: "942 Flushing Ave",
-                hours: "Daily 11:30am-10pm (Fri-Sat til 11pm)",
-                description:
-                  "Authentic Northern Thai restaurant with cozy plant-filled atmosphere, specializing in traditional dishes like larb and fermented rice noodles that customers rave about.",
-                specialty: "Northern Thai cuisine, curries",
-                url: "https://maps.app.goo.gl/MyoLqG1n3ptu4tAh9",
-              },
-              {
-                name: "Nowon",
-                address: "436 Jefferson St",
-                hours: "Tue-Thu 5-11pm, Fri 5pm-12am, Weekends 2pm-12am",
-                description:
-                  "Korean-American pocha (bar) with dim lighting and '90s hip-hop vibes, famous for their legendary cheeseburger with roasted kimchi and creative Korean fusion dishes.",
-                specialty: "Korean fusion burgers, cocktails",
-                url: "https://maps.app.goo.gl/GPCp3KKqssgRzTVx5",
-              },
-              {
-                name: "Tong",
-                address: "321 Starr St",
-                hours: "Daily 12-3:30pm & 5-10pm (Fri-Sat til 11pm)",
-                description:
-                  "MICHELIN Guide authentic Thai restaurant in a rustic warehouse space, specializing in kub klaem small plates and fiery Isaan dishes that don't hold back on chilies.",
-                specialty: "Authentic Thai small plates, spicy Isaan cuisine",
-                url: "https://maps.app.goo.gl/zrC15Zpe7zwgEem58",
-              },
-            ]}
-          />
-
-          <DetailedSection
-            title="Bars"
-            places={[
-              {
-                name: "Kings County Brewers Collective",
-                address: "381 Troutman St",
-                hours: "M-Th 4-11pm, F 3pm-12am, Sat 12pm-12am, Sun 1-10pm",
-                description:
-                  "Bushwick's first brick-and-mortar brewery in 40+ years, featuring creative craft beers with quirky names, laid-back taproom vibes, and an ambitious barrel-aging program.",
-                specialty: "Craft beer, barrel-aged releases",
-                url: "https://maps.app.goo.gl/yS62zoan39BbxNDY7",
-              },
-              {
-                name: "The Johnson's",
-                address: "369 Troutman St",
-                hours: "M-W 3pm-2am, Th-F 3pm-4am, Sat 2pm-4am, Sun 2pm-2am",
-                description:
-                  "Sister bar to the LES original, this larger Bushwick spot attracts recent grads with cheap beers, pool tables, cozy booths, and retro atmosphere serving bar food like corn dogs.",
-                specialty: "Cheap beers, pool tables, bar food",
-                url: "https://maps.app.goo.gl/TFoRT4WZ1Mom2hVk9",
-              },
-              {
-                name: "Carousel",
-                address: "36 Wyckoff Ave",
-                hours: "Opens 3pm daily",
-                description:
-                  "Retro 70s-inspired bar with absinthe-focused cocktails, pool tables, dance floor, and a conversation pit that can be reserved for groups and birthdays.",
-                specialty: "Absinthe cocktails, pool tables",
-                url: "https://maps.app.goo.gl/mcVD4VdT83P8PBGs5",
-              },
-              {
-                name: "Alphaville",
-                address: "140 Wilson Ave",
-                hours: "Daily 4pm-4am",
-                description:
-                  "Classic Bushwick dive bar and music venue established in 2014, featuring world-class cocktails with fresh-squeezed juices, live music, karaoke nights, and surprisingly good burgers.",
-                specialty: "Live music, whiskey selection, karaoke",
-                url: "https://maps.app.goo.gl/SLiJEzb3WWJrXDt89",
-              },
-              {
-                name: "Fine Time",
-                address: "84 Central Ave",
-                hours: "M-F 5pm-4am, Weekends 3pm-4am",
-                description:
-                  "Award-winning dive bar with the best patio in Bushwick, featuring free hot dogs and popcorn, frozen margaritas, pool table, and backyard games like cornhole and shuffleboard.",
-                specialty: "Happy hour deals, backyard patio",
-                url: "https://maps.app.goo.gl/jQX3u3zJjcLubTE77",
-              },
-            ]}
-          />
-
-          <DetailedSection
-            title="Clubs"
-            places={[
-              {
-                name: "Elsewhere",
-                address: "599 Johnson Ave",
-                hours: "Th 5-11pm, F 5pm-12am, Weekends 2pm-12am",
-                description:
-                  "Multi-room music venue in renovated warehouse with rooftop bar, gallery, and multiple performance spaces.",
-                specialty: "Underground music, multi-room parties",
-                url: "https://maps.app.goo.gl/MNmKqqdHjHr2d6tz5",
-              },
-              {
-                name: "Basement",
-                address: "52-19 Flushing Ave, Maspeth",
-                hours: "Fri-Sat 10pm-5am",
-                description:
-                  "NYC's premier underground techno club in a converted factory, featuring massive sound systems and selective door policy reminiscent of Berlin's Berghain.",
-                specialty: "Techno music, international DJs",
-                url: "https://maps.app.goo.gl/rUax7p6FRXfmGh7Z8",
-              },
-              {
-                name: "Nowadays",
-                address: "56-06 Cooper Ave, Ridgewood",
-                hours:
-                  "Thu 10pm-12am, Fri 10pm-4am, Sat 10pm-6am, Sun 12am-10pm",
-                description:
-                  "Community-centered indoor-outdoor dance club on the Bushwick-Ridgewood border with a warehouse dance floor, park-like outdoor area, and 24-hour weekend parties.",
-                specialty: "House & techno, all-ages events, weekend marathons",
-                url: "https://maps.app.goo.gl/pcjcBsLrACV4XrJ2A",
-              },
-              {
-                name: "Bossa Nova Civic Club",
-                address: "1271 Myrtle Ave, Brooklyn",
-                hours: "Daily 7pm-4am",
-                description:
-                  "Bushwick's hottest underground techno club with 140-capacity space under the subway overpass, featuring European-style dancing, fog machines, and fresh empanadas.",
-                specialty: "Techno music, underground dance culture",
-                url: "https://maps.app.goo.gl/wEoHNkMsrC88KBAE8",
-              },
-              {
-                name: "Ornithology Jazz Club",
-                address: "6 Suydam St, Bushwick",
-                hours: "Daily 7pm-late (live jazz nightly)",
-                description:
-                  "Bohemian jazz performance space from the Smalls team featuring live jazz every night with no cover, three floors including rooftop, and vegan Mediterranean food.",
-                specialty: "Live jazz, vegan cuisine, intimate performances",
-                url: "https://maps.app.goo.gl/teSFuCr6Br5WtVE56",
-              },
-            ]}
-          />
-
-          <DetailedSection
-            title="Comedy Venues"
-            places={[
-              {
-                name: "Comedy Cellar",
-                address: "117 MacDougal St, Greenwich Village",
-                hours:
-                  "Daily 11am-3am (shows: 6:45pm, 8:45pm, 10:45pm, 12:30am)",
-                description:
-                  "NYC's most legendary comedy club since 1981, universally recognized as the greatest comedy room in the country with surprise appearances by comedy legends.",
-                specialty: "A-list comedians, intimate basement setting",
-                url: "https://www.google.com/maps?cid=15186798998046674051",
-              },
-              {
-                name: "The Stand",
-                address: "116 E 16th St, Union Square",
-                hours:
-                  "Mon 5pm-12am, Tu-Thu 12pm-12am, Fri 12pm-2am, Sat 11am-2am, Sun 11am-12am",
-                description:
-                  "Bi-level venue combining comedy shows with Northern Italian cuisine and steakhouse offerings, named best comedy venue by New York Magazine.",
-                specialty: "High-end dining with comedy, no drink minimums",
-                url: "https://www.google.com/maps/place/The+Stand+NYC/@40.7312507,-73.995589,16z/data=!4m6!3m5!1s0x89c259a015566081:0x4a6339f6049de57c!8m2!3d40.7353369!4d-73.9884791!16s%2Fg%2F11h0cd13x?entry=tts",
-              },
-              {
-                name: "New York Comedy Club",
-                address: "241 E 24th St, Gramercy",
-                hours:
-                  "Mon-Wed 6-11pm, Thu 5pm-12am, Fri 6pm-1am, Sat 4pm-1am, Sun 4pm-12am",
-                description:
-                  "Serving NYC comedy since 1989 with newly renovated bar and showroom, featuring nightly showcases with local and international talent.",
-                specialty: "Established comedy showcase, multiple locations",
-                url: "https://www.google.com/maps/place/New+York+Comedy+Club/@40.7389205,-73.9998747,15z/data=!4m7!3m6!1s0x89c2590a3831ebf5:0x18417b14375043f7!8m2!3d40.7389205!4d-73.9808203!15sChxOZXcgWW9yayBDb21lZHkgQ2x1YiBtaWR0b3duIgOIAQGSAQtjb21lZHlfY2x1YuABAA!16s%2Fg%2F12hly4yjm?entry=tts",
-              },
-            ]}
-          />
+      <GuideSection id="key" title="Key">
+        <p className="casa-text">
+          The key is in the lockbox shown below. Use code{" "}
+          <span className="casa-code">{KEY_CODE}</span>.
+        </p>
+        <div className="casa-photos">
+          <figure>
+            <div className="casa-photo">
+              <Image
+                src="/key_location_far_away.jpg"
+                alt="The sidewalk outside the building, with a low iron fence around a street tree near the curb."
+                fill
+                sizes="(min-width: 900px) 30vw, 50vw"
+              />
+            </div>
+            <figcaption className="site-label">Overview</figcaption>
+          </figure>
+          <figure>
+            <div className="casa-photo">
+              <Image
+                src="/key_location_closeup.jpg"
+                alt="The combination lockbox hanging on the low iron fence around the street tree."
+                fill
+                sizes="(min-width: 900px) 30vw, 50vw"
+              />
+            </div>
+            <figcaption className="site-label">Close-up</figcaption>
+          </figure>
         </div>
-      </div>
-    </div>
+      </GuideSection>
+
+      <GuideSection id="couch" title="Couch">
+        <p className="casa-text">
+          The couch is a Koala Byron sofa bed. It turns into a queen-size bed in
+          seconds, with no tools.
+        </p>
+        <div className="casa-steps">
+          <div>
+            <h3 className="site-label">Set it up</h3>
+            <ol>
+              <li>Remove the back cushions and set them aside.</li>
+              <li>Pull out the hidden base frame. It slides out smoothly.</li>
+              <li>Unfold the mattress so it sits flat on the pull-out frame.</li>
+              <li>That&apos;s it: you now have a queen-size bed.</li>
+            </ol>
+          </div>
+          <div>
+            <h3 className="site-label">Convert it back</h3>
+            <ol>
+              <li>Fold the mattress back in half.</li>
+              <li>Push the base frame back under the sofa.</li>
+              <li>Replace the back cushions.</li>
+            </ol>
+          </div>
+        </div>
+        <div className="casa-actions">
+          <a
+            className="editorial-link"
+            href="https://assets.ctfassets.net/uvwd10ivtduz/4JlT1FFXjfjCV9r7lp1XYj/f58ff363c8006b8095efd1984ed5af7c/20240410_Assembly_Instructions_Byron_Sofa_Bed_V2_Digital__1_.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>Setup manual (PDF)</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a
+            className="quiet-link"
+            href="https://www.youtube.com/results?search_query=koala+byron+sofa+bed+setup"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Setup videos<span aria-hidden="true"> ↗</span>
+          </a>
+        </div>
+      </GuideSection>
+
+      <GuideSection id="transportation" title="Transportation">
+        <PlaceList places={transportation} />
+      </GuideSection>
+
+      <GuideSection id="laundry" title="Laundry">
+        <ul className="casa-places">
+          <li className="casa-place">
+            <div className="casa-place-head">
+              <h3>Building laundry room</h3>
+              <p className="casa-place-address">Basement level of 250 Moore St</p>
+            </div>
+            <p className="casa-place-hours">24/7 access with building key</p>
+            <p className="casa-place-description">
+              Washers and dryers run on the Hercules app. Detergent pods are
+              provided.
+            </p>
+            <p className="casa-place-note">In-building, detergent included</p>
+          </li>
+        </ul>
+      </GuideSection>
+
+      <GuideSection id="trash" title="Trash">
+        <p className="casa-text">
+          Trash and recycling bins are in the back of the building.
+        </p>
+        <div className="casa-steps">
+          <div>
+            <h3 className="site-label">How to get there</h3>
+            <ol>
+              <li>The door to the back is by the entrance, next to the package shelf.</li>
+              <li>
+                <strong>Bring your keys.</strong> The door locks behind you.
+              </li>
+              <li>Use the bins in the back area for trash and recycling.</li>
+            </ol>
+          </div>
+        </div>
+      </GuideSection>
+
+      {placeSections.map((section) => (
+        <GuideSection key={section.id} id={section.id} title={section.title}>
+          <PlaceList places={section.places} />
+        </GuideSection>
+      ))}
+
+      <footer className="casa-footer">
+        <a className="quiet-link" href="#top">
+          Back to top<span aria-hidden="true"> ↑</span>
+        </a>
+        <p className="site-label">Casa de Kasper</p>
+      </footer>
+    </main>
   );
 }
 
-interface Place {
-  name: string;
-  address: string;
-  hours: string;
-  description: string;
-  specialty: string;
-  url: string;
-}
-
-function DetailedSection({
+function GuideSection({
+  id,
   title,
-  places,
+  children,
 }: {
+  id: string;
   title: string;
-  places: Place[];
+  children: React.ReactNode;
 }) {
   return (
-    <SectionCard title={title}>
-      <div className="flex flex-col gap-6 sm:gap-7">
-          {places.map((place, index) => (
-            <div
-              key={index}
-              className="border-b border-black/[.08] dark:border-white/[.145] pb-5 sm:pb-6 last:border-b-0"
-            >
-              <div className="flex flex-col gap-2.5 sm:gap-3">
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                  <a
-                    href={place.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-medium text-sm link"
-                  >
-                    {place.name} →
-                  </a>
-                  {place.address && (
-                    <span className="text-xs opacity-70 font-mono">
-                      {place.address}
-                    </span>
-                  )}
-                </div>
-
-                {place.hours && (
-                  <div className="text-xs opacity-70 font-mono">
-                    {place.hours}
-                  </div>
-                )}
-
-                <div className="text-sm/6 opacity-90">{place.description}</div>
-
-                {place.specialty && (
-                  <div className="text-xs font-mono opacity-70">
-                    <span className="bg-black/[.05] dark:bg-white/[.06] px-2 py-1 rounded">
-                      {place.specialty}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
-      </div>
-    </SectionCard>
+    <section id={id} className="casa-section" aria-labelledby={`${id}-title`}>
+      <h2 id={`${id}-title`}>{title}</h2>
+      <div className="casa-section-body">{children}</div>
+    </section>
   );
 }
 
-function Section({
-  title,
-  items,
-}: {
-  title: string;
-  items: { name: string; url?: string }[];
-}) {
+function PlaceList({ places }: { places: Place[] }) {
   return (
-    <SectionCard title={title}>
-      <div className="flex flex-col gap-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-5 lg:gap-6">
-          {items.map((item, index) => (
-            <div key={index}>
-              {item.url ? (
-                <a
-                  href={item.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm/6 link"
-                >
-                  {item.name} →
-                </a>
-              ) : (
-                <span className="text-sm/6">{item.name}</span>
-              )}
-            </div>
-          ))}
-      </div>
-    </SectionCard>
+    <ul className="casa-places">
+      {places.map((place) => (
+        <li key={place.name} className="casa-place">
+          <div className="casa-place-head">
+            <h3>
+              <a href={place.url} target="_blank" rel="noopener noreferrer">
+                {place.name}
+                <span aria-hidden="true"> ↗</span>
+              </a>
+            </h3>
+            {place.address && (
+              <p className="casa-place-address">{place.address}</p>
+            )}
+          </div>
+          {place.hours && <p className="casa-place-hours">{place.hours}</p>}
+          <p className="casa-place-description">{place.description}</p>
+          {place.specialty && (
+            <p className="casa-place-note">{place.specialty}</p>
+          )}
+        </li>
+      ))}
+    </ul>
   );
 }

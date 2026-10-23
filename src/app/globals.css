@@ -1,118 +1,68 @@
 @import "tailwindcss";
-@import "../styles/renders-tokens/index.css";
+@import "../styles/renders-tokens/colors.css";
+@import "../styles/renders-tokens/animations.css";
+@import "../styles/renders-tokens/shells.css";
+@import "./editorial.css";
+@import "./casa.css";
 
+/* Semantic mapping from renders.nyc (apps/web/src/app/globals.css). */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-heading);
-  --font-mono: var(--font-mono);
-  --font-hero: var(--font-hero);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
 }
 
-* {
-  box-sizing: border-box;
+/* renders.nyc app overrides: lighter muted ink for small-text contrast, and
+   the two loaded families behind the package's font roles. */
+:root {
+  --muted-foreground: #858585;
+  --font-heading: var(--font-gibson), "Arial Narrow", Arial, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo,
+    Consolas, monospace;
 }
 
-html,
+html {
+  background: var(--background);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
 body {
-  min-height: 100%;
-  background: var(--renders-background);
-}
-
-body {
-  color: var(--renders-foreground);
-  font-family: var(--font-mono), monospace;
-  letter-spacing: 0;
-}
-
-.landing-page {
-  display: flex;
   min-height: 100svh;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5rem 1rem;
+  overflow-x: hidden;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.landing-content {
-  width: 100%;
-  max-width: 28rem;
-  text-align: center;
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
-.landing-header {
-  margin-bottom: 2rem;
+::selection {
+  background-color: rgba(229, 229, 229, 0.2);
 }
 
-.title-eyebrow {
-  margin-bottom: 0.4rem;
-  color: #a0a0a0;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.display {
-  font-family: var(--font-hero), sans-serif;
-  font-size: clamp(2.75rem, 8vw, 4rem);
-  font-weight: 900;
-  letter-spacing: 0;
-  line-height: 1;
-}
-
-.title-rule {
-  height: 1px;
-  margin-top: 0.75rem;
-  background: var(--renders-border);
-}
-
-.landing-intro,
-.signup-status {
-  color: #a0a0a0;
-  font-size: 0.875rem;
-  line-height: 1.5rem;
-}
-
-.signup-form {
-  display: grid;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.signup-status {
-  margin: 0;
-}
-
-@media (min-width: 640px) {
-  .landing-page {
-    padding: 4rem 5rem;
-  }
-
-  .title-eyebrow {
-    margin-bottom: 0.5rem;
-  }
-
-  .title-rule {
-    margin-top: 0.875rem;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

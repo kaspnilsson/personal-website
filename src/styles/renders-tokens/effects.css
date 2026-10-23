@@ -130,3 +130,99 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Scanlines — hero sections only
+ * 2px repeating horizontal lines, slow drift.
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 1px,
+    rgba(255, 255, 255, 0.02) 1px,
+    rgba(255, 255, 255, 0.02) 2px
+  );
+  animation: scanlineMove 6s linear infinite;
+}
+
+@keyframes scanlineMove {
+  from { transform: translateY(0); }
+  to   { transform: translateY(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanlines { animation: none; }
+}
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Hairlines — dominant layout device, 1px rules
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+.hairline    { border:        1px solid var(--renders-border); }
+.hairline-t  { border-top:    1px solid var(--renders-border); }
+.hairline-b  { border-bottom: 1px solid var(--renders-border); }
+.hairline-l  { border-left:   1px solid var(--renders-border); }
+.hairline-r  { border-right:  1px solid var(--renders-border); }
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Buttons — primary (filled) and ghost (outlined)
+ * Zero radius. Uppercase mono. No shadow, no hover-scale.
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--renders-foreground);
+  color: var(--renders-background);
+  border: none;
+  padding: 14px 20px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0;
+  transition: background-color var(--duration-fast) ease-out;
+}
+.btn-primary:hover  { background: var(--renders-hover); }
+.btn-primary:active { background: #c0c0c0; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--renders-foreground);
+  border: 1px solid var(--renders-border);
+  padding: 13px 19px; /* 1px less to account for border */
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 0;
+  transition: border-color var(--duration-fast) ease-out,
+              color var(--duration-fast) ease-out;
+}
+.btn-ghost:hover  { color: var(--renders-hover); border-color: #555; }
+
+/* ═════════════════════════════════════════════════════════════════════════
+ * Render chrome — the "Rendered N%" / frame counter footer
+ * Use sparingly — one per surface.
+ * ═════════════════════════════════════════════════════════════════════════ */
+
+.render-chrome {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #3a3a3a;
+}

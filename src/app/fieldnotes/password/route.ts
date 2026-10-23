@@ -1,5 +1,5 @@
 import { cookieValue, csrfToken, sessionHeader, validForm, validSession } from '@/lib/fieldnotes/auth.mjs';
-import { boundedBody, html, passwordReady, passwordSetup, privateHeaders } from '@/lib/fieldnotes/http.mjs';
+import { boundedBody, html, notice, passwordReady, passwordSetup, privateHeaders } from '@/lib/fieldnotes/http.mjs';
 import { acceptablePassword, passwordSessionKey, setInitialPassword } from '@/lib/fieldnotes/password.mjs';
 import { sharedAuthentication as authentication } from '@/lib/fieldnotes/shared-auth.mjs';
 
@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     if (!validSession(key, session)) return login();
     const token = csrfToken(key, session);
     return html(record ? passwordReady(token) : passwordSetup(token));
-  } catch { return html('<h1>Fieldnotes</h1><p>Password setup is temporarily unavailable. Please try again.</p>', 503); }
+  } catch { return html(notice('Account page unavailable', 'This page could not load. Try again in a moment.'), 503); }
 }
 export async function POST(request: Request) {
   try {
@@ -29,5 +29,5 @@ export async function POST(request: Request) {
     const created = await setInitialPassword(store, password);
     if (!created) return login();
     return new Response(null, { status: 303, headers: { ...privateHeaders, Location: '/fieldnotes', 'Set-Cookie': sessionHeader(passwordSessionKey(master, created), request) } });
-  } catch { return html('<h1>Fieldnotes</h1><p>Your password could not be saved. Please reload and try again.</p>', 503); }
+  } catch { return html(notice('Password not saved', 'Your password could not be saved. Reload the page and try again.'), 503); }
 }

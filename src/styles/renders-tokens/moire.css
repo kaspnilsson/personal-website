@@ -1,0 +1,139 @@
+/**
+ * RENDERS Moiré Fabric
+ *
+ * Two repeating-linear-gradient grids stacked via ::before / ::after, offset
+ * by --moire-angle-b, counter-rotating on a slow drift. The second grid uses
+ * `mix-blend-mode: difference` — that is what produces the interference
+ * pattern rather than two overlaid line sets. Do not drop it.
+ *
+ * Canonical class is `.moire`. Two named presets ship with the package:
+ *   - `.moire-subtle` — body wash (10px gap, tiny tint). Use behind type.
+ *   - `.moire-hero`   — hero-surface accent (6px gap, heavier tint).
+ *
+ * `.moire-subtle` and `.moire-hero` are tint-only presets — they only set CSS
+ * custom properties, so they MUST be applied as a compound class on the same
+ * element as `.moire`:
+ *
+ *     <div class="moire moire-subtle" />     // correct
+ *     <div class="moire"><div class="moire-subtle" /></div>  // WRONG
+ *
+ * `.page-wash` is a page-level wrapper preset — a full-bleed, position:fixed
+ * variant that sits behind app content as a background layer.
+ *
+ * Tokens (override per surface):
+ *   --moire-tint            line color (rgba recommended)
+ *   --moire-line-width      line thickness
+ *   --moire-line-gap        period of the grid
+ *   --moire-angle-a         first grid angle
+ *   --moire-angle-b         second grid angle
+ *   --moire-drift-duration  animation period
+ *
+ * The `.moire-fabric` / `.moire-fabric--subtle` classes are retained as
+ * backwards-compatible aliases for v0.3.x consumers and intentionally keep
+ * the v0.3.x defaults (neutral white tint). New work should use `.moire`.
+ */
+
+:root {
+  --moire-tint: rgba(255, 255, 255, 0.18);
+  --moire-line-width: 1px;
+  --moire-line-gap: 6px;
+  --moire-angle-a: 0deg;
+  --moire-angle-b: 7deg;
+  --moire-drift-duration: 40s;
+}
+
+.moire,
+.moire-fabric {
+  position: relative;
+  overflow: hidden;
+  background: var(--renders-background, #000);
+}
+
+.moire::before,
+.moire::after,
+.moire-fabric::before,
+.moire-fabric::after {
+  content: '';
+  position: absolute;
+  inset: -25%;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    var(--moire-angle-a),
+    var(--moire-tint) 0,
+    var(--moire-tint) var(--moire-line-width),
+    transparent var(--moire-line-width),
+    transparent var(--moire-line-gap)
+  );
+  will-change: transform;
+}
+
+.moire::after,
+.moire-fabric::after {
+  background-image: repeating-linear-gradient(
+    var(--moire-angle-b),
+    var(--moire-tint) 0,
+    var(--moire-tint) var(--moire-line-width),
+    transparent var(--moire-line-width),
+    transparent var(--moire-line-gap)
+  );
+  mix-blend-mode: difference;
+}
+
+.moire-subtle {
+  --moire-tint: rgba(212, 208, 195, 0.035);
+  --moire-line-gap: 10px;
+}
+
+.moire-hero {
+  --moire-tint: rgba(212, 208, 195, 0.08);
+  --moire-line-gap: 6px;
+}
+
+/* v0.3.x defaults — preserved for BC. Do not retune; new work uses .moire-subtle. */
+.moire-fabric--subtle {
+  --moire-tint: rgba(255, 255, 255, 0.08);
+  --moire-line-gap: 10px;
+}
+
+/**
+ * Full-bleed background layer. Note: `z-index: 0` here establishes a stacking
+ * context — consumers placing app content "above" `.page-wash` need their
+ * content at `z-index: 1` or higher (or in a separate stacking context),
+ * otherwise the fabric will render on top.
+ */
+.page-wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  --moire-tint: rgba(212, 208, 195, 0.035);
+  --moire-line-gap: 10px;
+}
+
+/**
+ * Drift animation only registered when the user opts in. Note: tokens/
+ * animations.css already ships a global reduce-motion guard that zeroes
+ * `animation-duration` on every selector, so this `no-preference` gate is
+ * belt-and-suspenders for consumers that import the full token bundle. It
+ * is still preferred — never registering the animation is cleaner than
+ * registering it with a 0.01ms duration.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .moire::before,
+  .moire-fabric::before {
+    animation: moire-drift-a var(--moire-drift-duration) linear infinite;
+  }
+  .moire::after,
+  .moire-fabric::after {
+    animation: moire-drift-b var(--moire-drift-duration) linear infinite reverse;
+  }
+}
+
+@keyframes moire-drift-a {
+  from { transform: rotate(0deg) translate(0, 0); }
+  to   { transform: rotate(0.5deg) translate(4%, 2%); }
+}
+@keyframes moire-drift-b {
+  from { transform: rotate(7deg) translate(0, 0); }
+  to   { transform: rotate(7.5deg) translate(-3%, 4%); }
+}

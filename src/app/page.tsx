@@ -1,21 +1,26 @@
-import { NewsletterSignup } from "@/components/newsletter-signup";
+import type { Metadata } from "next";
+
+import { ReleaseHero, ReleaseIndex } from "@/components/music";
+import { PhotoLookbook } from "@/components/photo-lookbook";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { SkipLink } from "@/components/skip-link";
+import { lookbook } from "@/data/photography";
+import { latestRelease, releases } from "@/data/releases";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 export default function HomePage() {
   return (
-    <main className="landing-page">
-      <div className="landing-content">
-        <header className="landing-header">
-          <div className="title-eyebrow">Electronic Music Producer / DJ</div>
-          <h1 className="display">kasp</h1>
-          <div className="title-rule" />
-        </header>
-
-        <p className="landing-intro">
-          Subscribe for new releases and exclusive content.
-        </p>
-
-        <NewsletterSignup />
-      </div>
-    </main>
+    <>
+      <SkipLink />
+      <SiteHeader home />
+      <main id="main-content" className="home-page">
+        <ReleaseHero release={latestRelease} />
+        <ReleaseIndex releases={releases} />
+        <PhotoLookbook photos={lookbook} />
+      </main>
+      <SiteFooter />
+    </>
   );
 }
