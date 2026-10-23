@@ -46,8 +46,18 @@ export function expectedOrigin(request, env = process.env) {
 }
 export function validWrite(request, key, env = process.env) {
   const session = cookieValue(request);
-  return validSession(key, session) && request.headers.get('origin') === expectedOrigin(request, env) &&
-    request.headers.get('sec-fetch-site') !== 'cross-site' && sameSecret(request.headers.get('x-review-token'), csrfToken(key, session));
+  return validSession(key, session) && sameOrigin(request, env) && sameSecret(request.headers.get('x-review-token'), csrfToken(key, session));
+}
+export function sameOrigin(request, env = process.env) {
+  return request.headers.get('origin') === expectedOrigin(request, env) && request.headers.get('sec-fetch-site') !== 'cross-site';
+}
+export function validForm(request, key, token, env = process.env) {
+  const session = cookieValue(request);
+  return validSession(key, session) && sameOrigin(request, env) && sameSecret(token, csrfToken(key, session));
+}
+export function expiredSessionHeader(request) {
+  const secure = new URL(request.url).protocol === 'https:' || process.env.NODE_ENV === 'production';
+  return `${sessionCookieName}=; HttpOnly; SameSite=Lax; Path=/fieldnotes; Max-Age=0${secure ? '; Secure' : ''}`;
 }
 export function decryptCatalog(envelope, key) {
   if (envelope.version !== 1) throw new Error('Unsupported private catalog.');

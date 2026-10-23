@@ -90,6 +90,22 @@ test('Redis HTTP and command failures reject and never claim a successful durabl
   await assert.rejects(offline.compareAndSwap('fixture-key', null, 'next'), /fixture offline/);
 });
 
+test('login counter CAS sets expiry atomically while ordinary records remain durable', async () => {
+  const calls = [];
+  const store = new RedisStore('https://kv.example.invalid', 'fixture-token', async (_url, options) => {
+    calls.push(JSON.parse(options.body));
+    return Response.json({ result: 1 });
+  });
+  assert.equal(await store.compareAndSwap('counter-fixture', null, 'attempt-one', 900), true);
+  assert.deepEqual(calls[0].slice(2), ['1', 'counter-fixture', '__ABSENT__', 'attempt-one', '900']);
+  assert.match(calls[0][1], /redis\.call\('SET',KEYS\[1\],ARGV\[2\],'EX',ARGV\[3\]\)/);
+  assert.equal(await store.compareAndSwap('password-fixture', null, 'verifier'), true);
+  assert.equal(calls[1].length, 6);
+  assert.doesNotMatch(calls[1][1], /'EX'/);
+  for (const ttl of [0, -1, 1.5, NaN, Infinity, '900']) await assert.rejects(store.compareAndSwap('bad', null, 'value', ttl), /expiry/);
+  assert.equal(calls.length, 2);
+});
+
 test('inventory identity yields stable private storage keys and keeps distinct listings separate', () => {
   const first = reviewStorageKey('fixture-shop:inventory-001');
   assert.equal(first, reviewStorageKey('fixture-shop:inventory-001'));
