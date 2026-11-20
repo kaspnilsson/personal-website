@@ -4,23 +4,35 @@ import { contact, profiles, renders } from "@/config/site";
 
 import { NewsletterSignup } from "./newsletter-signup";
 
-// Printed ink for display type and the solid buttons: a faint, broad variation in toner
-// density and a slightly soft edge. No pinholes or speckle: scattered dots inside letters
-// read as noise (and to some people as trypophobic), so the solid stays solid.
+// Photocopied ink, modelled on the Desire cover's own lettering: the shape is softened, a
+// fine pixel-level toner noise is added, and the result is re-hardened. That gives a dense
+// grain all through the black and slightly feathered edges, the way a copier prints type.
+// No discrete pinholes: separate white dots read as holes (and to some people as
+// trypophobic); a fine, even grain reads as print.
+function inkSteps(blur: number, amp: number, slope: number, intercept: number) {
+  return (
+    <>
+      <feGaussianBlur in="SourceAlpha" stdDeviation={blur} result="soft" />
+      <feTurbulence type="fractalNoise" baseFrequency="3" numOctaves="1" seed="3" result="toner" />
+      <feColorMatrix in="toner" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="noise" />
+      <feComposite in="soft" in2="noise" operator="arithmetic" k1="0" k2="1" k3={amp} k4={-amp / 2} result="grain" />
+      <feComponentTransfer in="grain" result="copy">
+        <feFuncA type="linear" slope={slope} intercept={intercept} />
+      </feComponentTransfer>
+      <feFlood floodColor="#121110" result="ink" />
+      <feComposite in="ink" in2="copy" operator="in" />
+    </>
+  );
+}
+
 function InkFilter() {
   return (
     <svg className="sr-only" aria-hidden="true" focusable="false">
-      <filter id="ink" x="-1%" y="-1%" width="102%" height="102%" colorInterpolationFilters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="toner" />
-        <feDisplacementMap in="SourceGraphic" in2="toner" scale="1" xChannelSelector="R" yChannelSelector="G" result="edge" />
-        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="8" result="field" />
-        <feColorMatrix in="field" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.16 0 0 0 0.88" result="density" />
-        <feComposite in="edge" in2="density" operator="in" />
+      <filter id="ink" x="-3%" y="-3%" width="106%" height="106%" colorInterpolationFilters="sRGB">
+        {inkSteps(0.5, 1.6, 2.4, -0.9)}
       </filter>
       <filter id="ink-solid" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency="0.012 0.03" numOctaves="2" seed="5" result="field" />
-        <feColorMatrix in="field" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.16 0 0 0 0.88" result="density" />
-        <feComposite in="SourceGraphic" in2="density" operator="in" />
+        {inkSteps(0.5, 1.2, 2.6, -1)}
       </filter>
     </svg>
   );
