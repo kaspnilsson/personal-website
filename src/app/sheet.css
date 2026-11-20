@@ -135,11 +135,24 @@ html:has(.sheet) {
   gap: 8px 28px;
   margin-top: 26px;
 }
-.sheet-actions .editorial-link {
-  min-width: 250px;
-  border-bottom-width: 2px;
+/* The two actions on the page, Listen and Subscribe, are the only solid ink blocks. */
+.sheet-actions .editorial-link,
+.sheet .signup-submit {
+  min-height: 54px;
+  padding: 0 20px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
   font-size: 13px;
   letter-spacing: 0.08em;
+}
+.sheet-actions .editorial-link {
+  min-width: 250px;
+}
+.sheet-actions .editorial-link:hover,
+.sheet .signup-submit:hover {
+  background: #000;
+  color: #fff;
 }
 .sheet-link {
   display: inline-flex;
@@ -222,7 +235,7 @@ html:has(.sheet) {
   overflow: hidden;
 }
 .sheet .footer-signup-copy {
-  grid-row: 1;
+  grid-row: 3;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
   align-items: end;
@@ -252,17 +265,16 @@ html:has(.sheet) {
   width: auto;
   min-width: 170px;
   margin: 0;
-  border-bottom-width: 2px;
-  font-size: 13px;
 }
 .sheet .signup-status {
   grid-column: 1 / -1;
   color: var(--ink-muted);
 }
+/* The word always heads the form and is never cropped: it has to be read. */
 .sheet .footer-word {
   grid-row: 2;
   grid-column: 1 / -1;
-  margin: 0 0 -0.12em;
+  margin: 0 0 0.08em;
   padding: 0 2.5vw;
   font-size: 22.4vw;
   line-height: 0.8;
