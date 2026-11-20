@@ -4,44 +4,22 @@ import { contact, profiles, renders } from "@/config/site";
 
 import { NewsletterSignup } from "./newsletter-signup";
 
-// Print wear for display type: the edge is pushed about by toner grain and the solid
-// is opened by a few worn patches. The letters stay real text.
-function WornFilter() {
-  return (
-    <svg className="sr-only" aria-hidden="true" focusable="false">
-      <filter id="worn" x="-2%" y="-2%" width="104%" height="104%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="4" result="toner" />
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="toner"
-          scale="4"
-          xChannelSelector="R"
-          yChannelSelector="G"
-          result="edge"
-        />
-        <feTurbulence type="fractalNoise" baseFrequency="0.035 0.1" numOctaves="3" seed="11" result="wear" />
-        <feColorMatrix
-          in="wear"
-          type="matrix"
-          values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -40 0 0 0 30"
-          result="mask"
-        />
-        <feComposite in="edge" in2="mask" operator="in" />
-      </filter>
-    </svg>
-  );
-}
-
-export function SiteFooter({ signup = true }: { signup?: boolean }) {
+export function SiteFooter({
+  signup = true,
+  photo,
+}: {
+  signup?: boolean;
+  photo?: React.ReactNode;
+}) {
   return (
     <footer id="contact" className="site-footer">
-      <WornFilter />
       {signup && (
         <section
           id="updates"
-          className="footer-signup"
+          className={`footer-signup${photo ? " footer-signup--photo" : ""}`}
           aria-labelledby="updates-title"
         >
+          {photo}
           <h2 id="updates-title" className="footer-word">
             Updates
           </h2>
