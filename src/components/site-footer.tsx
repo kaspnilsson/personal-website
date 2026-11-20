@@ -4,6 +4,25 @@ import { contact, profiles, renders } from "@/config/site";
 
 import { NewsletterSignup } from "./newsletter-signup";
 
+// Printed ink for display type: toner density varies inside the strokes, the edge is a
+// little soft, and a few pinholes open in the solid. Letter shapes stay whole and readable.
+function InkFilter() {
+  return (
+    <svg className="sr-only" aria-hidden="true" focusable="false">
+      <filter id="ink" x="-1%" y="-1%" width="102%" height="102%" colorInterpolationFilters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="toner" />
+        <feDisplacementMap in="SourceGraphic" in2="toner" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="edge" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.014 0.035" numOctaves="3" seed="8" result="field" />
+        <feColorMatrix in="field" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.4 0 0 0 0.74" result="density" />
+        <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="1" seed="21" result="fine" />
+        <feColorMatrix in="fine" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -18 0 0 0 13.4" result="pins" />
+        <feComposite in="density" in2="pins" operator="in" result="mask" />
+        <feComposite in="edge" in2="mask" operator="in" />
+      </filter>
+    </svg>
+  );
+}
+
 export function SiteFooter({
   signup = true,
   photo,
@@ -13,6 +32,7 @@ export function SiteFooter({
 }) {
   return (
     <footer id="contact" className="site-footer">
+      <InkFilter />
       {signup && (
         <section
           id="updates"

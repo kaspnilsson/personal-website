@@ -105,12 +105,18 @@ html:has(.sheet) body {
   text-transform: uppercase;
 }
 .sheet-latest h1 {
-  margin: 10px 0 4px;
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 400;
-  letter-spacing: 0.1em;
+  margin: 14px 0 16px -0.04em;
+  font-family: var(--font-heading);
+  font-size: clamp(56px, 6.4vw, 100px);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -0.035em;
   text-transform: uppercase;
+}
+/* Display type is printed, not flat: see InkFilter in site-footer.tsx. */
+.sheet-latest h1,
+.sheet .footer-word {
+  filter: url(#ink);
 }
 .sheet-meta {
   color: var(--ink-muted);
