@@ -17,9 +17,9 @@
 .sheet {
   --paper: #e4e0d6;
   --ink: #121110;
-  --ink-muted: #57534b;
-  --ink-rule: rgba(18, 17, 16, 0.42);
-  --ink-hairline: rgba(18, 17, 16, 0.16);
+  --ink-muted: #45413a;
+  --ink-rule: rgba(18, 17, 16, 0.5);
+  --ink-hairline: rgba(18, 17, 16, 0.26);
   --ink-placeholder: #7a756b;
   --background: var(--paper);
   --foreground: var(--ink);
@@ -69,170 +69,174 @@ html:has(.sheet) body {
   color: #000;
 }
 
-/* Latest release: one mass in open ground, facts on its top and bottom axes. */
+/* Music: the cover is the one mass in open ground. Its column holds the whole catalogue,
+   the latest release on the cover's top edge and everything else on its bottom edge. */
 .release-sheet {
-  --cover: min(calc(100svh - 150px), 58vw);
+  --cover: min(calc(100svh - 140px), 56vw);
   display: grid;
-  grid-template-columns: 5vw var(--cover) minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  column-gap: 32px;
-  padding: 18px 5vw 110px 0;
+  grid-template-columns: var(--cover) minmax(0, 1fr);
+  column-gap: 44px;
+  padding: 14px 5vw 120px;
 }
 .sheet-cover {
   position: relative;
-  grid-column: 2;
-  grid-row: 1 / 4;
   width: var(--cover);
   aspect-ratio: 1 / 1;
 }
-.sheet-cover img {
+.sheet-cover img,
+.sheet-thumb img,
+.photo-band img {
   object-fit: cover;
   mix-blend-mode: multiply;
 }
-.sheet-facts {
-  grid-column: 3;
-  font-size: 12px;
+.sheet-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 48px;
+  min-width: 0;
+  font-size: 13px;
   line-height: 1.6;
-  letter-spacing: 0.08em;
+}
+.sheet-label {
+  color: var(--ink-muted);
+  font-size: 12px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.sheet-facts--top {
-  grid-row: 1;
-  display: grid;
-  gap: 14px;
-  margin-top: -3px;
-}
-.sheet-facts--top .site-label {
-  color: var(--ink-muted);
-}
-.sheet-facts h1 {
+.sheet-latest h1 {
+  margin: 10px 0 4px;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 400;
-  line-height: 1.6;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
-.sheet-facts .site-label {
-  font-size: 12px;
-  letter-spacing: 0.08em;
+.sheet-meta {
+  color: var(--ink-muted);
+  font-size: 13px;
 }
-.sheet-facts--bottom {
-  grid-row: 3;
-  align-self: end;
+.sheet-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 28px;
+  gap: 8px 28px;
+  margin-top: 26px;
 }
-.sheet-facts--bottom .editorial-link {
-  min-width: 230px;
-  font-size: 12px;
+.sheet-actions .editorial-link {
+  min-width: 250px;
+  border-bottom-width: 2px;
+  font-size: 13px;
   letter-spacing: 0.08em;
 }
-
-/* Index: everything else as small technical rows. */
-.release-index {
-  padding: 0 5vw 120px;
-}
-.index-title {
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--ink);
-}
-.index-row {
-  display: grid;
-  grid-template-columns: 36px 52px minmax(0, 1fr) minmax(0, 1.6fr) auto;
+.sheet-link {
+  display: inline-flex;
   align-items: center;
-  gap: 0 24px;
-  min-height: 76px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.index-number,
-.index-meta {
-  color: var(--ink-muted);
-}
-.index-thumb {
-  position: relative;
-  width: 52px;
-  height: 52px;
-}
-.index-thumb img {
-  object-fit: cover;
-  mix-blend-mode: multiply;
-}
-.index-name {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 400;
-}
-.index-links a,
-.index-profiles a {
+  min-height: 44px;
+  font-size: 13px;
   text-decoration: underline;
-  text-decoration-color: var(--ink-hairline);
+  text-decoration-color: var(--ink-rule);
   text-underline-offset: 4px;
 }
-.index-links a:hover,
-.index-profiles a:hover {
+.sheet-link:hover {
   text-decoration-color: currentColor;
 }
-.index-links {
-  display: flex;
-  column-gap: 24px;
-  justify-content: end;
+.sheet-catalogue .sheet-label {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
 }
-.index-profiles {
+.sheet-row {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 18px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sheet-thumb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+.sheet-row-text {
+  display: grid;
+  min-width: 0;
+}
+.sheet-row-title {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sheet-row-links {
+  display: flex;
+  gap: 0 18px;
+}
+.sheet-profiles {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 4px 40px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--border);
+  gap: 0 18px;
+  padding-top: 8px;
 }
-.index-profiles .site-label {
-  color: var(--ink-muted);
+.sheet-profiles .sheet-label {
+  margin-right: 6px;
+  padding: 0;
+  border: 0;
 }
-.index-profiles .site-label,
-.index-title {
-  font-size: 12px;
-  letter-spacing: 0.08em;
-}
-.index-profiles ul {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 28px;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+
+/* One photograph, mastered into ink on this paper, edge to edge. */
+.photo-band {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1600 / 850;
 }
 
 /* Updates: one word at full scale, cropped by the sheet, with the form hanging off it. */
 .sheet .footer-signup {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  grid-template-columns: minmax(0, 1fr);
   min-height: 0;
   gap: 0;
-  padding: 100px 0 0;
+  padding: 96px 0 0;
   overflow: hidden;
 }
 .sheet .footer-signup-copy {
   grid-row: 1;
-  grid-column: 2;
-  padding: 0 5vw 34px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  align-items: end;
+  gap: 24px 44px;
+  padding: 0 5vw 36px;
 }
 .sheet .signup-description {
-  font-size: 13px;
-  line-height: 1.6;
-}
-.sheet .signup-form .site-label {
-  font-size: 11px;
+  max-width: 30ch;
+  font-size: 15px;
+  line-height: 1.5;
 }
 .sheet .signup-form {
-  margin-top: 22px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 20px;
+  margin: 0;
+}
+.sheet .signup-form .site-label {
+  grid-column: 1 / -1;
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+.sheet .signup-form .field-input {
+  font-size: 15px;
+}
+.sheet .signup-submit {
+  width: auto;
+  min-width: 170px;
+  margin: 0;
+  border-bottom-width: 2px;
+  font-size: 13px;
+}
+.sheet .signup-status {
+  grid-column: 1 / -1;
+  color: var(--ink-muted);
 }
 .sheet .footer-word {
   grid-row: 2;
@@ -257,7 +261,7 @@ html:has(.sheet) body {
 /* Usability over the flyer: wear and grain never sit on anything you have to read.
    Wear is only on the decorative Updates word. Nav stays legible at 11px. */
 .sheet .site-navigation a {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
 }
 
@@ -265,63 +269,35 @@ html:has(.sheet) body {
   .release-sheet {
     --cover: 100vw;
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
-    gap: 22px 0;
+    row-gap: 26px;
     padding: 6px 0 80px;
   }
-  .sheet-cover {
-    grid-column: 1 / -1;
-    grid-row: 1;
+  .sheet-column {
+    padding: 0 22px;
   }
-  .sheet-facts--top {
-    grid-column: 1;
-    grid-row: 2;
-    grid-template-columns: auto auto 1fr;
-    align-items: start;
-    gap: 8px 24px;
-    margin: 0 5vw;
-  }
-  .sheet-facts--bottom {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    margin: 0 5vw;
-  }
-  .sheet-facts--bottom .editorial-link {
+  .sheet-actions .editorial-link {
     flex: 1 1 100%;
   }
-  .index-row {
-    grid-template-columns: 52px minmax(0, 1fr);
-    gap: 2px 16px;
+  .sheet-row {
+    grid-template-columns: 48px minmax(0, 1fr);
   }
-  .index-number {
-    display: none;
+  .sheet-row-links {
+    grid-column: 2;
   }
-  .index-thumb {
-    grid-row: 1 / 4;
-    align-self: start;
-  }
-  .index-links {
-    justify-content: start;
+  .photo-band {
+    aspect-ratio: 4 / 3;
   }
   .sheet .footer-signup {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    padding: 72px 0 0;
+    padding-top: 64px;
   }
   .sheet .footer-signup-copy {
-    grid-column: 1;
+    grid-template-columns: minmax(0, 1fr);
     padding: 0 22px 30px;
   }
-}
-
-@media (max-width: 599px) {
-  .release-index {
-    padding: 0 22px 80px;
+  .sheet .signup-form {
+    grid-template-columns: minmax(0, 1fr);
   }
-  .sheet-facts--bottom {
-    margin: 0 22px;
-  }
-  .sheet-facts--top {
-    margin: 0 22px;
+  .sheet .signup-submit {
+    width: 100%;
   }
 }

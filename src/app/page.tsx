@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-import { ReleaseIndex, ReleaseSheet } from "@/components/music";
+import { MusicSheet, PhotoBand } from "@/components/music";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
@@ -17,8 +17,8 @@ export default function HomePage() {
       <SkipLink />
       <SiteHeader home />
       <main id="main-content" className="home-page">
-        <ReleaseSheet release={newestFirst[0]} />
-        <ReleaseIndex releases={newestFirst} />
+        <MusicSheet releases={newestFirst} />
+        <PhotoBand />
       </main>
       <SiteFooter />
     </div>
