@@ -12,7 +12,7 @@ function InkFilter() {
       <filter id="ink" x="-1%" y="-1%" width="102%" height="102%" colorInterpolationFilters="sRGB">
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="toner" />
         <feDisplacementMap in="SourceGraphic" in2="toner" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="edge" />
-        <feTurbulence type="fractalNoise" baseFrequency="0.014 0.035" numOctaves="3" seed="8" result="field" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="2" seed="8" result="field" />
         <feColorMatrix in="field" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.4 0 0 0 0.74" result="density" />
         <feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="1" seed="21" result="fine" />
         <feColorMatrix in="fine" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -18 0 0 0 13.4" result="pins" />

@@ -164,6 +164,17 @@ html:has(.sheet) body {
   width: 48px;
   height: 48px;
 }
+.sheet-row--text {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.sheet-about {
+  max-width: 44ch;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.sheet-about .sheet-meta {
+  margin-top: 6px;
+}
 .sheet-row-text {
   display: grid;
   min-width: 0;
@@ -312,6 +323,12 @@ html:has(.sheet) body {
   }
   .sheet-row-links {
     grid-column: 2;
+  }
+  .sheet-row--text {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sheet-row--text .sheet-row-links {
+    grid-column: 1;
   }
   .photo-band {
     aspect-ratio: 4 / 3;

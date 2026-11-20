@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { listeningProfiles } from "@/config/site";
+import { contact, listeningProfiles, site } from "@/config/site";
 import {
   appearances,
   formatReleaseDate,
@@ -75,6 +75,15 @@ export function MusicSheet({ releases }: { releases: readonly Release[] }) {
             ))}
           </div>
         </div>
+        <div className="sheet-about">
+          <p>{site.description}</p>
+          <p className="sheet-meta">
+            Bookings{" "}
+            <a className="sheet-link" href={`mailto:${contact.email}`}>
+              {contact.email}
+            </a>
+          </p>
+        </div>
         <div className="sheet-catalogue">
           <h2 className="sheet-label">More music</h2>
           <ul className="sheet-rows">
@@ -100,8 +109,7 @@ export function MusicSheet({ releases }: { releases: readonly Release[] }) {
               </li>
             ))}
             {appearances.map((appearance) => (
-              <li className="sheet-row" key={appearance.link.href}>
-                <span className="sheet-thumb sheet-thumb--empty" aria-hidden="true" />
+              <li className="sheet-row sheet-row--text" key={appearance.link.href}>
                 <span className="sheet-row-text">
                   <span className="sheet-row-title">{appearance.title}</span>
                   <span className="sheet-meta">
