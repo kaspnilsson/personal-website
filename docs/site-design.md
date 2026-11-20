@@ -35,9 +35,21 @@ Gibson (Canada Type) is the heading face Kasper chose for Kasp and Renders. The 
 
 Promo photographs were removed from the site in November 2026; they remain in git history.
 
+## The sheet
+
+The public pages (home, about, 404, error) sit on a paper sheet defined in `src/app/sheet.css`, applied by a `.sheet` wrapper. It carries over what the Renders poster hill climb learned (renders `drafts/design/hillclimb-2026-11-03`: `brand-direction.md`, `rubric-v4.txt`, `shared/master.py`), adjusted for a page people have to use:
+
+- Paper `#e4e0d6` and ink `#121110`: black, paper and earth only, never pure digital values.
+- One piece, not zones. The latest cover is the one dominant mass in open ground, printed into the paper with `mix-blend-mode: multiply`, and its facts hang off its top and bottom axes. The picture gets the first read.
+- Type at the extremes: the cropped, worn UPDATES word, or 11 to 13 px mono. Nothing in between.
+- One surface over everything: `scripts/make-surface.py` bakes the master bus's grain, specks and room into `public/assets/kasp/surface`. They scroll with the paper.
+- Usability wins over the flyer: information is never worn or reduced below 12 px, links are underlined, and each release has one obvious Listen action.
+
+Casa and Fieldnotes keep the dark Renders chassis.
+
 ## Rules
 
-- Ground `#0a0a0a`, ink `#e5e5e5`, rules `#262626` and `#3a3a3a`. Pure white only on hover. No accent colours, gradients, radius or drop shadows in the interface.
+- Dark chassis (Casa, Fieldnotes): ground `#0a0a0a`, ink `#e5e5e5`, rules `#262626` and `#3a3a3a`. Pure white only on hover. No accent colours, gradients, radius or drop shadows in the interface.
 - Gibson Bold, uppercase, for headings and titles. JetBrains Mono for facts, labels, body and actions.
 - Motion is functional: transforms and opacity only, power-curve easing, reduced motion respected.
 - Show facts at rest. No placeholder releases, events or sets.

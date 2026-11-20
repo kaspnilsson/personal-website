@@ -1,0 +1,327 @@
+/*
+ * The sheet: kasptrax.com's public pages as one printed piece.
+ *
+ * Carried over from the Renders poster hill climb (renders
+ * drafts/design/hillclimb-2026-11-03: brand-direction.md, rubric-v4.txt,
+ * shared/master.py):
+ *   - Black, paper and earth only. Ink and paper are never pure digital values.
+ *   - One piece, not zones: the latest cover is the one dominant mass in open
+ *     ground, printed into the paper, with small facts hanging off its axes.
+ *   - Type at the extremes: very large heavy Gibson or small mono, nothing in
+ *     between. Display type is worn, not clean.
+ *   - Give the picture the first read: the release word stays small.
+ *   - One process over everything, last: the master bus's grain and room sit
+ *     over the whole page, type and picture together (scripts/make-surface.py).
+ */
+
+.sheet {
+  --paper: #e4e0d6;
+  --ink: #121110;
+  --ink-muted: #57534b;
+  --ink-rule: rgba(18, 17, 16, 0.42);
+  --ink-hairline: rgba(18, 17, 16, 0.16);
+  --ink-placeholder: #7a756b;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --muted-foreground: var(--ink-muted);
+  --border: var(--ink-hairline);
+  --border-strong: var(--ink-rule);
+  --secondary: rgba(18, 17, 16, 0.05);
+  --ring: var(--ink);
+  position: relative;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+}
+html:has(.sheet),
+html:has(.sheet) body {
+  background: #e4e0d6;
+  color-scheme: light;
+}
+.sheet ::selection {
+  background-color: rgba(18, 17, 16, 0.16);
+}
+
+/* Master bus: one uneven exposure (room) and one grain over the whole sheet.
+   They belong to the paper, so they scroll with it. */
+.sheet::before,
+.sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+.sheet::before {
+  background: url("/assets/kasp/surface/room.png") 0 0 / 100vw 100vw repeat;
+}
+.sheet::after {
+  background: url("/assets/kasp/surface/grain.png") 0 0 / 384px 384px repeat;
+}
+
+.sheet .site-wordmark img {
+  filter: brightness(0);
+  opacity: 0.93;
+}
+.sheet .site-navigation a:hover,
+.sheet .quiet-link:hover,
+.sheet .footer-bottom a:hover {
+  color: #000;
+}
+
+/* Latest release: one mass in open ground, facts on its top and bottom axes. */
+.release-sheet {
+  --cover: min(calc(100svh - 150px), 58vw);
+  display: grid;
+  grid-template-columns: 5vw var(--cover) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  column-gap: 32px;
+  padding: 18px 5vw 110px 0;
+}
+.sheet-cover {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / 4;
+  width: var(--cover);
+  aspect-ratio: 1 / 1;
+}
+.sheet-cover img {
+  object-fit: cover;
+  mix-blend-mode: multiply;
+}
+.sheet-facts {
+  grid-column: 3;
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.sheet-facts--top {
+  grid-row: 1;
+  display: grid;
+  gap: 14px;
+  margin-top: -3px;
+}
+.sheet-facts--top .site-label {
+  color: var(--ink-muted);
+}
+.sheet-facts h1 {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+}
+.sheet-facts .site-label {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+.sheet-facts--bottom {
+  grid-row: 3;
+  align-self: end;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 28px;
+}
+.sheet-facts--bottom .editorial-link {
+  min-width: 230px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+/* Index: everything else as small technical rows. */
+.release-index {
+  padding: 0 5vw 120px;
+}
+.index-title {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ink);
+}
+.index-row {
+  display: grid;
+  grid-template-columns: 36px 52px minmax(0, 1fr) minmax(0, 1.6fr) auto;
+  align-items: center;
+  gap: 0 24px;
+  min-height: 76px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.index-number,
+.index-meta {
+  color: var(--ink-muted);
+}
+.index-thumb {
+  position: relative;
+  width: 52px;
+  height: 52px;
+}
+.index-thumb img {
+  object-fit: cover;
+  mix-blend-mode: multiply;
+}
+.index-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+}
+.index-links a,
+.index-profiles a {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-hairline);
+  text-underline-offset: 4px;
+}
+.index-links a:hover,
+.index-profiles a:hover {
+  text-decoration-color: currentColor;
+}
+.index-links {
+  display: flex;
+  column-gap: 24px;
+  justify-content: end;
+}
+.index-profiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 40px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.index-profiles .site-label {
+  color: var(--ink-muted);
+}
+.index-profiles .site-label,
+.index-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+.index-profiles ul {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 28px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Updates: one word at full scale, cropped by the sheet, with the form hanging off it. */
+.sheet .footer-signup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  min-height: 0;
+  gap: 0;
+  padding: 100px 0 0;
+  overflow: hidden;
+}
+.sheet .footer-signup-copy {
+  grid-row: 1;
+  grid-column: 2;
+  padding: 0 5vw 34px 0;
+}
+.sheet .signup-description {
+  font-size: 13px;
+  line-height: 1.6;
+}
+.sheet .signup-form .site-label {
+  font-size: 11px;
+}
+.sheet .signup-form {
+  margin-top: 22px;
+}
+.sheet .footer-word {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  margin: 0 0 -0.165em -0.055em;
+  font-size: 25.4vw;
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  white-space: nowrap;
+  filter: url(#worn);
+}
+.sheet .footer-bottom {
+  position: relative;
+  border-top: 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+.sheet .footer-bottom a:hover {
+  color: #fff;
+}
+
+/* Usability over the flyer: wear and grain never sit on anything you have to read.
+   Wear is only on the decorative Updates word. Nav stays legible at 11px. */
+.sheet .site-navigation a {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 899px) {
+  .release-sheet {
+    --cover: 100vw;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 22px 0;
+    padding: 6px 0 80px;
+  }
+  .sheet-cover {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+  .sheet-facts--top {
+    grid-column: 1;
+    grid-row: 2;
+    grid-template-columns: auto auto 1fr;
+    align-items: start;
+    gap: 8px 24px;
+    margin: 0 5vw;
+  }
+  .sheet-facts--bottom {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    margin: 0 5vw;
+  }
+  .sheet-facts--bottom .editorial-link {
+    flex: 1 1 100%;
+  }
+  .index-row {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 2px 16px;
+  }
+  .index-number {
+    display: none;
+  }
+  .index-thumb {
+    grid-row: 1 / 4;
+    align-self: start;
+  }
+  .index-links {
+    justify-content: start;
+  }
+  .sheet .footer-signup {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 72px 0 0;
+  }
+  .sheet .footer-signup-copy {
+    grid-column: 1;
+    padding: 0 22px 30px;
+  }
+}
+
+@media (max-width: 599px) {
+  .release-index {
+    padding: 0 22px 80px;
+  }
+  .sheet-facts--bottom {
+    margin: 0 22px;
+  }
+  .sheet-facts--top {
+    margin: 0 22px;
+  }
+}

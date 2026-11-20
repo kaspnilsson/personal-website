@@ -2,8 +2,8 @@
  * Kasp editorial layer.
  * Ported from renders.nyc: apps/web/src/app/editorial.css on
  * codex/enfin-leve-website (472427c). Shared Renders class names keep their
- * values; Kasp-only sections (release index, about,
- * status pages) follow the same measurements.
+ * values; Kasp-only sections (about, status pages) follow the same
+ * measurements. The public pages sit on the paper sheet in sheet.css.
  */
 
 .skip-link {
@@ -85,7 +85,7 @@
   min-height: 48px;
   min-width: 188px;
   padding: 0;
-  border-bottom: 1px solid #ffffff50;
+  border-bottom: 1px solid var(--ink-rule, #ffffff50);
   background: none;
   color: inherit;
   cursor: pointer;
@@ -107,8 +107,6 @@
   min-height: 44px;
 }
 
-.release-caption h3,
-.release-record h3,
 .footer-signup h2,
 .profile-grid h1,
 .status-page h1 {
@@ -125,92 +123,6 @@
   column-gap: 30px;
   row-gap: 8px;
   margin-top: 30px;
-}
-
-/* Release index: renders.nyc's archive grid with release covers. */
-.release-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9vw;
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 46px 5vw 70px;
-  align-items: start;
-}
-.release-card {
-  min-width: 0;
-}
-.release-art {
-  position: relative;
-  display: block;
-  aspect-ratio: 1 / 1;
-  background: var(--secondary);
-}
-.release-art img {
-  object-fit: cover;
-}
-.release-art:focus-visible {
-  outline-offset: -5px;
-}
-.release-caption {
-  padding: 20px 0 0;
-}
-.release-caption h3 {
-  margin: 0 0 10px;
-  font-size: 30px;
-}
-.release-caption .site-label {
-  color: #b8b8b8;
-}
-.release-links {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 28px;
-  margin-top: 6px;
-}
-.release-more {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 5vw 110px;
-}
-.release-record {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  padding: 35px 0;
-  border-top: 1px solid var(--border);
-}
-.release-record h3 {
-  margin: 0 0 10px;
-  font-size: 24px;
-}
-.release-record p {
-  color: #b8b8b8;
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.release-record .editorial-link {
-  flex: none;
-}
-.profile-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px 40px;
-  padding: 22px 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-.profile-row .site-label {
-  color: #b8b8b8;
-}
-.profile-row ul {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: 34px;
 }
 
 /* Footer: renders.nyc footer-signup with an email form in place of texts. */
@@ -239,7 +151,7 @@
   gap: 10px;
 }
 .signup-form .site-label {
-  color: #b8b8b8;
+  color: var(--ink-muted, #b8b8b8);
 }
 .field-input {
   width: 100%;
@@ -255,7 +167,7 @@
   transition: box-shadow 150ms var(--ease-power2-out);
 }
 .field-input::placeholder {
-  color: #8a8a8a;
+  color: var(--ink-placeholder, #8a8a8a);
 }
 .field-input:-webkit-autofill {
   -webkit-text-fill-color: var(--foreground);
@@ -281,7 +193,7 @@
 }
 .signup-status {
   max-width: 42ch;
-  color: #b8b8b8;
+  color: var(--ink-muted, #b8b8b8);
   font-size: 12px;
   line-height: 1.6;
 }
@@ -299,7 +211,7 @@
   min-height: 88px;
   padding: 20px 5vw;
   border-top: 1px solid var(--border);
-  color: #b8b8b8;
+  color: var(--ink-muted, #b8b8b8);
   font-size: 9px;
 }
 .site-footer > .footer-bottom:first-child {
@@ -338,12 +250,12 @@
 }
 .profile-bio + .profile-bio {
   margin-top: 14px;
-  color: #b8b8b8;
+  color: var(--ink-muted, #b8b8b8);
 }
 .profile-bio a,
 .profile-facts a {
   text-decoration: underline;
-  text-decoration-color: #ffffff50;
+  text-decoration-color: var(--ink-rule, #ffffff50);
   text-underline-offset: 4px;
 }
 .profile-bio a:hover,
@@ -366,7 +278,7 @@
   text-transform: uppercase;
 }
 .profile-facts dt {
-  color: #b8b8b8;
+  color: var(--ink-muted, #b8b8b8);
 }
 .profile-facts dd a {
   text-transform: none;
@@ -378,14 +290,14 @@
 }
 .profile-links h2 {
   margin-bottom: 8px;
-  color: #b8b8b8;
+  color: var(--ink-muted, #b8b8b8);
 }
 .profile-links a {
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-height: 55px;
-  border-bottom: 1px solid #ffffff26;
+  border-bottom: 1px solid var(--ink-hairline, #ffffff26);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -456,35 +368,6 @@
   }
   .hero-actions .editorial-link {
     min-width: 160px;
-  }
-  .release-grid {
-    grid-template-columns: 1fr;
-    gap: 55px;
-    padding: 24px 22px 55px;
-  }
-  .release-caption {
-    padding-top: 15px;
-  }
-  .release-caption h3 {
-    font-size: 28px;
-  }
-  .release-caption .site-label {
-    font-size: 9px;
-  }
-  .release-more {
-    padding: 0 22px 70px;
-  }
-  .release-record {
-    flex-direction: column;
-    align-items: start;
-    gap: 20px;
-  }
-  .profile-row {
-    align-items: start;
-    flex-direction: column;
-  }
-  .profile-row ul {
-    column-gap: 22px;
   }
   .footer-signup {
     display: block;

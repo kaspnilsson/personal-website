@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -18,11 +18,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = { themeColor: "#e4e0d6", colorScheme: "light" };
+
 const followProfiles = [...listeningProfiles, profiles.instagram];
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="sheet">
       <SkipLink />
       <SiteHeader current="about" />
       <main id="main-content" className="about-page">
@@ -64,6 +66,6 @@ export default function AboutPage() {
         </article>
       </main>
       <SiteFooter />
-    </>
+    </div>
   );
 }

@@ -3,6 +3,7 @@
 @import "../styles/renders-tokens/animations.css";
 @import "../styles/renders-tokens/shells.css";
 @import "./editorial.css";
+@import "./sheet.css";
 @import "./casa.css";
 
 /* Semantic mapping from renders.nyc (apps/web/src/app/globals.css). */
