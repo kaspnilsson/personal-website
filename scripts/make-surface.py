@@ -14,9 +14,10 @@ re-rendered through it, so this bakes the same noise into two tiles that sit ove
 Both are ink on transparent ground and tile seamlessly. Like print, they move with the page.
 The output is deterministic.
 
-  uv run scripts/make-surface.py
+  uv run scripts/make-surface.py [grain strength, default 0.055] [grain file name]
 """
 import pathlib
+import sys
 
 import numpy as np
 from PIL import Image
@@ -38,7 +39,8 @@ def main():
     # Grain: the bus mixes fine and clumped toner, 0.6 and 0.4, at radii 0.65 and 1.5.
     size = 384
     grain = 0.6 * clumped(rng, (size, size), 0.65) + 0.4 * clumped(rng, (size, size), 1.5)
-    alpha = np.clip(grain * 0.055, 0, 1)
+    strength = float(sys.argv[1]) if len(sys.argv) > 1 else 0.055
+    alpha = np.clip(grain * strength, 0, 1)
     # Specks on the paper where the noise runs deep, as in the bus's solids step.
     holes = clumped(rng, (size, size), 0.8)
     alpha = np.where(holes < -3.0, 0.55, alpha)
@@ -46,7 +48,7 @@ def main():
     rgba = np.zeros((size, size, 4), np.uint8)
     rgba[..., :3] = INK
     rgba[..., 3] = np.round(np.clip(alpha, 0, 1) * 255).astype(np.uint8)
-    Image.fromarray(rgba).save(OUT / "grain.png", optimize=True)
+    Image.fromarray(rgba).save(OUT / (sys.argv[2] if len(sys.argv) > 2 else "grain.png"), optimize=True)
 
     # Room: one uneven exposure. The bus blurs noise at radius 150 on a 1080 px poster; this
     # 96 px field is tiled at the page's width, so radius 10 keeps that scale. It wraps, so it tiles.

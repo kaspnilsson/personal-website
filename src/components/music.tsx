@@ -90,7 +90,7 @@ export function MusicSheet({ releases }: { releases: readonly Release[] }) {
             {earlier.map((release) => (
               <li className="sheet-row" key={release.id}>
                 <span className="sheet-thumb">
-                  <Image src={release.cover.src} alt="" fill sizes="80px" />
+                  <Image src={release.cover.src} alt="" fill sizes="96px" />
                 </span>
                 <span className="sheet-row-text">
                   <span className="sheet-row-title">{release.title}</span>
@@ -111,7 +111,7 @@ export function MusicSheet({ releases }: { releases: readonly Release[] }) {
             {appearances.map((appearance) => (
               <li className="sheet-row" key={appearance.link.href}>
                 <span className="sheet-thumb">
-                  <Image src={appearance.cover.src} alt="" fill sizes="80px" />
+                  <Image src={appearance.cover.src} alt="" fill sizes="96px" />
                 </span>
                 <span className="sheet-row-text">
                   <span className="sheet-row-title">{appearance.title}</span>

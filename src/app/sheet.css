@@ -172,16 +172,16 @@ html:has(.sheet) {
 }
 .sheet-row {
   display: grid;
-  grid-template-columns: 80px minmax(0, 1fr) auto;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0 20px;
+  gap: 0 22px;
   padding: 12px 0;
   border-bottom: 1px solid var(--border);
 }
 .sheet-thumb {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 96px;
+  height: 96px;
 }
 
 .sheet-about {
@@ -196,10 +196,18 @@ html:has(.sheet) {
   display: grid;
   min-width: 0;
 }
+/* Catalogue titles at display size: the list carries drama, not just data. */
 .sheet-row-title {
-  font-size: 13px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 2.6vw, 40px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
+  filter: url(#ink);
+}
+.sheet-row-text {
+  gap: 6px;
 }
 .sheet-row-links {
   display: flex;
