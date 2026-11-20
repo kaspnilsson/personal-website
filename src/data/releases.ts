@@ -18,6 +18,7 @@ export type Appearance = {
   credit: string;
   release: string;
   date: string;
+  cover: { src: string; alt: string };
   link: ReleaseLink;
 };
 
@@ -60,6 +61,10 @@ export const appearances: Appearance[] = [
     credit: "Sasha Rome and kasp",
     release: "Every Reason",
     date: "2026-10-16",
+    cover: {
+      src: "/assets/kasp/releases/every-reason-cover.jpg",
+      alt: "Every Reason cover: green and white pixelated abstract with a vertical bar mark.",
+    },
     link: { label: "Spotify", href: "https://open.spotify.com/track/368vSQvw8T6ce3hARtAA82" },
   },
 ];

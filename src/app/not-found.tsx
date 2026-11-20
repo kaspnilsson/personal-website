@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 
 import { SiteFooter } from "@/components/site-footer";
@@ -10,9 +10,11 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
+export const viewport: Viewport = { themeColor: "#e4e0d6", colorScheme: "light" };
+
 export default function NotFound() {
   return (
-    <>
+    <div className="sheet">
       <SkipLink />
       <SiteHeader />
       <main id="main-content" className="status-page">
@@ -24,6 +26,6 @@ export default function NotFound() {
         </Link>
       </main>
       <SiteFooter signup={false} />
-    </>
+    </div>
   );
 }

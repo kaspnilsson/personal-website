@@ -1,26 +1,25 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
-import { ReleaseHero, ReleaseIndex } from "@/components/music";
-import { PhotoLookbook } from "@/components/photo-lookbook";
+import { MusicSheet, PhotoBand } from "@/components/music";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
-import { lookbook } from "@/data/photography";
-import { latestRelease, releases } from "@/data/releases";
+import { releases } from "@/data/releases";
 
 export const metadata: Metadata = { alternates: { canonical: "/" } };
+export const viewport: Viewport = { themeColor: "#e4e0d6", colorScheme: "light" };
+
+const newestFirst = [...releases].sort((a, b) => b.date.localeCompare(a.date));
 
 export default function HomePage() {
   return (
-    <>
+    <div className="sheet">
       <SkipLink />
       <SiteHeader home />
       <main id="main-content" className="home-page">
-        <ReleaseHero release={latestRelease} />
-        <ReleaseIndex releases={releases} />
-        <PhotoLookbook photos={lookbook} />
+        <MusicSheet releases={newestFirst} />
       </main>
-      <SiteFooter />
-    </>
+      <SiteFooter photo={<PhotoBand />} />
+    </div>
   );
 }

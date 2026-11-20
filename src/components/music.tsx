@@ -1,15 +1,12 @@
 import Image from "next/image";
 
-import { listeningProfiles } from "@/config/site";
-import { photographs } from "@/data/photography";
+import { contact, listeningProfiles, site } from "@/config/site";
 import {
   appearances,
   formatReleaseDate,
   type Release,
   type ReleaseLink,
 } from "@/data/releases";
-
-import { SitePhoto } from "./site-photo";
 
 function ReleaseDate({ date }: { date: string }) {
   return <time dateTime={date}>{formatReleaseDate(date)}</time>;
@@ -31,114 +28,131 @@ function ExternalLink({
   );
 }
 
-export function ReleaseHero({ release }: { release: Release }) {
-  const [primary, ...secondary] = release.links;
+function Arrow() {
+  return <span aria-hidden="true"> ↗</span>;
+}
+
+// The music as one sheet: the latest cover is the dominant mass, printed into the paper.
+// Its column holds everything else, from the latest release on the cover's top edge to the
+// rest of the catalogue on its bottom edge, so the first screen is the whole site.
+export function MusicSheet({ releases }: { releases: readonly Release[] }) {
+  const [latest, ...earlier] = releases;
+  const [primary, ...secondary] = latest.links;
   return (
-    <section className="release-hero" aria-labelledby="latest-title">
-      <SitePhoto photo={photographs.lightTrails} priority />
-      <div className="hero-shade" aria-hidden="true" />
-      <div className="hero-copy">
-        <h1 id="latest-title">{release.title}</h1>
-        <div className="hero-facts">
-          <p>
-            {release.kind}
-            <span className="fact-divider">/</span>
-            <ReleaseDate date={release.date} />
+    <section id="music" className="release-sheet" aria-labelledby="latest-title">
+      <a
+        href={primary.href}
+        className="sheet-cover"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`Listen to ${latest.title} on ${primary.label}`}
+      >
+        <Image
+          src={latest.cover.src}
+          alt={latest.cover.alt}
+          fill
+          priority
+          sizes="(min-width: 900px) 58vw, 100vw"
+        />
+      </a>
+      <div className="sheet-column">
+        <div className="sheet-latest">
+          <p className="sheet-label">Latest release</p>
+          <h1 id="latest-title">{latest.title}</h1>
+          <p className="sheet-meta">
+            {latest.kind} / <ReleaseDate date={latest.date} /> / {latest.label}
+          </p>
+          <div className="sheet-actions">
+            <ExternalLink link={primary} className="editorial-link">
+              <span>Listen on {primary.label}</span>
+              <span aria-hidden="true">⟶</span>
+            </ExternalLink>
+            {secondary.map((link) => (
+              <ExternalLink key={link.href} link={link} className="sheet-link">
+                {link.label}
+                <Arrow />
+              </ExternalLink>
+            ))}
+          </div>
+        </div>
+        <div className="sheet-about">
+          <p>{site.description}</p>
+          <p className="sheet-meta">
+            Bookings{" "}
+            <a className="sheet-link" href={`mailto:${contact.email}`}>
+              {contact.email}
+            </a>
           </p>
         </div>
-        <div className="hero-actions">
-          <ExternalLink link={primary} className="editorial-link">
-            <span>Listen on {primary.label}</span>
-            <span aria-hidden="true">⟶</span>
-          </ExternalLink>
-          {secondary.map((link) => (
-            <ExternalLink key={link.href} link={link} />
-          ))}
+        <div className="sheet-catalogue">
+          <h2 className="sheet-label">More music</h2>
+          <ul className="sheet-rows">
+            {earlier.map((release) => (
+              <li className="sheet-row" key={release.id}>
+                <span className="sheet-thumb">
+                  <Image src={release.cover.src} alt="" fill sizes="96px" />
+                </span>
+                <span className="sheet-row-text">
+                  <span className="sheet-row-title">{release.title}</span>
+                  <span className="sheet-meta">
+                    {release.kind} / <ReleaseDate date={release.date} /> / {release.label}
+                  </span>
+                </span>
+                <span className="sheet-row-links">
+                  {release.links.map((link) => (
+                    <ExternalLink key={link.href} link={link} className="sheet-link">
+                      {link.label}
+                      <Arrow />
+                    </ExternalLink>
+                  ))}
+                </span>
+              </li>
+            ))}
+            {appearances.map((appearance) => (
+              <li className="sheet-row" key={appearance.link.href}>
+                <span className="sheet-thumb">
+                  <Image src={appearance.cover.src} alt="" fill sizes="96px" />
+                </span>
+                <span className="sheet-row-text">
+                  <span className="sheet-row-title">{appearance.title}</span>
+                  <span className="sheet-meta">
+                    {appearance.credit} / <ReleaseDate date={appearance.date} />
+                  </span>
+                </span>
+                <span className="sheet-row-links">
+                  <ExternalLink link={appearance.link} className="sheet-link">
+                    {appearance.link.label}
+                    <Arrow />
+                  </ExternalLink>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <nav className="sheet-profiles" aria-label="Kasp on music services">
+            <span className="sheet-label">Follow</span>
+            {listeningProfiles.map((profile) => (
+              <ExternalLink key={profile.href} link={profile} className="sheet-link">
+                {profile.label}
+                <Arrow />
+              </ExternalLink>
+            ))}
+          </nav>
         </div>
       </div>
-      <a className="hero-next site-label" href="#music">
-        Music<span aria-hidden="true">↓</span>
-      </a>
     </section>
   );
 }
 
-export function ReleaseIndex({ releases }: { releases: readonly Release[] }) {
+// A photograph put through the master bus until it is ink on the same paper.
+export function PhotoBand() {
   return (
-    <section id="music" className="release-index" aria-labelledby="music-title">
-      <h2 id="music-title" className="sr-only">
-        Music
-      </h2>
-      <div className="release-grid">
-        {releases.map((release) => {
-          const [primary] = release.links;
-          return (
-            <article className="release-card" key={release.id}>
-              <a
-                href={primary.href}
-                className="release-art"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Listen to ${release.title} on ${primary.label}`}
-              >
-                <Image
-                  src={release.cover.src}
-                  alt={release.cover.alt}
-                  fill
-                  sizes="(min-width: 600px) 45vw, 100vw"
-                />
-              </a>
-              <div className="release-caption">
-                <h3>{release.title}</h3>
-                <p className="site-label">
-                  {release.kind} / <ReleaseDate date={release.date} /> /{" "}
-                  {release.label}
-                </p>
-                <ul className="release-links" aria-label={`${release.title} links`}>
-                  {release.links.map((link) => (
-                    <li key={link.href}>
-                      <ExternalLink link={link}>
-                        {link.label}
-                        <span aria-hidden="true"> ↗</span>
-                      </ExternalLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-      <div className="release-more">
-        {appearances.map((appearance) => (
-          <article className="release-record" key={appearance.link.href}>
-            <div>
-              <h3>{appearance.title}</h3>
-              <p>
-                {appearance.credit} / {appearance.release} /{" "}
-                <ReleaseDate date={appearance.date} />
-              </p>
-            </div>
-            <ExternalLink link={appearance.link} className="editorial-link">
-              <span>{appearance.link.label}</span>
-              <span aria-hidden="true">↗</span>
-            </ExternalLink>
-          </article>
-        ))}
-        <nav className="profile-row" aria-label="Kasp on music services">
-          <p className="site-label">All music</p>
-          <ul>
-            {listeningProfiles.map((profile) => (
-              <li key={profile.href}>
-                <ExternalLink link={profile}>
-                  {profile.label}
-                  <span aria-hidden="true"> ↗</span>
-                </ExternalLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </section>
+    <div className="photo-band" aria-hidden="true">
+      <Image
+        src="/assets/kasp/printed/night-wall.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+      />
+    </div>
   );
 }

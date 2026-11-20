@@ -1,0 +1,445 @@
+/*
+ * The sheet: kasptrax.com's public pages as one printed piece.
+ *
+ * Carried over from the Renders poster hill climb (renders
+ * drafts/design/hillclimb-2026-11-03: brand-direction.md, rubric-v4.txt,
+ * shared/master.py):
+ *   - Black, paper and earth only. Ink and paper are never pure digital values.
+ *   - One piece, not zones: the latest cover is the one dominant mass in open
+ *     ground, printed into the paper, with small facts hanging off its axes.
+ *   - Type at the extremes: very large heavy Gibson or small mono, nothing in
+ *     between. Anything a visitor reads stays clean: no wear, no knockout.
+ *   - Give the picture the first read: the release word stays small.
+ *   - One process over everything, last: the master bus's grain and room sit
+ *     over the whole page, type and picture together (scripts/make-surface.py).
+ */
+
+.sheet {
+  --paper: #e4e0d6;
+  --ink: #121110;
+  --ink-muted: #38352f;
+  --ink-rule: rgba(18, 17, 16, 0.5);
+  --ink-hairline: rgba(18, 17, 16, 0.26);
+  --ink-placeholder: #7a756b;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --muted-foreground: var(--ink-muted);
+  --border: var(--ink-hairline);
+  --border-strong: var(--ink-rule);
+  --secondary: rgba(18, 17, 16, 0.05);
+  --ring: var(--ink);
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+}
+/* Short pages keep the footer on the bottom edge. */
+.sheet > main {
+  flex: 1 0 auto;
+}
+html:has(.sheet) body {
+  background: #e4e0d6;
+}
+/* Anything past the end of the page, overscroll included, reads as the ink footer. */
+html:has(.sheet) {
+  background: #121110;
+  color-scheme: light;
+}
+.sheet ::selection {
+  background-color: rgba(18, 17, 16, 0.16);
+}
+
+/* Master bus: one uneven exposure (room) and one grain in the paper itself. They scroll with
+   the paper and sit under the content, so nothing a visitor reads is flecked; the cover and
+   the photograph are multiplied into the paper and pick the grain up through the blend. */
+.sheet::before,
+.sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.sheet::before {
+  background: url("/assets/kasp/surface/room.png") 0 0 / 100vw 100vw repeat;
+}
+.sheet::after {
+  background:
+    url("/assets/kasp/surface/grain-a.png") 0 0 / 384px 384px repeat,
+    url("/assets/kasp/surface/grain-b.png") 0 0 / 263px 263px repeat;
+}
+
+.sheet .site-wordmark img {
+  filter: brightness(0);
+  opacity: 0.93;
+}
+.sheet .site-navigation a:hover,
+.sheet .quiet-link:hover,
+.sheet .footer-bottom a:hover {
+  color: #000;
+}
+
+/* Music: the cover is the one mass in open ground. Its column holds the whole catalogue,
+   the latest release on the cover's top edge and everything else on its bottom edge. */
+.release-sheet {
+  --cover: min(calc(100svh - 124px), 60vw);
+  display: grid;
+  grid-template-columns: var(--cover) minmax(0, 1fr);
+  column-gap: 52px;
+  /* The cover is crushed against the left edge of the sheet; the column keeps the margin. */
+  padding: 14px 5vw 120px 0;
+}
+.sheet-cover {
+  position: relative;
+  width: var(--cover);
+  aspect-ratio: 1 / 1;
+}
+.sheet-cover img,
+.sheet-thumb img,
+.photo-band img {
+  object-fit: cover;
+  mix-blend-mode: multiply;
+}
+.sheet-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 32px;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.sheet-label {
+  color: var(--ink-muted);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.sheet-latest h1 {
+  margin: 14px 0 16px -0.04em;
+  font-family: var(--font-heading);
+  font-size: clamp(56px, 6.4vw, 100px);
+  font-weight: 700;
+  line-height: 0.84;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+}
+/* Display type is printed, not flat: see InkFilter in site-footer.tsx. */
+.sheet-latest h1,
+.sheet .footer-word {
+  filter: url(#ink);
+}
+.sheet-meta {
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+.sheet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 28px;
+  margin-top: 26px;
+}
+/* The two actions on the page, Listen and Subscribe, are the only solid ink blocks. */
+.sheet-actions .editorial-link,
+.sheet .signup-submit {
+  min-height: 54px;
+  padding: 0 20px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+.sheet-actions .editorial-link {
+  min-width: 250px;
+}
+.sheet-actions .editorial-link:hover,
+.sheet .signup-submit:hover {
+  background: #000;
+  color: #fff;
+}
+/* The ink block is printed like the display type; its label stays crisp on top. */
+.sheet-actions .editorial-link,
+.sheet .signup-submit {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+.sheet-actions .editorial-link::before,
+.sheet .signup-submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  filter: url(#ink-solid);
+}
+.sheet-actions .editorial-link:hover::before,
+.sheet .signup-submit:hover::before {
+  background: #000;
+}
+/* The email field is a plain inked box: the clearest thing to type into. */
+.sheet .signup-form .field-input {
+  padding: 0 16px;
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.sheet-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 13px;
+  text-decoration: underline;
+  text-decoration-color: var(--ink-rule);
+  text-underline-offset: 4px;
+}
+.sheet-link:hover {
+  text-decoration-color: currentColor;
+}
+.sheet-catalogue .sheet-label {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+}
+.sheet-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0 22px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sheet-thumb {
+  position: relative;
+  width: 96px;
+  height: 96px;
+}
+
+.sheet-about {
+  max-width: 44ch;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.sheet-about .sheet-meta {
+  margin-top: 6px;
+}
+.sheet-row-text {
+  display: grid;
+  min-width: 0;
+}
+/* Catalogue titles at display size: the list carries drama, not just data. */
+.sheet-row-title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 2.6vw, 40px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  filter: url(#ink);
+}
+.sheet-row-text {
+  gap: 6px;
+}
+.sheet-row-links {
+  display: flex;
+  gap: 0 18px;
+}
+.sheet-profiles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 18px;
+  padding-top: 8px;
+}
+.sheet-profiles .sheet-label {
+  margin-right: 6px;
+  padding: 0;
+  border: 0;
+}
+
+/* One photograph, mastered into ink on this paper, edge to edge. */
+.photo-band {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1600 / 850;
+}
+
+/* Updates: one word at full scale, cropped by the sheet, with the form hanging off it. */
+.sheet .footer-signup {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+  gap: 0;
+  padding: 96px 0 0;
+  overflow: hidden;
+}
+.sheet .footer-signup-copy {
+  grid-row: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  align-items: end;
+  gap: 24px 44px;
+  padding: 0 5vw 36px;
+}
+.sheet .signup-description {
+  max-width: 30ch;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.sheet .signup-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px 20px;
+  margin: 0;
+}
+.sheet .signup-form .site-label {
+  grid-column: 1 / -1;
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+.sheet .signup-form .field-input {
+  font-size: 15px;
+}
+.sheet .signup-submit {
+  width: auto;
+  min-width: 170px;
+  margin: 0;
+}
+.sheet .signup-status {
+  grid-column: 1 / -1;
+  color: var(--ink-muted);
+}
+/* The word always heads the form and is never cropped: it has to be read. */
+.sheet .footer-word {
+  grid-row: 2;
+  grid-column: 1 / -1;
+  margin: 0 0 0.08em;
+  padding: 0 2.5vw;
+  font-size: 22.4vw;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+}
+/* With the photograph: the word hangs directly off the photograph's lower edge and the form
+   follows on the same axis. The word stays clean and whole: it has to be read. */
+.sheet .footer-signup--photo,
+.sheet .footer-signup.footer-signup--photo {
+  padding-top: 0;
+}
+.sheet .site-footer:has(.footer-signup--photo) {
+  border-top: 0;
+}
+.footer-signup--photo .photo-band {
+  grid-row: 1;
+  grid-column: 1 / -1;
+}
+.sheet .footer-signup--photo .footer-word {
+  grid-row: 2;
+  margin-top: 0.1em;
+  margin-bottom: 0.08em;
+}
+.sheet .footer-signup--photo .footer-signup-copy {
+  grid-row: 3;
+  padding-top: 8px;
+  padding-bottom: 56px;
+}
+/* Desktop close: the photograph and the signup repeat the opening spread. The photograph
+   bleeds off the left edge like the cover; the word sits on its top edge and the form on
+   its bottom edge, so the column hangs off the picture's axes. */
+@media (min-width: 900px) {
+  .sheet .footer-signup.footer-signup--photo {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: 52px;
+    padding: 0 0 96px;
+  }
+  .footer-signup--photo .photo-band {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    aspect-ratio: auto;
+    height: min(62svh, 540px);
+  }
+  .sheet .footer-signup--photo .footer-word {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    margin: -0.06em 0 0 -0.04em;
+    padding: 0 5vw 0 0;
+    font-size: 9.4vw;
+  }
+  .sheet .footer-signup--photo .footer-signup-copy {
+    grid-column: 2;
+    grid-row: 3;
+    grid-template-columns: minmax(0, 1fr);
+    align-self: end;
+    padding: 0 5vw 0 0;
+  }
+}
+.sheet .footer-bottom {
+  position: relative;
+  border-top: 0;
+  background: var(--ink);
+  color: var(--paper);
+}
+.sheet .footer-bottom a:hover {
+  color: #fff;
+}
+
+/* Usability over the flyer: wear and grain never sit on anything you have to read.
+   Wear is only on the decorative Updates word. Nav stays legible at 11px. */
+.sheet .site-navigation a {
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 899px) {
+  .release-sheet {
+    --cover: 100vw;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 26px;
+    padding: 6px 0 80px;
+  }
+  .sheet-column {
+    padding: 0 22px;
+  }
+  .sheet-actions .editorial-link {
+    flex: 1 1 100%;
+  }
+  .sheet-meta,
+  .sheet-link {
+    font-size: 15px;
+  }
+  .sheet-profiles .sheet-label {
+    flex: 1 1 100%;
+  }
+  .sheet-row {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 0 16px;
+  }
+  .sheet-thumb {
+    width: 64px;
+    height: 64px;
+  }
+  .sheet-row-links {
+    grid-column: 2;
+  }
+
+  .photo-band {
+    aspect-ratio: 4 / 3;
+  }
+  .sheet .footer-signup:not(.footer-signup--photo) {
+    padding-top: 64px;
+  }
+  .sheet .footer-signup-copy {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 0 22px 30px;
+  }
+  .sheet .signup-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sheet .signup-submit {
+    width: 100%;
+  }
+}
