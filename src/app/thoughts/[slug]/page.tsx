@@ -1,0 +1,92 @@
+import type { Metadata, Viewport } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { SkipLink } from "@/components/skip-link";
+import { ThoughtsFooter, ThoughtsHeader } from "@/components/thoughts-chrome";
+import {
+  formatThoughtDate,
+  getThoughtBody,
+  getThoughtPost,
+  getThoughtPosts,
+  thoughts,
+} from "@/lib/thoughts";
+
+type Params = { slug: string };
+
+export const dynamicParams = false;
+
+export function generateStaticParams(): Params[] {
+  return getThoughtPosts().map((post) => ({ slug: post.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getThoughtPost(slug);
+  if (!post) return {};
+  const url = `${thoughts.url}/${post.slug}`;
+  return {
+    title: post.title,
+    description: post.description,
+    alternates: { canonical: `/thoughts/${post.slug}` },
+    openGraph: {
+      siteName: thoughts.name,
+      type: "article",
+      title: post.title,
+      description: post.description,
+      url,
+      publishedTime: post.date,
+    },
+    twitter: {
+      card: "summary",
+      title: post.title,
+      description: post.description,
+    },
+  };
+}
+
+export const viewport: Viewport = { themeColor: "#e4e0d6", colorScheme: "light" };
+
+export default async function ThoughtPostPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { slug } = await params;
+  const post = getThoughtPost(slug);
+  if (!post) notFound();
+  const body = getThoughtBody(post.slug);
+
+  return (
+    <div className="sheet">
+      <SkipLink />
+      <ThoughtsHeader />
+      <main id="main-content" className="thought">
+        <aside className="thought-rail" aria-label="Post details">
+          <p className="sheet-meta">
+            <time dateTime={post.date}>{formatThoughtDate(post.date)}</time>
+          </p>
+          <p className="sheet-meta">{post.readingTime}</p>
+        </aside>
+        <article className="thought-article" aria-labelledby="thought-title">
+          <h1 id="thought-title" className="sheet-display thought-title">
+            {post.title}
+          </h1>
+          {/* Trusted, repo-authored HTML from src/content/thoughts. */}
+          <div className="thought-body" dangerouslySetInnerHTML={{ __html: body }} />
+          <div className="sheet-actions thought-back">
+            <Link href="/thoughts" className="editorial-link">
+              <span>All posts</span>
+              <span aria-hidden="true">⟶</span>
+            </Link>
+          </div>
+        </article>
+      </main>
+      <ThoughtsFooter />
+    </div>
+  );
+}
