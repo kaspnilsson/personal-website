@@ -1,16 +1,16 @@
 # kasptrax.com design system
 
-kasptrax.com uses the renders.nyc chassis directly: the same fonts, tokens, components and measurements, with Kasp's photographs and release artwork as the only colour.
+kasptrax.com uses the renders.nyc chassis directly: the same fonts, tokens, components and measurements, with release artwork as the only colour. The site carries no press or promo photographs.
 
 ## Sources
 
 | Layer | Source |
 | --- | --- |
-| Editorial components and measurements | renders.nyc `apps/web/src/app/editorial.css`, `site-header.tsx`, `site-footer.tsx`, `sms-signup.tsx`, `photo-lookbook.tsx`, `event-information.tsx` (kaspnilsson/renders, live website branch) |
+| Editorial components and measurements | renders.nyc `apps/web/src/app/editorial.css`, `site-header.tsx`, `site-footer.tsx`, `sms-signup.tsx`, `event-information.tsx` (kaspnilsson/renders, live website branch) |
 | Tokens | `@kaspnilsson/renders-ui` 0.4.0, vendored unchanged in `src/styles/renders-tokens` |
 | App token overrides | renders.nyc `apps/web/src/app/globals.css` (`--muted-foreground: #858585`, focus, selection, reduced motion) |
 
-Component mapping: `SiteHeader`, `SiteFooter`, `SkipLink` and `PhotoLookbook` are ports of the Renders components. `ReleaseHero` is the Renders event hero, `ReleaseIndex` the archive grid and upcoming record, the About page the event detail grid, and the 404 page the empty-event state. Casa and Fieldnotes are purpose-built shells on the same chassis, like the Renders SMS and legal routes.
+Component mapping: `SiteHeader`, `SiteFooter` and `SkipLink` are ports of the Renders components. `ReleaseIndex` is the archive grid and upcoming record and leads the homepage, the About page the event detail grid (name left, facts right), and the 404 page the empty-event state. Casa and Fieldnotes are purpose-built shells on the same chassis, like the Renders SMS and legal routes.
 
 ## Fonts
 
@@ -30,11 +30,10 @@ Gibson (Canada Type) is the heading face Kasper chose for Kasp and Renders. The 
 | --- | --- |
 | `assets/kasp/logo/kasp-logo-ink.png` | `kasp logo sq 1500x1500.png`, trimmed and recoloured to the ink `#e5e5e5` with alpha. The letterforms are the supplied artwork. |
 | `assets/kasp/releases/*-cover.jpg` | Approved Desire and Wait covers from the Renders release folders, 3000 to 1600 px. |
-| `assets/kasp/promo-shots/selected/kasp-wall-portrait.jpg` | Kasp's approved default photograph (IMG_0396), oriented, 2400 px tall, camera metadata removed. |
-| `assets/kasp/og/kasp-1200x630.jpg` | Sharing crop of `kasp-environmental-graffiti-wide.jpg`. |
+| `assets/kasp/og/kasp-1200x630.jpg` | `kasp-logo-ink.png` at 460 px wide, centred on the ground `#0a0a0a`. |
 | `key_location_*.jpg` | Casa photographs, oriented and resized, location metadata removed. |
 
-Other promo shots are unchanged. The headphones portrait is no longer the sharing image; Renders' identity registry marks it superseded for avatars.
+Promo photographs were removed from the site in November 2026; they remain in git history.
 
 ## Rules
 
@@ -45,7 +44,7 @@ Other promo shots are unchanged. The headphones portrait is no longer the sharin
 
 ## Adding a release
 
-Add an entry to `src/data/releases.ts` with its public links and cover, and add the cover to `public/assets/kasp/releases`. The homepage hero shows the most recent date automatically. Keep unreleased plans out of the file until they have public links.
+Add an entry to `src/data/releases.ts` with its public links and cover, and add the cover to `public/assets/kasp/releases`. The homepage lists releases newest first. Keep unreleased plans out of the file until they have public links.
 
 ## Private routes
 

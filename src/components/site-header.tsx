@@ -3,7 +3,6 @@ import Link from "next/link";
 
 const sections = [
   { id: "music", label: "Music" },
-  { id: "images", label: "Images" },
   { id: "updates", label: "Updates" },
 ];
 
@@ -15,7 +14,7 @@ export function SiteHeader({
   current?: "about";
 }) {
   return (
-    <header className={`site-header ${home ? "site-header--overlay" : ""}`}>
+    <header className="site-header">
       <Link href="/" className="site-wordmark" aria-label="Kasp home">
         <Image
           src="/assets/kasp/logo/kasp-logo-ink.png"

@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
 import { contact, listeningProfiles, profiles, renders, site } from "@/config/site";
-import { photographs, pressPhotos } from "@/data/photography";
 
 export const metadata: Metadata = {
   title: "About",
@@ -22,10 +20,6 @@ export const metadata: Metadata = {
 
 const followProfiles = [...listeningProfiles, profiles.instagram];
 
-function fileName(src: string) {
-  return src.split("/").at(-1) ?? src;
-}
-
 export default function AboutPage() {
   return (
     <>
@@ -33,18 +27,8 @@ export default function AboutPage() {
       <SiteHeader current="about" />
       <main id="main-content" className="about-page">
         <article className="profile-grid" aria-labelledby="about-title">
-          <figure className="profile-photo">
-            <Image
-              src={photographs.wall.src}
-              alt={photographs.wall.alt}
-              fill
-              priority
-              sizes="(min-width: 900px) 50vw, 100vw"
-              className="site-photo"
-            />
-          </figure>
+          <h1 id="about-title">Kasp</h1>
           <div className="profile-copy">
-            <h1 id="about-title">Kasp</h1>
             <p className="profile-bio">{site.description}</p>
             <p className="profile-bio">
               Kasp also runs{" "}
@@ -59,10 +43,6 @@ export default function AboutPage() {
                 <dd>
                   <a href={`mailto:${contact.email}`}>{contact.email}</a>
                 </dd>
-              </div>
-              <div>
-                <dt>Based in</dt>
-                <dd>Brooklyn, New York</dd>
               </div>
             </dl>
             <section className="profile-links" aria-labelledby="follow-title">
@@ -82,38 +62,6 @@ export default function AboutPage() {
             </section>
           </div>
         </article>
-        <section id="press" className="press-photos" aria-labelledby="press-title">
-          <div className="press-heading">
-            <h2 id="press-title">Press photos</h2>
-            <p className="site-label">{pressPhotos.length} photographs / JPG</p>
-          </div>
-          <ul className="press-grid">
-            {pressPhotos.map((photo) => (
-              <li key={photo.src} className="press-photo">
-                <div className={`press-frame press-frame--${photo.orientation}`}>
-                  <Image
-                    src={photo.src}
-                    alt={photo.alt}
-                    fill
-                    sizes="(min-width: 900px) 25vw, (min-width: 600px) 45vw, 100vw"
-                  />
-                </div>
-                <div className="press-caption">
-                  <span>
-                    {photo.width} × {photo.height}
-                  </span>
-                  <a
-                    href={photo.src}
-                    download={fileName(photo.src)}
-                    aria-label={`Download ${photo.alt} (JPG, ${photo.width} by ${photo.height} pixels)`}
-                  >
-                    Download<span aria-hidden="true"> ↓</span>
-                  </a>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
       </main>
       <SiteFooter />
     </>

@@ -18,7 +18,7 @@ export const site = {
         url: "/assets/kasp/og/kasp-1200x630.jpg",
         width: 1200,
         height: 630,
-        alt: "Kasp leaning against a grey mural in Brooklyn.",
+        alt: "The kasp logo on black.",
       },
     ],
   },
