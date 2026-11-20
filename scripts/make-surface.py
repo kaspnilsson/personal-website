@@ -58,14 +58,14 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(3)
 
-    save(grain(rng, 384, 0.04, -3.5), "grain-a.png")
-    save(grain(rng, 263, 0.03, -3.7), "grain-b.png")
+    save(grain(rng, 384, 0.024, -3.75), "grain-a.png")
+    save(grain(rng, 263, 0.018, -3.95), "grain-b.png")
 
     # Room: one uneven exposure. The bus blurs noise at radius 150 on a 1080 px poster; this
     # 96 px field is tiled at the page's width, so radius 10 keeps that scale. It wraps, so it tiles.
     small = 96
     field = clumped(rng, (small, small), 10)
-    save(np.clip(0.05 + 0.03 * field, 0, 1), "room.png")
+    save(np.clip(0.03 + 0.018 * field, 0, 1), "room.png")
 
 
 if __name__ == "__main__":
