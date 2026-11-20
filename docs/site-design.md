@@ -71,7 +71,7 @@ Casa and Fieldnotes keep the dark Renders chassis.
 
 - Titles are Gibson Bold uppercase in the printed ink. Body text is JetBrains Mono at 15px (14.5px on phones) with a 66ch measure; a details rail (date, reading time) sits on the left axis on desktop. Bold lead-ins are a light stroke, since only the Regular mono is loaded.
 - Figures use the ink palette plus one earth tone, `#8a3a1c`, where a chart needs to separate two series. Screenshots print into the paper with `mix-blend-mode: multiply`. On phones, single-SVG charts run edge to edge so their labels stay as large as possible.
-- Wide tables scroll inside their own container with a thin ink scrollbar; the page never scrolls sideways.
+- Wide tables scroll inside their own container with a thin ink scrollbar; the page never scrolls sideways. Prose tables (text in the second column, a numeric fourth column, like "The models inside Keys") stack one block per row on phones instead, with the column names as small labels.
 
 ## Rules
 

@@ -337,6 +337,14 @@
   margin-top: 56px;
 }
 
+/* Prose tables (text in the second column, a numeric last column: "The models inside Keys").
+   Desktop: the numeric column takes only what it needs, so the prose columns get the room. */
+.thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td.n,
+.thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) th.n {
+  width: 1%;
+  white-space: nowrap;
+}
+
 @media (max-width: 899px) {
   .thoughts-index {
     padding: 12px 22px 80px;
@@ -371,6 +379,59 @@
 }
 
 @media (max-width: 599px) {
+  /* Phones: prose tables stack, one block per row, so nothing scrolls sideways or wraps
+     into narrow towers. The column names become small labels. */
+  .thought-body .tablewrap:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) {
+    overflow: visible;
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) {
+    min-width: 0;
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) tr {
+    display: grid;
+    gap: 6px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) tr:last-child {
+    border-bottom: 0;
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td {
+    display: block;
+    padding: 0;
+    border: 0;
+    text-align: left;
+    white-space: normal;
+    width: auto;
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td:first-child {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td:nth-child(3)::before,
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td:nth-child(4)::before {
+    display: block;
+    color: var(--ink-muted);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td:nth-child(3)::before {
+    content: "Trained on";
+  }
+  .thought-body table:has(td:nth-child(2):not(.n)):has(th:nth-child(4).n) td:nth-child(4)::before {
+    content: "Size";
+  }
   .thought-body {
     font-size: 14.5px;
     line-height: 1.72;
