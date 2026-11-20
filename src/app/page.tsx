@@ -19,7 +19,7 @@ export default function HomePage() {
       <main id="main-content" className="home-page">
         <MusicSheet releases={newestFirst} />
       </main>
-      <SiteFooter photo={<PhotoBand />} />
+      <SiteFooter signup photo={<PhotoBand />} />
     </div>
   );
 }

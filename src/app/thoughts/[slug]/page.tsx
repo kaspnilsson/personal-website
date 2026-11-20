@@ -68,26 +68,30 @@ export default async function ThoughtPostPage({
       <SkipLink />
       <SiteHeader current="thoughts" />
       <main id="main-content" className="thought">
-        <article>
-          <header className="thought-header">
-            <p className="thought-kicker">
-              <Link href="/thoughts">Thoughts</Link>
-            </p>
-            <h1>{post.title}</h1>
-            <p className="thought-meta">
-              <time dateTime={post.date}>{formatThoughtDate(post.date)}</time>
-              <span>{post.readingTime}</span>
-            </p>
-          </header>
+        <aside className="thought-rail" aria-label="Post details">
+          <p className="sheet-label">
+            <Link className="sheet-link" href="/thoughts">
+              Thoughts
+            </Link>
+          </p>
+          <p className="sheet-meta">
+            <time dateTime={post.date}>{formatThoughtDate(post.date)}</time>
+          </p>
+          <p className="sheet-meta">{post.readingTime}</p>
+        </aside>
+        <article className="thought-article" aria-labelledby="thought-title">
+          <h1 id="thought-title" className="sheet-display thought-title">
+            {post.title}
+          </h1>
           {/* Trusted, repo-authored HTML from src/content/thoughts. */}
           <div className="thought-body" dangerouslySetInnerHTML={{ __html: body }} />
+          <div className="sheet-actions thought-back">
+            <Link href="/thoughts" className="editorial-link">
+              <span>All thoughts</span>
+              <span aria-hidden="true">⟶</span>
+            </Link>
+          </div>
         </article>
-        <p className="thought-back">
-          <Link href="/thoughts" className="editorial-link">
-            <span>All thoughts</span>
-            <span aria-hidden="true">⟶</span>
-          </Link>
-        </p>
       </main>
       <SiteFooter />
     </div>

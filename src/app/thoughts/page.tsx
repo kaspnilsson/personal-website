@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
+import { Spread } from "@/components/spread";
 import { site } from "@/config/site";
 import { formatThoughtDate, getThoughtPosts } from "@/lib/thoughts";
 
@@ -39,25 +40,36 @@ export default function ThoughtsPage() {
       <SkipLink />
       <SiteHeader current="thoughts" />
       <main id="main-content" className="thoughts-index">
-        <h1 className="thoughts-title">Thoughts</h1>
-        <ol className="thoughts-list">
-          {posts.map((post) => (
-            <li key={post.slug} className="thoughts-row">
-              <time dateTime={post.date} className="thoughts-date">
-                {formatThoughtDate(post.date)}
-              </time>
-              <div className="thoughts-entry">
-                <h2>
-                  <Link href={`/thoughts/${post.slug}`}>{post.title}</Link>
-                </h2>
-                <p>{post.description}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <p className="thoughts-feed">
-          <a href="/thoughts/rss.xml">RSS</a>
-        </p>
+        <Spread image={{ src: "/assets/kasp/printed/wall-loops.jpg" }} labelledBy="thoughts-title">
+          <div>
+            <p className="sheet-label">Writing</p>
+            <h1 id="thoughts-title" className="sheet-display">
+              Thoughts
+            </h1>
+            <p className="sheet-text">{description}</p>
+          </div>
+          <div className="sheet-catalogue">
+            <h2 className="sheet-label">All posts</h2>
+            <ol className="thoughts-list">
+              {posts.map((post) => (
+                <li key={post.slug} className="thoughts-row">
+                  <time dateTime={post.date} className="sheet-meta">
+                    {formatThoughtDate(post.date)}
+                  </time>
+                  <h3 className="thoughts-row-title">
+                    <Link href={`/thoughts/${post.slug}`}>{post.title}</Link>
+                  </h3>
+                  <p className="thoughts-row-text">{post.description}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="thoughts-feed">
+              <a className="sheet-link" href="/thoughts/rss.xml">
+                RSS feed<span aria-hidden="true"> ↗</span>
+              </a>
+            </p>
+          </div>
+        </Spread>
       </main>
       <SiteFooter />
     </div>

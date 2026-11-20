@@ -32,7 +32,7 @@ function InkFilter() {
 }
 
 export function SiteFooter({
-  signup = true,
+  signup = false,
   photo,
 }: {
   signup?: boolean;

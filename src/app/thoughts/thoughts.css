@@ -5,72 +5,40 @@
  * with the site; labels and facts stay at the site's 11 to 13px mono.
  */
 
-/* Index */
-.thoughts-index {
-  padding: 46px 5vw 120px;
-}
-.thoughts-title {
-  margin: 0 0 40px -0.04em;
-  font-family: var(--font-heading);
-  font-size: clamp(64px, 9vw, 150px);
-  font-weight: 700;
-  line-height: 0.9;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
-}
+/* Index: the homepage spread. The print is the mass; the column holds the posts as the
+   homepage column holds the catalogue. */
 .thoughts-list {
-  border-top: 1px solid var(--ink);
+  margin: 0;
 }
 .thoughts-row {
   display: grid;
-  grid-template-columns: minmax(150px, 0.32fr) minmax(0, 1fr);
-  gap: 0 32px;
-  padding: 22px 0 24px;
+  gap: 6px;
+  padding: 16px 0;
   border-bottom: 1px solid var(--border);
 }
-.thoughts-date {
-  padding-top: 5px;
-  color: var(--ink-muted);
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.thoughts-entry h2 {
+.thoughts-row-title {
   font-family: var(--font-heading);
-  font-size: clamp(22px, 2.2vw, 30px);
+  font-size: clamp(24px, 2.2vw, 34px);
   font-weight: 700;
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
   text-transform: uppercase;
   text-wrap: balance;
+  filter: url(#ink);
 }
-.thoughts-entry h2 a {
+.thoughts-row-title a:hover {
   text-decoration: underline;
-  text-decoration-color: var(--ink-hairline);
   text-decoration-thickness: 2px;
-  text-underline-offset: 6px;
+  text-underline-offset: 5px;
 }
-.thoughts-entry h2 a:hover {
-  text-decoration-color: currentColor;
-}
-.thoughts-entry p {
-  max-width: 62ch;
-  margin-top: 12px;
+.thoughts-row-text {
+  max-width: 52ch;
   color: var(--ink-muted);
-  font-size: 13px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.6;
 }
 .thoughts-feed {
-  margin-top: 18px;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.thoughts-feed a {
-  text-decoration: underline;
-  text-decoration-color: var(--ink-hairline);
-  text-underline-offset: 4px;
+  padding-top: 8px;
 }
 
 /* Post */
@@ -85,46 +53,29 @@
   --accent: #8a3a1c;
   --accent-soft: rgba(138, 58, 28, 0.12);
   --neg: #9b2b1d;
-  padding: 46px 5vw 110px;
+  /* A meta rail on the left axis and one reading column: the spread, set for long reading. */
+  display: grid;
+  grid-template-columns: minmax(160px, 22vw) minmax(0, 66ch);
+  column-gap: 52px;
+  padding: 14px 5vw 110px;
 }
-.thought > article,
-.thought-back {
-  max-width: 66ch;
-  margin: 0 auto;
-}
-.thought-header {
-  margin-bottom: 44px;
-}
-.thought-kicker,
-.thought-meta {
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-.thought-kicker a {
-  text-decoration: underline;
-  text-decoration-color: var(--ink-hairline);
-  text-underline-offset: 4px;
-}
-.thought-header h1 {
-  margin: 18px 0 22px -0.03em;
-  font-family: var(--font-heading);
-  font-size: clamp(38px, 5.4vw, 68px);
-  font-weight: 700;
-  line-height: 0.98;
-  letter-spacing: -0.025em;
-  text-transform: uppercase;
-  text-wrap: balance;
-}
-.thought-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 28px;
-  padding: 12px 0;
+.thought-rail {
+  position: sticky;
+  top: 24px;
+  align-self: start;
+  display: grid;
+  gap: 6px;
+  padding-top: 18px;
   border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--border);
-  color: var(--ink-muted);
+}
+.thought-article {
+  min-width: 0;
+}
+.sheet-display.thought-title {
+  margin: 0 0 40px -0.04em;
+  font-size: clamp(44px, 5vw, 80px);
+  line-height: 0.88;
+  text-wrap: balance;
 }
 
 .thought-body {
@@ -355,26 +306,25 @@
 }
 
 @media (max-width: 899px) {
-  .thoughts-row {
+  .thought {
     grid-template-columns: minmax(0, 1fr);
-    gap: 6px;
+    row-gap: 24px;
+    padding: 12px 22px 80px;
   }
-  .thoughts-date {
-    padding-top: 0;
+  .thought-rail {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 18px;
+    padding-top: 12px;
+  }
+  .sheet-display.thought-title {
+    font-size: clamp(40px, 11vw, 64px);
   }
 }
 
 @media (max-width: 599px) {
-  .thoughts-index {
-    padding: 12px 22px 80px;
-  }
-  .thoughts-title {
-    margin-bottom: 26px;
-    font-size: clamp(52px, 17vw, 80px);
-  }
-  .thought {
-    padding: 12px 22px 80px;
-  }
   .thought-body {
     font-size: 14.5px;
     line-height: 1.72;

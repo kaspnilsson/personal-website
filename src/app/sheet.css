@@ -82,9 +82,11 @@ html:has(.sheet) {
   color: #000;
 }
 
-/* Music: the cover is the one mass in open ground. Its column holds the whole catalogue,
-   the latest release on the cover's top edge and everything else on its bottom edge. */
-.release-sheet {
+/* The spread: every page opens the same way. One printed image is the mass in open ground,
+   crushed against the left edge; the page's column hangs off its top and bottom edges.
+   On the homepage the image is the latest cover and the column holds the catalogue. */
+.release-sheet,
+.spread {
   --cover: min(calc(100svh - 124px), 60vw);
   display: grid;
   grid-template-columns: var(--cover) minmax(0, 1fr);
@@ -92,12 +94,14 @@ html:has(.sheet) {
   /* The cover is crushed against the left edge of the sheet; the column keeps the margin. */
   padding: 14px 5vw 120px 0;
 }
-.sheet-cover {
+.sheet-cover,
+.spread-image {
   position: relative;
   width: var(--cover);
   aspect-ratio: 1 / 1;
 }
 .sheet-cover img,
+.spread-image img,
 .sheet-thumb img,
 .photo-band img {
   object-fit: cover;
@@ -118,7 +122,8 @@ html:has(.sheet) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-.sheet-latest h1 {
+.sheet-latest h1,
+.sheet-display {
   margin: 14px 0 16px -0.04em;
   font-family: var(--font-heading);
   font-size: clamp(56px, 6.4vw, 100px);
@@ -129,8 +134,22 @@ html:has(.sheet) {
 }
 /* Display type is printed, not flat: see InkFilter in site-footer.tsx. */
 .sheet-latest h1,
+.sheet-display,
 .sheet .footer-word {
   filter: url(#ink);
+}
+.sheet-text {
+  max-width: 44ch;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.sheet-text + .sheet-text {
+  margin-top: 12px;
+}
+.sheet-text a {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-rule);
+  text-underline-offset: 4px;
 }
 .sheet-meta {
   color: var(--ink-muted);
@@ -395,7 +414,8 @@ html:has(.sheet) {
 }
 
 @media (max-width: 899px) {
-  .release-sheet {
+  .release-sheet,
+  .spread {
     --cover: 100vw;
     grid-template-columns: minmax(0, 1fr);
     row-gap: 26px;
