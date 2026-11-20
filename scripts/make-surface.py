@@ -4,20 +4,21 @@
 # ///
 """The site's one surface, taken from the Renders master bus (drafts/design/hillclimb-2026-11-03/shared/master.py).
 
-The master bus puts one grain, a few pinholes and specks, and one uneven exposure over a whole
-poster, solids and paper included, so type and picture sit in one space. A web page cannot be
-re-rendered through it, so this bakes the same noise into two tiles that sit over the whole page:
+The master bus puts one grain, a few specks, and one uneven exposure over a whole poster,
+solids and paper included, so type and picture sit in one space. A web page cannot be
+re-rendered through it, so this bakes the same noise into tiles that sit in the page's paper:
 
-  grain.png   tileable toner grain, pinholes and specks: the bus's "noise" and solids steps
-  room.png    one low-frequency exposure field, tiled at page width: the bus's "room"
+  grain-a.png, grain-b.png   toner grain and specks: the bus's "noise" and solids steps. Two
+                             tiles of unrelated sizes (384 and 263 px) are layered so the grain
+                             never visibly repeats, at a fraction of the weight of one big tile.
+  room.png                   one low-frequency exposure field, tiled at page width: the "room"
 
-Both are ink on transparent ground and tile seamlessly. Like print, they move with the page.
+All are ink on transparent ground, tile seamlessly and move with the page like print.
 The output is deterministic.
 
-  uv run scripts/make-surface.py [grain strength, default 0.055] [grain file name]
+  uv run scripts/make-surface.py
 """
 import pathlib
-import sys
 
 import numpy as np
 from PIL import Image
@@ -32,33 +33,39 @@ def clumped(rng, shape, r):
     return n / (n.std() + 1e-9)
 
 
+def save(alpha, name, levels=64):
+    # Only the alpha varies: store grey plus alpha, with the alpha rounded to a few levels,
+    # which looks the same and compresses several times smaller than full precision.
+    h, w = alpha.shape
+    la = np.zeros((h, w, 2), np.uint8)
+    la[..., 0] = INK[0]
+    step = 255 / (levels - 1)
+    la[..., 1] = (np.round(np.clip(alpha, 0, 1) * 255 / step) * step).astype(np.uint8)
+    Image.fromarray(la, "LA").save(OUT / name, optimize=True)
+
+
+def grain(rng, size, strength, speck):
+    # The bus mixes fine and clumped toner, 0.6 and 0.4, at radii 0.65 and 1.5.
+    g = 0.6 * clumped(rng, (size, size), 0.65) + 0.4 * clumped(rng, (size, size), 1.5)
+    alpha = np.clip(g * strength, 0, 1)
+    # Sparse specks where the noise runs deep, as in the bus's solids step.
+    holes = clumped(rng, (size, size), 0.8)
+    alpha = np.where(holes < speck, 0.45, alpha)
+    return gaussian_filter(alpha, 0.35, mode="wrap")
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(3)
 
-    # Grain: the bus mixes fine and clumped toner, 0.6 and 0.4, at radii 0.65 and 1.5.
-    size = 1024
-    grain = 0.6 * clumped(rng, (size, size), 0.65) + 0.4 * clumped(rng, (size, size), 1.5)
-    strength = float(sys.argv[1]) if len(sys.argv) > 1 else 0.055
-    alpha = np.clip(grain * strength, 0, 1)
-    # Specks on the paper where the noise runs deep, as in the bus's solids step.
-    holes = clumped(rng, (size, size), 0.8)
-    alpha = np.where(holes < -3.4, 0.45, alpha)
-    alpha = gaussian_filter(alpha, 0.35, mode="wrap")
-    rgba = np.zeros((size, size, 4), np.uint8)
-    rgba[..., :3] = INK
-    rgba[..., 3] = np.round(np.clip(alpha, 0, 1) * 255).astype(np.uint8)
-    Image.fromarray(rgba).save(OUT / (sys.argv[2] if len(sys.argv) > 2 else "grain.png"), optimize=True)
+    save(grain(rng, 384, 0.04, -3.5), "grain-a.png")
+    save(grain(rng, 263, 0.03, -3.7), "grain-b.png")
 
     # Room: one uneven exposure. The bus blurs noise at radius 150 on a 1080 px poster; this
     # 96 px field is tiled at the page's width, so radius 10 keeps that scale. It wraps, so it tiles.
     small = 96
     field = clumped(rng, (small, small), 10)
-    room = np.clip(0.05 + 0.03 * field, 0, 1)
-    rgba = np.zeros((small, small, 4), np.uint8)
-    rgba[..., :3] = INK
-    rgba[..., 3] = np.round(room * 255).astype(np.uint8)
-    Image.fromarray(rgba).save(OUT / "room.png", optimize=True)
+    save(np.clip(0.05 + 0.03 * field, 0, 1), "room.png")
 
 
 if __name__ == "__main__":

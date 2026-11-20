@@ -30,9 +30,15 @@
   --ring: var(--ink);
   position: relative;
   isolation: isolate;
+  display: flex;
+  flex-direction: column;
   min-height: 100svh;
   background: var(--paper);
   color: var(--ink);
+}
+/* Short pages keep the footer on the bottom edge. */
+.sheet > main {
+  flex: 1 0 auto;
 }
 html:has(.sheet) body {
   background: #e4e0d6;
@@ -61,7 +67,9 @@ html:has(.sheet) {
   background: url("/assets/kasp/surface/room.png") 0 0 / 100vw 100vw repeat;
 }
 .sheet::after {
-  background: url("/assets/kasp/surface/grain.png") 0 0 / 1024px 1024px repeat;
+  background:
+    url("/assets/kasp/surface/grain-a.png") 0 0 / 384px 384px repeat,
+    url("/assets/kasp/surface/grain-b.png") 0 0 / 263px 263px repeat;
 }
 
 .sheet .site-wordmark img {
@@ -174,10 +182,10 @@ html:has(.sheet) {
 .sheet .signup-submit:hover::before {
   background: #000;
 }
-/* The email field is a printed rule to write on, not a box. */
+/* The email field is a plain inked box: the clearest thing to type into. */
 .sheet .signup-form .field-input {
-  padding: 0 2px;
-  box-shadow: inset 0 -2px 0 var(--ink);
+  padding: 0 16px;
+  box-shadow: inset 0 0 0 2px var(--ink);
 }
 .sheet-link {
   display: inline-flex;
@@ -336,6 +344,38 @@ html:has(.sheet) {
   grid-row: 3;
   padding-top: 8px;
   padding-bottom: 56px;
+}
+/* Desktop close: the photograph and the signup repeat the opening spread. The photograph
+   bleeds off the left edge like the cover; the word sits on its top edge and the form on
+   its bottom edge, so the column hangs off the picture's axes. */
+@media (min-width: 900px) {
+  .sheet .footer-signup.footer-signup--photo {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    column-gap: 52px;
+    padding: 0 0 96px;
+  }
+  .footer-signup--photo .photo-band {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    aspect-ratio: auto;
+    height: min(62svh, 540px);
+  }
+  .sheet .footer-signup--photo .footer-word {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    margin: -0.06em 0 0 -0.04em;
+    padding: 0 5vw 0 0;
+    font-size: 9.4vw;
+  }
+  .sheet .footer-signup--photo .footer-signup-copy {
+    grid-column: 2;
+    grid-row: 3;
+    grid-template-columns: minmax(0, 1fr);
+    align-self: end;
+    padding: 0 5vw 0 0;
+  }
 }
 .sheet .footer-bottom {
   position: relative;
