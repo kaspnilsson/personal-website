@@ -406,6 +406,14 @@ html:has(.sheet) {
   color: #fff;
 }
 
+/* Domain-level status pages (404, error): the sheet with no section chrome. */
+.sheet .status-page {
+  flex: 1 0 auto;
+  justify-content: center;
+  gap: 0;
+  padding: 80px 5vw;
+}
+
 /* Usability over the flyer: wear and grain never sit on anything you have to read.
    Wear is only on the decorative Updates word. Nav stays legible at 11px. */
 .sheet .site-navigation a {

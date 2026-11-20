@@ -1,5 +1,4 @@
-import { site } from "@/config/site";
-import { getThoughtPosts } from "@/lib/thoughts";
+import { getThoughtPosts, thoughts } from "@/lib/thoughts";
 
 export const dynamic = "force-static";
 
@@ -15,7 +14,7 @@ export function GET() {
   const posts = getThoughtPosts();
   const items = posts
     .map((post) => {
-      const url = `${site.url}/thoughts/${post.slug}`;
+      const url = `${thoughts.url}/${post.slug}`;
       return `    <item>
       <title>${escape(post.title)}</title>
       <link>${url}</link>
@@ -29,11 +28,11 @@ export function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Thoughts / Kasp</title>
-    <link>${site.url}/thoughts</link>
-    <description>Writing by Kasp.</description>
+    <title>${thoughts.name}</title>
+    <link>${thoughts.url}</link>
+    <description>${thoughts.description}</description>
     <language>en-us</language>
-    <atom:link href="${site.url}/thoughts/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="${thoughts.url}/rss.xml" rel="self" type="application/rss+xml" />
 ${items}
   </channel>
 </rss>

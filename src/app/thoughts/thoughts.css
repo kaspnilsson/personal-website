@@ -5,20 +5,48 @@
  * with the site; labels and facts stay at the site's 11 to 13px mono.
  */
 
-/* Index: the homepage spread. The print is the mass; the column holds the posts as the
-   homepage column holds the catalogue. */
+/* Header: the blog's own wordmark in place of the music logo. */
+.thoughts-wordmark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* Index: the title, then every post as a row on the sheet's axes. */
+.thoughts-index {
+  padding: 14px 5vw 120px;
+}
+.sheet-display.thoughts-title {
+  margin: 10px 0 44px -0.04em;
+  font-size: clamp(64px, 9vw, 150px);
+}
 .thoughts-list {
   margin: 0;
+  border-top: 1px solid var(--ink);
 }
 .thoughts-row {
   display: grid;
-  gap: 6px;
-  padding: 16px 0;
+  grid-template-columns: minmax(150px, 22vw) minmax(0, 1fr);
+  column-gap: 52px;
+  padding: 26px 0 28px;
   border-bottom: 1px solid var(--border);
+}
+.thoughts-date {
+  padding-top: 4px;
+}
+.thoughts-entry {
+  display: grid;
+  gap: 10px;
+  max-width: 66ch;
 }
 .thoughts-row-title {
   font-family: var(--font-heading);
-  font-size: clamp(24px, 2.2vw, 34px);
+  font-size: clamp(26px, 2.6vw, 40px);
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.025em;
@@ -32,13 +60,10 @@
   text-underline-offset: 5px;
 }
 .thoughts-row-text {
-  max-width: 52ch;
+  max-width: 56ch;
   color: var(--ink-muted);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
-}
-.thoughts-feed {
-  padding-top: 8px;
 }
 
 /* Post */
@@ -115,10 +140,13 @@
 .thought-body a:hover {
   text-decoration-color: currentColor;
 }
+/* Only JetBrains Mono Regular is loaded, so emphasis is a light stroke: it reads as bold
+   without a fake grey highlight. */
 .thought-body b,
 .thought-body strong {
   font-weight: 400;
-  background: linear-gradient(transparent 62%, rgba(18, 17, 16, 0.1) 62%);
+  color: var(--ink);
+  -webkit-text-stroke: 0.45px currentColor;
 }
 .thought-body ul,
 .thought-body ol {
@@ -207,6 +235,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+.thought-body .tablewrap {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-rule) transparent;
 }
 .thought-body .tablewrap {
   overflow-x: auto;
@@ -306,6 +338,20 @@
 }
 
 @media (max-width: 899px) {
+  .thoughts-index {
+    padding: 12px 22px 80px;
+  }
+  .thoughts-row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 8px;
+  }
+  .thoughts-date {
+    padding-top: 0;
+  }
+  .sheet-display.thoughts-title {
+    margin-bottom: 28px;
+    font-size: clamp(56px, 17vw, 96px);
+  }
   .thought {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 24px;
@@ -335,6 +381,13 @@
   .thought-body .duo,
   .thought-body .panels {
     grid-template-columns: minmax(0, 1fr);
+  }
+  /* Charts drawn as one wide SVG run edge to edge on a phone, so their labels stay as large
+     as possible while the whole chart, legend included, stays in view without scrolling. */
+  .thought-body figure > svg {
+    width: calc(100% + 44px);
+    max-width: none;
+    margin: 0 -22px;
   }
   .thought-body table {
     font-size: 12px;

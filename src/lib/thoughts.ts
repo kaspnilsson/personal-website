@@ -1,7 +1,16 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
+import { site } from "@/config/site";
 import { thoughtPosts, type ThoughtPost } from "@/content/thoughts/posts";
+
+// Thoughts is its own publication. It shares the domain with the music site and nothing else:
+// no music name, logo, sharing image or links.
+export const thoughts = {
+  name: "Thoughts",
+  description: "Posts, newest first.",
+  url: `${site.url}/thoughts`,
+};
 
 export function getThoughtPosts(): ThoughtPost[] {
   return [...thoughtPosts].sort((a, b) => b.date.localeCompare(a.date));

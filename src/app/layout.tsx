@@ -24,17 +24,9 @@ const jetbrainsMono = localFont({
   display: "swap",
 });
 
+// Domain-wide defaults only. Each section (music, blog, private pages) sets its own identity.
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: site.name, template: `%s / ${site.name}` },
-  description: site.description,
-  openGraph: site.openGraph,
-  twitter: {
-    card: "summary_large_image",
-    title: site.name,
-    description: site.description,
-    images: [site.openGraph.images[0].url],
-  },
 };
 
 export const viewport: Viewport = {

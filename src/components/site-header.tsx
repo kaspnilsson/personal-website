@@ -11,7 +11,7 @@ export function SiteHeader({
   current,
 }: {
   home?: boolean;
-  current?: "about" | "thoughts";
+  current?: "about";
 }) {
   return (
     <header className="site-header">
@@ -31,12 +31,6 @@ export function SiteHeader({
             {section.label}
           </a>
         ))}
-        <Link
-          href="/thoughts"
-          aria-current={current === "thoughts" ? "page" : undefined}
-        >
-          Thoughts
-        </Link>
         <Link
           href="/about"
           aria-current={current === "about" ? "page" : undefined}

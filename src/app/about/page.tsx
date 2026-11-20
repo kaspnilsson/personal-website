@@ -4,20 +4,14 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
 import { Spread } from "@/components/spread";
+import { musicMetadata } from "@/config/music-metadata";
 import { contact, listeningProfiles, profiles, renders, site } from "@/config/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = musicMetadata({
   title: "About",
   description: `${site.description} Bookings: ${contact.email}.`,
-  alternates: { canonical: "/about" },
-  openGraph: { ...site.openGraph, title: "About / Kasp", url: `${site.url}/about` },
-  twitter: {
-    card: "summary_large_image",
-    title: "About / Kasp",
-    description: site.description,
-    images: [site.openGraph.images[0].url],
-  },
-};
+  path: "/about",
+});
 
 export const viewport: Viewport = { themeColor: "#e4e0d6", colorScheme: "light" };
 

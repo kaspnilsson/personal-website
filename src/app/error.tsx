@@ -1,31 +1,21 @@
 "use client";
 
-import Link from "next/link";
+import { InkFilter } from "@/components/ink-filter";
 
-import { Spread } from "@/components/spread";
-
+// Domain-level error page: like the 404, it belongs to no one section of the domain.
 export default function Error({ reset }: { error: Error; reset: () => void }) {
   return (
     <div className="sheet">
-      <main id="main-content">
-        <Spread image={{ src: "/assets/kasp/printed/wall-letters.jpg" }} labelledBy="status-title">
-          <div>
-            <p className="sheet-label">Error</p>
-            <h1 id="status-title" className="sheet-display">
-              Page unavailable.
-            </h1>
-            <p className="sheet-text">This page could not load. Try again, or return to the homepage.</p>
-            <div className="sheet-actions">
-              <button type="button" className="editorial-link" onClick={reset}>
-                <span>Try again</span>
-                <span aria-hidden="true">⟶</span>
-              </button>
-              <Link className="sheet-link" href="/">
-                Homepage
-              </Link>
-            </div>
-          </div>
-        </Spread>
+      <InkFilter />
+      <main id="main-content" className="status-page">
+        <p className="sheet-label">Error</p>
+        <h1 className="sheet-display">Page unavailable.</h1>
+        <div className="sheet-actions">
+          <button type="button" className="editorial-link" onClick={reset}>
+            <span>Try again</span>
+            <span aria-hidden="true">⟶</span>
+          </button>
+        </div>
       </main>
     </div>
   );

@@ -1,13 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import Link from "next/link";
 
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { SkipLink } from "@/components/skip-link";
-import { Spread } from "@/components/spread";
+import { InkFilter } from "@/components/ink-filter";
 
+// Domain-level 404. The domain hosts separate things (the music site, the blog), so this page
+// belongs to none of them: no header, logo, image or links to either.
 export const metadata: Metadata = {
-  title: "Page not found",
+  title: { absolute: "Page not found" },
   robots: { index: false },
 };
 
@@ -16,26 +14,12 @@ export const viewport: Viewport = { themeColor: "#e4e0d6", colorScheme: "light" 
 export default function NotFound() {
   return (
     <div className="sheet">
-      <SkipLink />
-      <SiteHeader />
-      <main id="main-content">
-        <Spread image={{ src: "/assets/kasp/printed/wall-letters.jpg" }} labelledBy="status-title">
-          <div>
-            <p className="sheet-label">404</p>
-            <h1 id="status-title" className="sheet-display">
-              Page not found.
-            </h1>
-            <p className="sheet-text">This address does not match a page on kasptrax.com.</p>
-            <div className="sheet-actions">
-              <Link href="/" className="editorial-link">
-                <span>Go to the homepage</span>
-                <span aria-hidden="true">⟶</span>
-              </Link>
-            </div>
-          </div>
-        </Spread>
+      <InkFilter />
+      <main id="main-content" className="status-page">
+        <p className="sheet-label">404</p>
+        <h1 className="sheet-display">Page not found.</h1>
+        <p className="sheet-text">This address does not match a page on this domain.</p>
       </main>
-      <SiteFooter />
     </div>
   );
 }

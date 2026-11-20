@@ -2,15 +2,14 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
-import { site } from "@/config/site";
+import { ThoughtsFooter, ThoughtsHeader } from "@/components/thoughts-chrome";
 import {
   formatThoughtDate,
   getThoughtBody,
   getThoughtPost,
   getThoughtPosts,
+  thoughts,
 } from "@/lib/thoughts";
 
 type Params = { slug: string };
@@ -29,13 +28,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getThoughtPost(slug);
   if (!post) return {};
-  const url = `${site.url}/thoughts/${post.slug}`;
+  const url = `${thoughts.url}/${post.slug}`;
   return {
     title: post.title,
     description: post.description,
     alternates: { canonical: `/thoughts/${post.slug}` },
     openGraph: {
-      ...site.openGraph,
+      siteName: thoughts.name,
       type: "article",
       title: post.title,
       description: post.description,
@@ -43,10 +42,9 @@ export async function generateMetadata({
       publishedTime: post.date,
     },
     twitter: {
-      card: "summary_large_image",
+      card: "summary",
       title: post.title,
       description: post.description,
-      images: [site.openGraph.images[0].url],
     },
   };
 }
@@ -66,14 +64,9 @@ export default async function ThoughtPostPage({
   return (
     <div className="sheet">
       <SkipLink />
-      <SiteHeader current="thoughts" />
+      <ThoughtsHeader />
       <main id="main-content" className="thought">
         <aside className="thought-rail" aria-label="Post details">
-          <p className="sheet-label">
-            <Link className="sheet-link" href="/thoughts">
-              Thoughts
-            </Link>
-          </p>
           <p className="sheet-meta">
             <time dateTime={post.date}>{formatThoughtDate(post.date)}</time>
           </p>
@@ -87,13 +80,13 @@ export default async function ThoughtPostPage({
           <div className="thought-body" dangerouslySetInnerHTML={{ __html: body }} />
           <div className="sheet-actions thought-back">
             <Link href="/thoughts" className="editorial-link">
-              <span>All thoughts</span>
+              <span>All posts</span>
               <span aria-hidden="true">⟶</span>
             </Link>
           </div>
         </article>
       </main>
-      <SiteFooter />
+      <ThoughtsFooter />
     </div>
   );
 }
