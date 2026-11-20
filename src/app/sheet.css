@@ -61,7 +61,7 @@ html:has(.sheet) {
   background: url("/assets/kasp/surface/room.png") 0 0 / 100vw 100vw repeat;
 }
 .sheet::after {
-  background: url("/assets/kasp/surface/grain.png") 0 0 / 384px 384px repeat;
+  background: url("/assets/kasp/surface/grain.png") 0 0 / 1024px 1024px repeat;
 }
 
 .sheet .site-wordmark img {
@@ -99,7 +99,7 @@ html:has(.sheet) {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 48px;
+  gap: 32px;
   min-width: 0;
   font-size: 13px;
   line-height: 1.6;
@@ -153,6 +153,31 @@ html:has(.sheet) {
 .sheet .signup-submit:hover {
   background: #000;
   color: #fff;
+}
+/* The ink block is printed like the display type; its label stays crisp on top. */
+.sheet-actions .editorial-link,
+.sheet .signup-submit {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+.sheet-actions .editorial-link::before,
+.sheet .signup-submit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ink);
+  filter: url(#ink-solid);
+}
+.sheet-actions .editorial-link:hover::before,
+.sheet .signup-submit:hover::before {
+  background: #000;
+}
+/* The email field is a printed rule to write on, not a box. */
+.sheet .signup-form .field-input {
+  padding: 0 2px;
+  box-shadow: inset 0 -2px 0 var(--ink);
 }
 .sheet-link {
   display: inline-flex;
@@ -340,6 +365,13 @@ html:has(.sheet) {
     padding: 0 22px;
   }
   .sheet-actions .editorial-link {
+    flex: 1 1 100%;
+  }
+  .sheet-meta,
+  .sheet-link {
+    font-size: 15px;
+  }
+  .sheet-profiles .sheet-label {
     flex: 1 1 100%;
   }
   .sheet-row {

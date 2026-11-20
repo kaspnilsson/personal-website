@@ -37,13 +37,13 @@ def main():
     rng = np.random.default_rng(3)
 
     # Grain: the bus mixes fine and clumped toner, 0.6 and 0.4, at radii 0.65 and 1.5.
-    size = 384
+    size = 1024
     grain = 0.6 * clumped(rng, (size, size), 0.65) + 0.4 * clumped(rng, (size, size), 1.5)
     strength = float(sys.argv[1]) if len(sys.argv) > 1 else 0.055
     alpha = np.clip(grain * strength, 0, 1)
     # Specks on the paper where the noise runs deep, as in the bus's solids step.
     holes = clumped(rng, (size, size), 0.8)
-    alpha = np.where(holes < -3.0, 0.55, alpha)
+    alpha = np.where(holes < -3.4, 0.45, alpha)
     alpha = gaussian_filter(alpha, 0.35, mode="wrap")
     rgba = np.zeros((size, size, 4), np.uint8)
     rgba[..., :3] = INK

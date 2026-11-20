@@ -19,6 +19,14 @@ function InkFilter() {
         <feComposite in="density" in2="pins" operator="in" result="mask" />
         <feComposite in="edge" in2="mask" operator="in" />
       </filter>
+      <filter id="ink-solid" x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="2" seed="5" result="field" />
+        <feColorMatrix in="field" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.4 0 0 0 0.74" result="density" />
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="1" seed="13" result="fine" />
+        <feColorMatrix in="fine" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -40 0 0 0 30.5" result="pins" />
+        <feComposite in="density" in2="pins" operator="in" result="mask" />
+        <feComposite in="SourceGraphic" in2="mask" operator="in" />
+      </filter>
     </svg>
   );
 }
