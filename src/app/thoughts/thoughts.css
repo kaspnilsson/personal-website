@@ -1,0 +1,396 @@
+/*
+ * Thoughts: the blog on the sheet. Same paper, ink, grain and type roles as the
+ * rest of the public site. Long-form body text is JetBrains Mono at 15px with a
+ * 66ch measure, the size the About bio already uses, so it reads as one voice
+ * with the site; labels and facts stay at the site's 11 to 13px mono.
+ */
+
+/* Index */
+.thoughts-index {
+  padding: 46px 5vw 120px;
+}
+.thoughts-title {
+  margin: 0 0 40px -0.04em;
+  font-family: var(--font-heading);
+  font-size: clamp(64px, 9vw, 150px);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+.thoughts-list {
+  border-top: 1px solid var(--ink);
+}
+.thoughts-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.32fr) minmax(0, 1fr);
+  gap: 0 32px;
+  padding: 22px 0 24px;
+  border-bottom: 1px solid var(--border);
+}
+.thoughts-date {
+  padding-top: 5px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thoughts-entry h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(22px, 2.2vw, 30px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.thoughts-entry h2 a {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-hairline);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+.thoughts-entry h2 a:hover {
+  text-decoration-color: currentColor;
+}
+.thoughts-entry p {
+  max-width: 62ch;
+  margin-top: 12px;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.thoughts-feed {
+  margin-top: 18px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thoughts-feed a {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-hairline);
+  text-underline-offset: 4px;
+}
+
+/* Post */
+.thought {
+  /* Figure palette: ink, paper and one earth tone for Keys. */
+  --fg: var(--ink);
+  --muted: #5d584f;
+  --rule: rgba(18, 17, 16, 0.18);
+  --panel: rgba(18, 17, 16, 0.05);
+  --key: #eeebe3;
+  --keyedge: rgba(18, 17, 16, 0.32);
+  --accent: #8a3a1c;
+  --accent-soft: rgba(138, 58, 28, 0.12);
+  --neg: #9b2b1d;
+  padding: 46px 5vw 110px;
+}
+.thought > article,
+.thought-back {
+  max-width: 66ch;
+  margin: 0 auto;
+}
+.thought-header {
+  margin-bottom: 44px;
+}
+.thought-kicker,
+.thought-meta {
+  font-size: 12px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thought-kicker a {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-hairline);
+  text-underline-offset: 4px;
+}
+.thought-header h1 {
+  margin: 18px 0 22px -0.03em;
+  font-family: var(--font-heading);
+  font-size: clamp(38px, 5.4vw, 68px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.thought-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 28px;
+  padding: 12px 0;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-muted);
+}
+
+.thought-body {
+  font-size: 15px;
+  line-height: 1.75;
+}
+.thought-body p,
+.thought-body ul,
+.thought-body ol,
+.thought-body blockquote,
+.thought-body .tablewrap {
+  margin: 0 0 20px;
+}
+.thought-body h2 {
+  margin: 56px 0 14px;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+.thought-body h3 {
+  margin: 36px 0 10px;
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.thought-body a {
+  text-decoration: underline;
+  text-decoration-color: var(--ink-rule);
+  text-underline-offset: 4px;
+}
+.thought-body a:hover {
+  text-decoration-color: currentColor;
+}
+.thought-body b,
+.thought-body strong {
+  font-weight: 400;
+  background: linear-gradient(transparent 62%, rgba(18, 17, 16, 0.1) 62%);
+}
+.thought-body ul,
+.thought-body ol {
+  padding-left: 1.4em;
+}
+.thought-body ul {
+  list-style: square;
+}
+.thought-body ol {
+  list-style: decimal;
+}
+.thought-body li {
+  margin: 0 0 8px;
+}
+.thought-body li::marker {
+  color: var(--ink-muted);
+}
+.thought-body sup {
+  font-size: 0.7em;
+  line-height: 0;
+}
+.thought-body sup a {
+  text-decoration: none;
+}
+.thought-body code {
+  padding: 0.05em 0.3em;
+  background: var(--panel);
+  font-size: 0.92em;
+}
+.thought-body hr {
+  margin: 44px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Figures and tables */
+.thought-body figure {
+  margin: 34px 0 36px;
+}
+.thought-body .exh {
+  margin: 0 0 10px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thought-body figcaption {
+  margin-top: 12px;
+  color: var(--ink-muted);
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+.thought-body svg {
+  display: block;
+  height: auto;
+}
+.thought-body svg text {
+  font-family: var(--font-heading);
+}
+.thought-body .duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.thought-body .duo figure {
+  margin: 0;
+}
+.thought-body .duo .cap {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thought-body .duo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--ink-hairline);
+  mix-blend-mode: multiply;
+}
+.thought-body .duo img.top {
+  border-bottom: 0;
+}
+.thought-body .panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.thought-body .tablewrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink-rule);
+}
+.thought-body table {
+  width: 100%;
+  min-width: 420px;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+}
+.thought-body th,
+.thought-body td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+.thought-body tr:last-child td {
+  border-bottom: 0;
+}
+.thought-body th {
+  color: var(--ink-muted);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thought-body td.n,
+.thought-body th.n {
+  text-align: right;
+  white-space: nowrap;
+}
+.thought-body td.win {
+  color: var(--accent);
+}
+.thought-body .ci {
+  color: var(--ink-muted);
+  font-size: 0.86em;
+  white-space: nowrap;
+}
+
+/* Brief, appendix, notes */
+.thought-body blockquote.brief {
+  padding: 16px 20px;
+  border-left: 2px solid var(--ink);
+  background: var(--panel);
+  font-size: 14px;
+  line-height: 1.65;
+}
+.thought-body blockquote.brief p {
+  margin: 0 0 10px;
+}
+.thought-body blockquote.brief p:last-child {
+  margin: 0;
+}
+.thought-body section.appendix {
+  margin-top: 88px;
+  padding-top: 26px;
+  border-top: 2px solid var(--ink);
+}
+.thought-body section.appendix > h2 {
+  margin-top: 0;
+}
+.thought-body .notes {
+  margin-top: 56px;
+  padding-top: 18px;
+  border-top: 1px solid var(--ink-rule);
+  color: var(--ink-muted);
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+.thought-body .notes .lab {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thought-body .notes ol {
+  margin: 0;
+}
+.thought-body .notes .colophon {
+  margin: 16px 0 0;
+}
+.thought-body .post-origin {
+  margin-top: 36px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.thought-back {
+  margin-top: 56px;
+}
+
+@media (max-width: 899px) {
+  .thoughts-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+  .thoughts-date {
+    padding-top: 0;
+  }
+}
+
+@media (max-width: 599px) {
+  .thoughts-index {
+    padding: 12px 22px 80px;
+  }
+  .thoughts-title {
+    margin-bottom: 26px;
+    font-size: clamp(52px, 17vw, 80px);
+  }
+  .thought {
+    padding: 12px 22px 80px;
+  }
+  .thought-body {
+    font-size: 14.5px;
+    line-height: 1.72;
+  }
+  .thought-body h2 {
+    font-size: 21px;
+  }
+  .thought-body .duo,
+  .thought-body .panels {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .thought-body table {
+    font-size: 12px;
+  }
+  .thought-body th,
+  .thought-body td {
+    padding: 8px 6px;
+  }
+}

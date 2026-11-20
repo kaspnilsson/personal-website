@@ -1,0 +1,110 @@
+<p><a href="https://www.adweek.com/media/openai-chatgpt-ads-job-listing-marketing-platform/" target="_blank" rel="noopener noreferrer">OpenAI is exploring ads in ChatGPT</a>. <a href="https://www.nbcnews.com/tech/tech-news/anthropic-says-pentagon-declared-national-security-risk-rcna262013" target="_blank" rel="noopener noreferrer">Anthropic's "Constitutional AI" guardrails are crumbling under pressure from the Pentagon</a>. <a href="https://www.tomsguide.com/ai/google-gemini/how-to-stop-gemini-from-training-on-your-data" target="_blank" rel="noopener noreferrer">Google trains on everything you feed Gemini</a>. Nobody knows exactly what these companies will do with the thousands of conversations you have poured into their products -- your debugging sessions, your medical questions, your relationship problems, your business plans -- but the incentives are not subtle. They want you dependent on their product, and your conversation history is the lever.</p>
+<p>Each of them remembers what you tell their models, and each of them locks that history inside their own app. Switch from Claude to ChatGPT and you start over. Switch to Gemini and you start over again. The profile they have built of how you think, how you write, and what you work on belongs to them, not to you. It does not follow you out the door.</p>
+<p>When I'm not writing software to help develop the <a href="https://waymo.com/" target="_blank" rel="noopener noreferrer">Waymo Driver</a>, I'm an obsessive user of these tools. I've dumped a year of working context into them: project architectures, code reviews, personal health data, half-baked startup ideas. That accumulated context makes every conversation sharper. And it sits, today, in four separate vendor databases that do not talk to each other.</p>
+<p>So I built my own system.</p>
+<h2>What I Actually Built</h2>
+<p>I run a knowledge graph in a Postgres database on my own server. Claude, GPT-5, Gemini, GLM-5 -- every model I use reads from and writes to that same database. The data never touches a vendor's infrastructure. When I switch models, the new one picks up exactly where the old one left off.</p>
+<p>The architecture has three layers:</p>
+<h3>The Brain</h3>
+<p>I wrote an open-source MCP server called <a href="https://github.com/kaspnilsson/mcp-memory-supabase" target="_blank" rel="noopener noreferrer"><code>mcp-memory-supabase</code></a> that stores a knowledge graph -- entities, observations, relations -- in <a href="https://supabase.com/" target="_blank" rel="noopener noreferrer">Supabase</a> (managed Postgres) with <code>pgvector</code> for semantic search. The <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol</a> is an open standard that lets AI clients call external tools. This server is one of several tools I run.</p>
+<h3>The Gateway</h3>
+<p>A small cloud VPS (virtual private server) hosts an MCP Gateway -- a Node.js daemon that multiplexes several MCP tools behind a single HTTPS endpoint. I run three: the memory server, <a href="https://brave.com/search/api/" target="_blank" rel="noopener noreferrer">Brave Search</a> for grounding in live data, and a GitHub server for reading and writing code. The gateway authenticates requests with a bearer token and spawns each tool as a child process. Adding a new tool means adding four lines to a JSON config file.</p>
+<h3>The Client</h3>
+<p><a href="https://www.typingmind.com/" target="_blank" rel="noopener noreferrer">TypingMind</a> connects to the gateway. It is a bring-your-own-key AI chat app that runs as a PWA on every device I own -- phone, work laptop, home desktop. Same interface, same tools, any model. I pick the model from a dropdown. A new release from Anthropic or OpenAI inherits my full history the moment I select it.</p>
+<h2>What It Costs</h2>
+<p>AI subscriptions are priced at $20/month to make the lock-in feel cheap.</p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Monthly Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VPS</td>
+<td>~$6</td>
+</tr>
+<tr>
+<td>Supabase</td>
+<td>$0 (free tier)</td>
+</tr>
+<tr>
+<td>TypingMind</td>
+<td>~$3 amortized (one-time ~$40 license)</td>
+</tr>
+<tr>
+<td>Brave Search API</td>
+<td>$0 (free tier)</td>
+</tr>
+<tr>
+<td>API compute via <a href="https://openrouter.ai/" target="_blank" rel="noopener noreferrer">OpenRouter</a>
+</td>
+<td>~$36 for 50M tokens</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~$45</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>Metered compute costs more than a flat subscription. But the $20 price is a customer-acquisition subsidy. These companies are burning cash to build a user base before they figure out how to extract value from the conversation data they are accumulating. I pay the actual cost of the compute and keep the data under my own lock and key.</p>
+<h2>What Does Not Work Well</h2>
+<p>I will not pretend this competes with Claude.ai or ChatGPT as a <em>product</em>.</p>
+<p>Anthropic has hundreds of engineers building a native application with voice, artifacts, projects, and a mobile app. TypingMind is a PWA built by a small team. The gaps show:</p>
+<ul>
+<li>
+<strong>Voice is rough.</strong> TypingMind supports speech input, but the experience is miles behind the native ChatGPT and Claude voice modes.</li>
+<li>
+<strong>iOS kills background work.</strong> If you leave the browser while the AI is mid-thought on a long tool chain, iOS may terminate the process. You have to re-run the query.</li>
+<li>
+<strong>MCP config does not sync across devices.</strong> TypingMind syncs chats, but you configure the MCP server URL and token manually on each device. Easy to work around, but annoying.</li>
+<li>
+<strong>You are your own SRE.</strong> If the VPS goes down at 2 AM, nobody pages anyone.</li>
+</ul>
+<p>This is not a consumer product. If you want polish, use Claude.ai. If you want control, keep reading.</p>
+<h2>Why It Gets Better Over Time</h2>
+<p>The subscription model gives you a fixed product. You get the features the vendor ships, on the vendor's timeline.</p>
+<p>This system compounds. Every conversation enriches the same graph, regardless of which model I used or which device I was on. After a month of use, the AI knows my manager's name is James. It knows my height and weight and clothing sizes when I ask it to help me shop online. It knows I want options ranked in a rubric, not dumped in a vague pros-and-cons list. It knows the tech stack of every side project I maintain. I never re-explain any of this.</p>
+<p>When Anthropic ships Sonnet 4.6, I select it from a dropdown. It reads the graph and immediately has the context that took me weeks to build. If I don't like how it behaves, I re-select Gemini 3.1 Pro and reissue the query. I do not wait for Anthropic or Google to build a "memory" feature and hope they implement it well. The memory is mine.</p>
+<p>After three months of daily use, the distance between this setup and a fresh ChatGPT session is enormous -- and it grows with every conversation.</p>
+<h2>The Playbook</h2>
+<p>This repository walks through the full architecture, start to finish. The guides are written for humans and structured for AI agents.</p>
+<h3>Guides</h3>
+<ol>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/guides/01-architecture.md" target="_blank" rel="noopener noreferrer">Architecture Overview</a> -- How the pieces fit together.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/guides/02-database.md" target="_blank" rel="noopener noreferrer">Database Provisioning</a> -- Setting up Supabase and <code>pgvector</code>.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/guides/03-vps-and-gateway.md" target="_blank" rel="noopener noreferrer">VPS &amp; Gateway Setup</a> -- The server, Caddy, systemd, and the MCP multiplexer.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/guides/04-client-setup.md" target="_blank" rel="noopener noreferrer">Client &amp; System Prompt</a> -- Connecting TypingMind and teaching the AI to use its tools.</li>
+</ol>
+<h3>Deep Dives</h3>
+<ul>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/economics.md" target="_blank" rel="noopener noreferrer">The Economics</a> -- Full cost breakdown vs. SaaS subscriptions.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/advanced-system-prompt.md" target="_blank" rel="noopener noreferrer">Advanced System Prompt</a> -- Orchestrating tools and memory with radical candor.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/security-model.md" target="_blank" rel="noopener noreferrer">Security Model</a> -- Exposing an MCP server safely.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/why-typingmind.md" target="_blank" rel="noopener noreferrer">Why TypingMind?</a> -- Client requirements for this architecture.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/why-supabase.md" target="_blank" rel="noopener noreferrer">Why Supabase?</a> -- Managed Postgres and the RLS debate.</li>
+<li>
+<a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/autonomous-delegation.md" target="_blank" rel="noopener noreferrer">Autonomous Delegation</a> -- The theoretical vision for 24/7 engineering.</li>
+</ul>
+<h3>Open Source Primitives</h3>
+<ul>
+<li>
+<a href="https://github.com/kaspnilsson/mcp-memory-supabase" target="_blank" rel="noopener noreferrer"><code>mcp-memory-supabase</code></a> -- The knowledge graph MCP server. MIT licensed.</li>
+</ul>
+<h2>The Vision: Autonomous Delegation</h2>
+<p>This playbook focuses on the <strong>Memory + Search</strong> wedge -- the persistent brain. The architecture is designed for autonomous work.</p>
+<p>By adding an orchestration layer (like <a href="https://openclaw.ai/" target="_blank" rel="noopener noreferrer">OpenClaw</a>) and a GitHub-based state machine, you can delegate engineering tasks to your twin via GitHub labels (<code>scoped</code>, <code>in_progress</code>, <code>completed</code>). Autonomous bots are out of scope for this initial guide, but the infrastructure you build here supports them. See the <a href="https://github.com/kaspnilsson/digital-twin-playbook/blob/main/docs/deep-dives/autonomous-delegation.md" target="_blank" rel="noopener noreferrer">Autonomous Delegation</a> deep dive for details.</p>
+<hr>
+<p><strong>Note:</strong> This project was built largely with AI assistance. Every written word in this repository was reviewed and refined by <a href="https://github.com/kaspnilsson" target="_blank" rel="noopener noreferrer">kaspnilsson</a>.</p>
+
+<p class="post-origin">Originally published on <a href="https://github.com/kaspnilsson/digital-twin-playbook" target="_blank" rel="noopener noreferrer">GitHub</a>, March 2026.</p>

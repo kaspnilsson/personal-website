@@ -51,6 +51,14 @@ The public pages (home, about, 404, error) sit on a paper sheet defined in `src/
 
 Casa and Fieldnotes keep the dark Renders chassis.
 
+## Thoughts
+
+`/thoughts` is the blog: a reverse-chronological index and one page per post, both on the sheet. Posts are listed in `src/content/thoughts/posts.ts`; each body is trusted HTML at `src/content/thoughts/<slug>/body.html`, with images in `public/assets/thoughts/<slug>/`. The feed is `/thoughts/rss.xml`, and posts are in the sitemap.
+
+- Titles are Gibson Bold uppercase. Body text is JetBrains Mono at 15px (14.5px on phones) with a 66ch measure, the size of the About bio, so long reading stays comfortable. Labels, dates, captions and tables stay at 11 to 13px mono.
+- Figures inside posts use the ink palette plus one earth tone, `#8a3a1c`, where a chart needs to separate two series. Screenshots print into the paper with `mix-blend-mode: multiply`, like the covers.
+- Wide tables scroll inside their own container; the page never scrolls sideways.
+
 ## Rules
 
 - Dark chassis (Casa, Fieldnotes): ground `#0a0a0a`, ink `#e5e5e5`, rules `#262626` and `#3a3a3a`. Pure white only on hover. No accent colours, gradients, radius or drop shadows in the interface.
