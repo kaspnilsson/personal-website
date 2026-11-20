@@ -1255,7 +1255,25 @@
       <figcaption>391 letter taps per cell, aimed at each keyboard's visible keys. An earlier run aimed Apple's taps at its invisible touch zones, just below the visible keys. That made the gap look bigger than it is.</figcaption>
     </figure>
 
-    <h3>B. How the loop works</h3>
+    <h3>B. What's actually in the keyboard</h3>
+    <p>None of this is a chatbot. Five small models run on the phone, and on every tap they answer one question: which word did I mean? A decoder weighs two things for each candidate word, how well my taps fit its letters and how likely the word is after what I've already typed. It searches a dictionary of about 120,000 English words plus my own vocabulary.</p>
+    <figure>
+      <p class="exh">Table 3 · The models inside Keys</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Model</th><th>What it does</th><th>Trained on</th><th class="n">Size</th></tr></thead>
+        <tbody>
+          <tr><td>Touch model</td><td>Scores each tap against every nearby key instead of snapping it to the key it hit. When a tap is ambiguous, it leans toward the letter that fits the word so far.</td><td>Nothing: it uses the key positions, plus the word statistics' guess at the next letter</td><td class="n">—</td></tr>
+          <tr><td>Two word-statistics models</td><td>Count which words follow which. One covers public text, the other my messages. They do most of the work.</td><td>About 6 million lines of movie subtitles; my messages</td><td class="n">39 MB + 11 MB</td></tr>
+          <tr><td>Small neural predictor</td><td>Fills the suggestion bar and rescores words the word statistics have never seen. An 8-layer transformer with 19 million parameters.</td><td>My messages and public text, guided by the personal model's guesses</td><td class="n">38 MB</td></tr>
+          <tr><td>Personal language model</td><td>Refines the suggestion bar. It gets 60 milliseconds and is skipped if it runs out of time.</td><td>SmolLM2-135M, an open 135-million-parameter model, fine-tuned on my messages</td><td class="n">135 MB</td></tr>
+          <tr><td>Swipe model</td><td>Turns a swipe path into letters.</td><td>Simulated and recorded swipe paths, over a vocabulary that includes mine</td><td class="n">1.3 MB</td></tr>
+        </tbody>
+      </table></div>
+      <figcaption>Sizes are the files on the phone. The personal model is compressed to 8 bits per weight.</figcaption>
+    </figure>
+    <p>Retraining follows the same rules every time. The word statistics are rebuilt from scratch every night. The personal model starts from the public SmolLM2 checkpoint each time, never from my last fine-tune. It keeps whichever checkpoint does best on messages it never trains on. The small predictor learns by copying the personal model's guesses, which is called distillation. That keeps about 60% of the big model's gain at a size a keyboard can afford. The neural models only retrain once I've written about 2% more words, or after a week.</p>
+
+    <h3>C. How the loop works</h3>
     <p><b>Metric.</b> Two numbers should go up: how often the keyboard produces the word I meant, and how often it fixes a real typo. Two must never get worse: how often it changes one of my own words, and how often it changes a word I typed right.</p>
     <p><b>Data.</b> About 650,000 words of my iMessages since 2018. A model trained on the older nine-tenths had the right next word in its top three suggestions 27.5% of the time on my newest messages. A model trained on 76 million words of movie subtitles, 130 times more text, got 20.6%. Both are good to within about half a point. Every tap and correction I make now feeds the loop too, and it all stays on my own devices.</p>
     <p><b>Test bench.</b> The typing engine is a plain library. A harness types my old messages into it with a simulated thumb that makes realistic mistakes, and scores the result. My first bench used only my own messages and flattered the keyboard, so real typing from public studies now counts as much as mine. One agent leads and hands work out to the others. The others tune on older messages and never see the newest ones, and only the lead scores finished work on those.<sup><a href="#n4">4</a></sup> Apple's keyboard gets the same taps, in Apple's own simulator and on the old iPhone, which also taps the gaps and margins on every build.</p>
@@ -1291,17 +1309,17 @@
       <figcaption>A typical turn takes hours. The language models also retrain every night on new text, and a new version only ships if it beats the old one.</figcaption>
     </figure>
 
-    <h3>C. What didn't work</h3>
+    <h3>D. What didn't work</h3>
     <p>A model 30 times bigger, trained on the same writing, got its first guess for my next word right 23.0% of the time, against 20.5% for the model on my phone.<sup><a href="#n5">5</a></sup> That's a lot of GPU for two and a half points. My left thumb lands a little left of where it aims, and correcting for that helped my taps but added one or two wrong corrections per thousand words. That breaks a guardrail, so for now it only logs what it would have done.</p>
 
-    <h3>D. Setup and cost</h3>
+    <h3>E. Setup and cost</h3>
     <p>I run the agents side by side in T3 Code, an app for coding agents. On the busiest day about a dozen ran at once. The hardware was all stuff I already had, a Mac, the old iPhone for testing, and a gaming PC that trained the bigger model.</p>
     <p>I had to step in a couple of times. I asked for a job that taps the old iPhone every few minutes so it never locks. One agent decided that wouldn't work, quietly built something else, and the phone locked mid-test. Now the agents flag a change of plan before acting, and nothing counts as fixed without proof on a real phone. Another time, a dictation test with a live microphone transcribed a real conversation in the room. Audio tests now use a recorded public-domain clip.</p>
 
-    <h3>E. Starting your own loop</h3>
+    <h3>F. Starting your own loop</h3>
     <p>An annoyance qualifies if it happens at least weekly, leaves a record you can export, and runs on a system you're allowed to change.</p>
     <figure>
-      <p class="exh">Table 3 · Other loops I'd try</p>
+      <p class="exh">Table 4 · Other loops I'd try</p>
       <div class="tablewrap"><table>
         <thead><tr><th>Annoyance</th><th>Goal</th><th>Data stream</th><th>Test bench</th><th>Guardrail</th></tr></thead>
         <tbody>
