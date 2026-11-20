@@ -109,7 +109,10 @@ export function MusicSheet({ releases }: { releases: readonly Release[] }) {
               </li>
             ))}
             {appearances.map((appearance) => (
-              <li className="sheet-row sheet-row--text" key={appearance.link.href}>
+              <li className="sheet-row" key={appearance.link.href}>
+                <span className="sheet-thumb">
+                  <Image src={appearance.cover.src} alt="" fill sizes="80px" />
+                </span>
                 <span className="sheet-row-text">
                   <span className="sheet-row-title">{appearance.title}</span>
                   <span className="sheet-meta">

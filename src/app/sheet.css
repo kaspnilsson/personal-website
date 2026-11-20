@@ -17,7 +17,7 @@
 .sheet {
   --paper: #e4e0d6;
   --ink: #121110;
-  --ink-muted: #45413a;
+  --ink-muted: #38352f;
   --ink-rule: rgba(18, 17, 16, 0.5);
   --ink-hairline: rgba(18, 17, 16, 0.26);
   --ink-placeholder: #7a756b;
@@ -34,9 +34,12 @@
   background: var(--paper);
   color: var(--ink);
 }
-html:has(.sheet),
 html:has(.sheet) body {
   background: #e4e0d6;
+}
+/* Anything past the end of the page, overscroll included, reads as the ink footer. */
+html:has(.sheet) {
+  background: #121110;
   color-scheme: light;
 }
 .sheet ::selection {
@@ -74,11 +77,12 @@ html:has(.sheet) body {
 /* Music: the cover is the one mass in open ground. Its column holds the whole catalogue,
    the latest release on the cover's top edge and everything else on its bottom edge. */
 .release-sheet {
-  --cover: min(calc(100svh - 140px), 56vw);
+  --cover: min(calc(100svh - 124px), 60vw);
   display: grid;
   grid-template-columns: var(--cover) minmax(0, 1fr);
-  column-gap: 44px;
-  padding: 14px 5vw 72px;
+  column-gap: 52px;
+  /* The cover is crushed against the left edge of the sheet; the column keeps the margin. */
+  padding: 14px 5vw 120px 0;
 }
 .sheet-cover {
   position: relative;
@@ -122,7 +126,7 @@ html:has(.sheet) body {
 }
 .sheet-meta {
   color: var(--ink-muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 .sheet-actions {
   display: flex;
@@ -166,11 +170,7 @@ html:has(.sheet) body {
   width: 80px;
   height: 80px;
 }
-/* A record without artwork keeps the text column of the rows around it. */
-.sheet-row--text {
-  grid-template-columns: minmax(0, 1fr) auto;
-  padding-left: 100px;
-}
+
 .sheet-about {
   max-width: 44ch;
   font-size: 15px;
@@ -333,13 +333,7 @@ html:has(.sheet) body {
   .sheet-row-links {
     grid-column: 2;
   }
-  .sheet-row--text {
-    grid-template-columns: minmax(0, 1fr);
-    padding-left: 80px;
-  }
-  .sheet-row--text .sheet-row-links {
-    grid-column: 1;
-  }
+
   .photo-band {
     aspect-ratio: 4 / 3;
   }
