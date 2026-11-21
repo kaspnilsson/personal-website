@@ -16,7 +16,7 @@ export const thoughtPosts: ThoughtPost[] = [
     title: "I have a machine learning engineer in my pocket",
     date: "2026-11-20",
     description:
-      "Coding agents built me an iPhone keyboard trained on eight years of my own writing, and they still work on it every three hours.",
+      "I built an iPhone keyboard trained on eight years of my own writing without writing a line of its code. Coding agents still work on it every three hours.",
     readingTime: "5 min read, plus a technical appendix",
   },
   {

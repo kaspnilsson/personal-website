@@ -1,11 +1,12 @@
 <section>
-    <p>Over four days, a team of off-the-shelf coding agents (Claude Code and OpenAI's Codex) built Keys, an iPhone keyboard trained on eight years of my own writing. I never wrote or read a line of its code. I was the PM more than anything. I set the goal and designed the test bench, and the agents did the engineering. In Apple's simulator, on my newer messages, it produces the word I meant 96% of the time, against 92% for Apple's keyboard.</p>
+    <p>Over four days, I built Keys, an iPhone keyboard trained on eight years of my own writing, without writing or reading a line of its code. Off-the-shelf coding agents (Claude Code and OpenAI's Codex) wrote the app and trained the models. My job was picking the metric, logging every tap, and designing a test bench they couldn't cheat. On newer messages it never trained on, Keys gets the word I meant 96% of the time, up from 92% on Apple's keyboard.</p>
     <p>The agents still go over my typing every three hours, and when a change passes the tests, one of them installs it on my phone with Apple's developer tools. Nobody would put a human engineer on one guy's slightly annoying typing. Agents are cheap enough that it doesn't matter. Four days of them came to about $50 of the $400 a month I already pay for Claude Max and Codex.</p>
   </section>
 
   <section>
     <h2>Why a keyboard</h2>
     <p>Typing on my phone was fine. Apple's keyboard is a very good general solution. But it doesn't really learn, so I'd see the same kinds of errors over and over. The worst was probably “fuckin” to “ducking”. I have never once in my life meant ducking.</p>
+    <p>None of it is a chatbot. Five small models run right on the phone, weighing where each tap landed against which words I usually write next.</p>
     <figure>
       <p class="exh">Figure 1 · The same message on each keyboard</p>
       <div class="duo">
@@ -19,7 +20,7 @@
 
   <section>
     <h2>Why 92 to 96 is a big deal</h2>
-    <p>Keys produced the word I meant 96.3% of the time, and Apple's keyboard 91.6%. That's 1,547 words from newer messages Keys never trained on, typed into both keyboards in Apple's simulator by the same simulated thumb, typos included. It sounds close, but Apple's keyboard gets about 8 words in 100 wrong and Keys gets about 4.</p>
+    <p>92% to 96% sounds small until you count mistakes. Across about 1,500 words from newer messages Keys never trained on, typed into both keyboards in Apple's simulator by the same simulated thumb, typos included, Apple's keyboard gets about 8 words in 100 wrong and Keys gets about 4.</p>
 
     <p>A typical text of mine is six words. At those rates, I'd expect about 2 in 5 six-word texts to need fixing with Apple's keyboard, and 1 in 5 with Keys.<sup><a href="#n1">1</a></sup></p>
     <figure>
@@ -27,7 +28,7 @@
       <svg viewBox="0 0 640 310" width="100%" role="img" aria-label="Chance a message comes out with every word right, by message length. At six words: Keys 80%, Apple 59%. At twenty words: Keys 47%, Apple 17%."><line x1="64" x2="612" y1="248.0" y2="248.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="253.0" text-anchor="end" font-size="14" fill="var(--muted)">0%</text><line x1="64" x2="612" y1="192.0" y2="192.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="197.0" text-anchor="end" font-size="14" fill="var(--muted)">25%</text><line x1="64" x2="612" y1="136.0" y2="136.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="141.0" text-anchor="end" font-size="14" fill="var(--muted)">50%</text><line x1="64" x2="612" y1="80.0" y2="80.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="85.0" text-anchor="end" font-size="14" fill="var(--muted)">75%</text><line x1="64" x2="612" y1="24.0" y2="24.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="14" fill="var(--muted)">100%</text><text x="64.0" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">1</text><text x="208.2" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">6</text><text x="323.6" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">10</text><text x="467.8" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">15</text><text x="612.0" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">20</text><text x="338" y="306" text-anchor="middle" font-size="14" fill="var(--muted)">words in the message</text><line x1="208.2" x2="208.2" y1="24" y2="248" stroke="var(--muted)" stroke-dasharray="3 4" stroke-width="1"/><circle cx="208.2" cy="115.7" r="4.5" fill="var(--muted)"/><circle cx="208.2" cy="69.3" r="4.5" fill="var(--accent)"/><text x="218.2" y="59.3" font-size="14" fill="var(--accent)">80%</text><text x="218.2" y="135.7" font-size="14" fill="var(--muted)">59%</text><text x="214.2" y="38" font-size="13" fill="var(--muted)">my typical text</text><path d="M64.0,42.8 L92.8,60.1 L121.7,75.8 L150.5,90.3 L179.4,103.5 L208.2,115.7 L237.1,126.8 L265.9,137.0 L294.7,146.3 L323.6,154.8 L352.4,162.7 L381.3,169.8 L410.1,176.4 L438.9,182.4 L467.8,187.9 L496.6,193.0 L525.5,197.6 L554.3,201.8 L583.2,205.7 L612.0,209.3" fill="none" stroke="var(--muted)" stroke-width="2.5"/><path d="M64.0,32.3 L92.8,40.3 L121.7,48.0 L150.5,55.4 L179.4,62.5 L208.2,69.3 L237.1,76.0 L265.9,82.3 L294.7,88.5 L323.6,94.4 L352.4,100.0 L381.3,105.5 L410.1,110.8 L438.9,115.9 L467.8,120.8 L496.6,125.5 L525.5,130.0 L554.3,134.4 L583.2,138.6 L612.0,142.6" fill="none" stroke="var(--accent)" stroke-width="2.5"/><text x="612" y="132.6" text-anchor="end" font-size="15" font-weight="600" fill="var(--accent)">Keys</text><text x="612" y="231.3" text-anchor="end" font-size="15" font-weight="600" fill="var(--muted)">Apple</text></svg>
       <figcaption>From the per-word rates in Table 1 in the appendix, assuming each word's error is independent. On an earlier set of messages, this estimate landed within a point of the measured result.</figcaption>
     </figure>
-    <p>Two caveats. Apple's keyboard ran fresh, without the words my own phone has learned over the years, so it might do a little better in real life. And on other people's typos from a public study, the two tie. So Keys wins on how I write, not on typos in general. My own messages even predicted my next word better than 130 times as much movie-subtitle text: in the top three guesses 27.5% of the time, against 20.6%.</p>
+    <p>Two caveats. Apple's keyboard ran fresh, without the words my own phone has learned over the years, so it might do a little better in real life. And on other people's typos from a public study, the two tie. So Keys wins on how I write, not on typos in general.</p>
 
     <p>Keys also stopped fighting me. Of 40 words I spell my own way on purpose, Apple's keyboard changed 11 and Keys changed none. That's not just a fresh-install problem. Years in, my own phone was still turning fuckin into ducking.</p>
     <p>At some point I forgot it wasn't Apple's keyboard.</p>
@@ -36,7 +37,7 @@
   <section>
     <h2>What the tap logs caught</h2>
     <p>The best call I made was giving the agents detailed logs of how I use my phone, down to where every tap landed. My everyday phone is a folding iPhone, and its outer screen is tiny. I mentioned that taps near the edges of the keyboard didn't seem to register. The logs showed that of 225 taps on the outer screen that day, not one had landed between keys. Nobody aims that well.</p>
-    <p>iOS only passes a keyboard the taps that land on something the keyboard has drawn, and a redesign that day had made the gaps transparent. Technically the agents' bug, since they shipped the redesign. They painted the gaps 1% opaque, and the fix was on my phone ten hours after I complained.</p>
+    <p>An agent redesign earlier that day had turned the gaps between keys completely transparent, and iOS silently drops any tap that lands on empty space. Painting the gaps 1% opaque gave iOS something to hit, and the fix was on my phone ten hours after I complained.</p>
     <figure>
       <p class="exh">Figure 3 · Where my fingers landed on the outer screen</p>
       <div class="panels">
@@ -1207,7 +1208,7 @@
 
   <section>
     <h2>It isn't done</h2>
-    <p>Really long typos still trip it up. And on the old iPhone, with taps sloppier than mine, Keys gets 6.6% of individual letters wrong to Apple's 4.1%. Every so often the old iPhone also wants its passcode before the agents can drive it, so I walk home and type it in. The superintelligence can rebuild my keyboard overnight and still needs me to type a passcode into a phone.</p>
+    <p>Really long typos still trip it up. And on the old iPhone, with taps sloppier than mine, Keys gets about 7% of individual letters wrong to Apple's 4%. Every so often the old iPhone also wants its passcode before the agents can drive it, so I walk home and type it in. The superintelligence can rebuild my keyboard overnight and still needs me to type a passcode into a phone.</p>
   </section>
 
   <section>
@@ -1256,14 +1257,14 @@
     </figure>
 
     <h3>B. What's actually in the keyboard</h3>
-    <p>None of this is a chatbot. Five small models run on the phone, and on every tap they answer one question: which word did I mean? A decoder weighs two things for each candidate word, how well my taps fit its letters and how likely the word is after what I've already typed. It searches a dictionary of about 120,000 English words plus my own vocabulary.</p>
+    <p>On every tap, the five models answer one question: which word did I mean? A decoder weighs two things for each candidate word, how well my taps fit its letters and how likely the word is after what I've already typed. It searches a dictionary of about 120,000 English words plus my own vocabulary.</p>
     <figure>
       <p class="exh">Table 3 · The models inside Keys</p>
       <div class="tablewrap"><table>
         <thead><tr><th>Model</th><th>What it does</th><th>Trained on</th><th class="n">Size</th></tr></thead>
         <tbody>
-          <tr><td>Touch model</td><td>Scores each tap against every nearby key instead of snapping it to the key it hit. When a tap is ambiguous, it leans toward the letter that fits the word so far.</td><td>Nothing: it uses the key positions, plus the word statistics' guess at the next letter</td><td class="n">—</td></tr>
           <tr><td>Two word-statistics models</td><td>Count which words follow which. One covers public text, the other my messages. They do most of the work.</td><td>About 6 million lines of movie subtitles; my messages</td><td class="n">39 MB + 11 MB</td></tr>
+          <tr><td>Touch model</td><td>Scores each tap against every nearby key instead of snapping it to the key it hit. When a tap is ambiguous, it leans toward the letter that fits the word so far.</td><td>Nothing: it uses the key positions, plus the word statistics' guess at the next letter</td><td class="n">—</td></tr>
           <tr><td>Small neural predictor</td><td>Fills the suggestion bar and rescores words the word statistics have never seen. An 8-layer transformer with 19 million parameters.</td><td>My messages and public text, guided by the personal model's guesses</td><td class="n">38 MB</td></tr>
           <tr><td>Personal language model</td><td>Refines the suggestion bar. It gets 60 milliseconds and is skipped if it runs out of time.</td><td>SmolLM2-135M, an open 135-million-parameter model, fine-tuned on my messages</td><td class="n">135 MB</td></tr>
           <tr><td>Swipe model</td><td>Turns a swipe path into letters.</td><td>Simulated and recorded swipe paths, over a vocabulary that includes mine</td><td class="n">1.3 MB</td></tr>
