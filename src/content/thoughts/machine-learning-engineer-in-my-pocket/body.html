@@ -1266,13 +1266,14 @@
           <tr><td>Two word-statistics models</td><td>Count which words follow which. One covers public text, the other my messages. They do most of the work.</td><td>About 6 million lines of movie subtitles; my messages</td><td class="n">39 MB + 11 MB</td></tr>
           <tr><td>Touch model</td><td>Scores each tap against every nearby key instead of snapping it to the key it hit. When a tap is ambiguous, it leans toward the letter that fits the word so far.</td><td>Nothing: it uses the key positions, plus the word statistics' guess at the next letter</td><td class="n">—</td></tr>
           <tr><td>Small neural predictor</td><td>Fills the suggestion bar and rescores words the word statistics have never seen. An 8-layer transformer with 19 million parameters.</td><td>My messages and public text, guided by the personal model's guesses</td><td class="n">38 MB</td></tr>
-          <tr><td>Personal language model</td><td>Refines the suggestion bar. It gets 60 milliseconds and is skipped if it runs out of time.</td><td>SmolLM2-135M, an open 135-million-parameter model, fine-tuned on my messages</td><td class="n">135 MB</td></tr>
+          <tr><td>Personal language model</td><td>Refines the suggestion bar. It gets 60 milliseconds and is skipped if it runs out of time.</td><td>SmolLM2-135M, an open 135-million-parameter model, fine-tuned on my messages and Instagram DMs</td><td class="n">135 MB</td></tr>
           <tr><td>Swipe model</td><td>Turns a swipe path into letters.</td><td>Simulated and recorded swipe paths, over a vocabulary that includes mine</td><td class="n">1.3 MB</td></tr>
         </tbody>
       </table></div>
       <figcaption>Sizes are the files on the phone. The personal model is compressed to 8 bits per weight.</figcaption>
     </figure>
     <p>Keys checks for new writing every night, but it only rebuilds the models once I've written about 3,000 new words, roughly two weeks of my usual texting. Rebuilding daily made no measurable difference. Retraining follows the same rules every time. The word statistics are rebuilt from scratch. The personal model starts from the public SmolLM2 checkpoint each time, never from my last fine-tune. It keeps whichever checkpoint does best on messages it never trains on. The small predictor learns by copying the personal model's guesses, which is called distillation. That keeps about 60% of the big model's gain at a size a keyboard can afford. Within a rebuild, the neural models only retrain once I've written about 2% more words, or after a week.</p>
+    <p>Since then my Instagram DMs went in too, about 150,000 more words, with recent messages counting more. Next-word guesses got slightly better and autocorrect didn't change.</p>
 
     <h3>C. How the loop works</h3>
     <p><b>Metric.</b> Two numbers should go up: how often the keyboard produces the word I meant, and how often it fixes a real typo. Two must never get worse: how often it changes one of my own words, and how often it changes a word I typed right.</p>
