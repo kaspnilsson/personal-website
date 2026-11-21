@@ -1272,7 +1272,7 @@
       </table></div>
       <figcaption>Sizes are the files on the phone. The personal model is compressed to 8 bits per weight.</figcaption>
     </figure>
-    <p>Retraining follows the same rules every time. The word statistics are rebuilt from scratch every night. The personal model starts from the public SmolLM2 checkpoint each time, never from my last fine-tune. It keeps whichever checkpoint does best on messages it never trains on. The small predictor learns by copying the personal model's guesses, which is called distillation. That keeps about 60% of the big model's gain at a size a keyboard can afford. The neural models only retrain once I've written about 2% more words, or after a week.</p>
+    <p>Keys checks for new writing every night, but it only rebuilds the models once I've written about 3,000 new words, roughly two weeks of my usual texting. Rebuilding daily made no measurable difference. Retraining follows the same rules every time. The word statistics are rebuilt from scratch. The personal model starts from the public SmolLM2 checkpoint each time, never from my last fine-tune. It keeps whichever checkpoint does best on messages it never trains on. The small predictor learns by copying the personal model's guesses, which is called distillation. That keeps about 60% of the big model's gain at a size a keyboard can afford. Within a rebuild, the neural models only retrain once I've written about 2% more words, or after a week.</p>
 
     <h3>C. How the loop works</h3>
     <p><b>Metric.</b> Two numbers should go up: how often the keyboard produces the word I meant, and how often it fixes a real typo. Two must never get worse: how often it changes one of my own words, and how often it changes a word I typed right.</p>
@@ -1307,7 +1307,7 @@
       <g stroke="var(--neg)" stroke-width="1.6" fill="none" stroke-dasharray="5 4" marker-end="url(#ahr)"><path d="M170,246 C185,262 200,272 214,276"/></g>
       <text x="150" y="300" font-size="17" fill="var(--neg)" text-anchor="end">fails: rejected</text>
     </svg>
-      <figcaption>A typical turn takes hours. The language models also retrain every night on new text, and a new version only ships if it beats the old one.</figcaption>
+      <figcaption>A typical turn takes hours. The language models also retrain about every two weeks on new text, and a new version only ships if it beats the old one.</figcaption>
     </figure>
 
     <h3>D. What didn't work</h3>
