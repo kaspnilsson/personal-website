@@ -1,6 +1,6 @@
 <section>
     <p>Over four days, I built Keys, an iPhone keyboard trained on eight years of my own writing, without writing or reading a line of its code. Off-the-shelf coding agents (Claude Code and OpenAI's Codex) wrote the app and trained the models. My job was picking the metric, logging every tap, and designing a test bench they couldn't cheat. On newer messages it never trained on, Keys gets the word I meant 96% of the time, up from 92% on Apple's keyboard.</p>
-    <p>The agents still go over my typing every three hours, and when a change passes the tests, one of them installs it on my phone with Apple's developer tools. Nobody would put a human engineer on one guy's slightly annoying typing. Agents are cheap enough that it doesn't matter. Four days of them came to about $50 of the $400 a month I already pay for Claude Max and Codex.</p>
+    <p>The agents still go over my typing regularly, and when a change passes the tests, one of them installs it on my phone with Apple's developer tools. Nobody would put a human engineer on one guy's slightly annoying typing. Agents are cheap enough that it doesn't matter. Four days of them came to about $50 of the $400 a month I already pay for Claude Max and Codex.</p>
   </section>
 
   <section>
@@ -1196,7 +1196,7 @@
       <li><b>A metric.</b> How often it produces the word I meant.</li>
       <li><b>A data stream.</b> My messages, which I already had, and then every tap, once the keyboard started logging them.</li>
       <li><b>A test bench.</b> Worker agents tune on older messages. At milestones, one lead agent scores the result on newer messages the workers never see.</li>
-      <li><b>A loop with guardrails.</b> Every few hours the agents propose fixes to the language model, the touch targets or the autocorrect rules, and score them. A new version can never change more of my own words than the old one did, or more words I typed right.</li>
+      <li><b>A loop with guardrails.</b> The agents keep proposing fixes to the language model, the touch targets or the autocorrect rules, and score them. A new version can never change more of my own words than the old one did, or more words I typed right.</li>
     </ol>
     <p>Late in the week an upgrade fixed more typos but split "soi", as in khao soi, into "so I". It went back.</p>
   </section>
