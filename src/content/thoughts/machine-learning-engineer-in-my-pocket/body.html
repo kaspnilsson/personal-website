@@ -1,12 +1,12 @@
 <section>
-    <p>Over four days, I built Keys, an iPhone keyboard trained on eight years of my own writing, without writing or reading a line of its code. Off-the-shelf coding agents (Claude Code and OpenAI's Codex) wrote the app and trained the models. My job was picking the metric, logging every tap, and designing a test bench they couldn't cheat. On newer messages it never trained on, Keys gets the word I meant 96% of the time, up from 92% on Apple's keyboard.</p>
-    <p>The agents still go over my typing regularly, and when a change passes the tests, one of them installs it on my phone with Apple's developer tools. Nobody would put a human engineer on one guy's slightly annoying typing. Agents are cheap enough that it doesn't matter. Four days of them came to about $50 of the $400 a month I already pay for Claude Max and Codex.</p>
+    <p>For years my iPhone has turned “fuckin” into “ducking”. I have never once meant ducking. Apple's keyboard is good, but it doesn't really learn how I type, so the same mistakes just kept coming back.</p>
+    <p>So I had coding agents build me a new one. Keys is an iPhone keyboard trained on eight years of my own writing. Claude Code and OpenAI's Codex wrote the app and trained the models, and I never wrote or read a line of the code. It took four days. My part was deciding what “better” meant, logging every tap I made, and building a test the agents couldn't game.</p>
+    <p>It works. On recent messages it never saw in training, Keys gets the word I meant 96% of the time. Apple's keyboard gets 92%.</p>
   </section>
 
   <section>
-    <h2>Why a keyboard</h2>
-    <p>Typing on my phone was fine. Apple's keyboard is a very good general solution. But it doesn't really learn, so I'd see the same kinds of errors over and over. The worst was probably “fuckin” to “ducking”. I have never once in my life meant ducking.</p>
-    <p>None of it is a chatbot. Five small models run right on the phone, weighing where each tap landed against which words I usually write next.</p>
+    <h2>What's actually in it</h2>
+    <p>It's not a chatbot. Five small models run right on the phone, and on every tap they're basically weighing two things: where my thumb landed, and which word I usually type next.</p>
     <figure>
       <p class="exh">Figure 1 · The same message on each keyboard</p>
       <div class="duo">
@@ -19,25 +19,23 @@
   </section>
 
   <section>
-    <h2>Why 92 to 96 is a big deal</h2>
-    <p>92% to 96% sounds small until you count mistakes. Across about 1,500 words from newer messages Keys never trained on, typed into both keyboards in Apple's simulator by the same simulated thumb, typos included, Apple's keyboard gets about 8 words in 100 wrong and Keys gets about 4.</p>
-
-    <p>A typical text of mine is six words. At those rates, I'd expect about 2 in 5 six-word texts to need fixing with Apple's keyboard, and 1 in 5 with Keys.<sup><a href="#n1">1</a></sup></p>
+    <h2>Is 4 points a lot?</h2>
+    <p>I didn't think so at first. But flip it around: on my typing, Apple's keyboard gets about 8 words in 100 wrong and Keys gets about 4. That's half the mistakes. To test it I typed about 1,500 words from newer messages into both keyboards in Apple's simulator, with the same simulated thumb making the same typos.</p>
+    <p>Most of my texts are around six words. At those rates about 2 in 5 of them need fixing with Apple's keyboard, and more like 1 in 5 with Keys.<sup><a href="#n1">1</a></sup></p>
     <figure>
       <p class="exh">Figure 2 · Estimated chance a message comes out with every word right</p>
       <svg viewBox="0 0 640 310" width="100%" role="img" aria-label="Chance a message comes out with every word right, by message length. At six words: Keys 80%, Apple 59%. At twenty words: Keys 47%, Apple 17%."><line x1="64" x2="612" y1="248.0" y2="248.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="253.0" text-anchor="end" font-size="14" fill="var(--muted)">0%</text><line x1="64" x2="612" y1="192.0" y2="192.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="197.0" text-anchor="end" font-size="14" fill="var(--muted)">25%</text><line x1="64" x2="612" y1="136.0" y2="136.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="141.0" text-anchor="end" font-size="14" fill="var(--muted)">50%</text><line x1="64" x2="612" y1="80.0" y2="80.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="85.0" text-anchor="end" font-size="14" fill="var(--muted)">75%</text><line x1="64" x2="612" y1="24.0" y2="24.0" stroke="var(--rule)" stroke-width="1"/><text x="54" y="29.0" text-anchor="end" font-size="14" fill="var(--muted)">100%</text><text x="64.0" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">1</text><text x="208.2" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">6</text><text x="323.6" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">10</text><text x="467.8" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">15</text><text x="612.0" y="270" text-anchor="middle" font-size="14" fill="var(--muted)">20</text><text x="338" y="306" text-anchor="middle" font-size="14" fill="var(--muted)">words in the message</text><line x1="208.2" x2="208.2" y1="24" y2="248" stroke="var(--muted)" stroke-dasharray="3 4" stroke-width="1"/><circle cx="208.2" cy="115.7" r="4.5" fill="var(--muted)"/><circle cx="208.2" cy="69.3" r="4.5" fill="var(--accent)"/><text x="218.2" y="59.3" font-size="14" fill="var(--accent)">80%</text><text x="218.2" y="135.7" font-size="14" fill="var(--muted)">59%</text><text x="214.2" y="38" font-size="13" fill="var(--muted)">my typical text</text><path d="M64.0,42.8 L92.8,60.1 L121.7,75.8 L150.5,90.3 L179.4,103.5 L208.2,115.7 L237.1,126.8 L265.9,137.0 L294.7,146.3 L323.6,154.8 L352.4,162.7 L381.3,169.8 L410.1,176.4 L438.9,182.4 L467.8,187.9 L496.6,193.0 L525.5,197.6 L554.3,201.8 L583.2,205.7 L612.0,209.3" fill="none" stroke="var(--muted)" stroke-width="2.5"/><path d="M64.0,32.3 L92.8,40.3 L121.7,48.0 L150.5,55.4 L179.4,62.5 L208.2,69.3 L237.1,76.0 L265.9,82.3 L294.7,88.5 L323.6,94.4 L352.4,100.0 L381.3,105.5 L410.1,110.8 L438.9,115.9 L467.8,120.8 L496.6,125.5 L525.5,130.0 L554.3,134.4 L583.2,138.6 L612.0,142.6" fill="none" stroke="var(--accent)" stroke-width="2.5"/><text x="612" y="132.6" text-anchor="end" font-size="15" font-weight="600" fill="var(--accent)">Keys</text><text x="612" y="231.3" text-anchor="end" font-size="15" font-weight="600" fill="var(--muted)">Apple</text></svg>
       <figcaption>From the per-word rates in Table 1 in the appendix, assuming each word's error is independent. On an earlier set of messages, this estimate landed within a point of the measured result.</figcaption>
     </figure>
-    <p>Two caveats. Apple's keyboard ran fresh, without the words my own phone has learned over the years, so it might do a little better in real life. And on other people's typos from a public study, the two tie. So Keys wins on how I write, not on typos in general.</p>
-
-    <p>Keys also stopped fighting me. Of 40 words I spell my own way on purpose, Apple's keyboard changed 11 and Keys changed none. That's not just a fresh-install problem. Years in, my own phone was still turning fuckin into ducking.</p>
-    <p>At some point I forgot it wasn't Apple's keyboard.</p>
+    <p>To be fair to Apple, it ran fresh, without everything my real phone has learned about me over the years, so it would probably do a bit better day to day. And on other people's typos, from a public study, the two are tied. Keys is better at my typing, not at typing in general. That was kind of the whole idea.</p>
+    <p>What I notice most is that it stopped fighting me. There are 40 words I spell my own way on purpose. Apple's keyboard changed 11 of them and Keys changed none. That's not just a fresh-install thing either. My actual phone was still turning fuckin into ducking after years.</p>
+    <p>After a while I forgot I wasn't using Apple's keyboard.</p>
   </section>
 
   <section>
-    <h2>What the tap logs caught</h2>
-    <p>The best call I made was giving the agents detailed logs of how I use my phone, down to where every tap landed. My everyday phone is a folding iPhone, and its outer screen is tiny. I mentioned that taps near the edges of the keyboard didn't seem to register. The logs showed that of 225 taps on the outer screen that day, not one had landed between keys. Nobody aims that well.</p>
-    <p>An agent redesign earlier that day had turned the gaps between keys completely transparent, and iOS silently drops any tap that lands on empty space. Painting the gaps 1% opaque gave iOS something to hit, and the fix was on my phone ten hours after I complained.</p>
+    <h2>Log everything</h2>
+    <p>The most useful thing I did was have the keyboard log how I use it, down to where every tap landed. My main phone is a folding iPhone and the outer screen is tiny. I told the agents that taps near the edges of the keyboard didn't seem to register. They checked the logs, and of 225 taps on the outer screen that day, zero had landed between keys. Nobody is that accurate.</p>
+    <p>It turned out an agent had redesigned the keyboard earlier that day and made the gaps between keys fully transparent, and iOS silently drops taps on transparent space. Making the gaps 1% opaque fixed it. The fix was on my phone about ten hours after I complained.</p>
     <figure>
       <p class="exh">Figure 3 · Where my fingers landed on the outer screen</p>
       <div class="panels">
@@ -1191,35 +1189,32 @@
   </section>
 
   <section>
-    <h2>The recipe</h2>
+    <h2>How the loop works</h2>
+    <p>The setup is pretty simple:</p>
     <ol>
-      <li><b>A metric.</b> How often it produces the word I meant.</li>
-      <li><b>A data stream.</b> My messages, which I already had, and then every tap, once the keyboard started logging them.</li>
-      <li><b>A test bench.</b> Worker agents tune on older messages. At milestones, one lead agent scores the result on newer messages the workers never see.</li>
-      <li><b>A loop with guardrails.</b> The agents keep proposing fixes to the language model, the touch targets or the autocorrect rules, and score them. A new version can never change more of my own words than the old one did, or more words I typed right.</li>
+      <li><b>One number to push.</b> How often the keyboard produces the word I meant.</li>
+      <li><b>Data.</b> My old messages to start with, then every tap once the keyboard was logging them.</li>
+      <li><b>A test the agents can't peek at.</b> Worker agents tune on older messages. A lead agent checks finished work on newer messages the workers never see.</li>
+      <li><b>Guardrails.</b> The agents keep trying changes to the language model, the touch targets and the autocorrect rules. A change gets thrown out if it alters more of my own words, or more words I typed correctly, than the old version did.</li>
     </ol>
-    <p>Late in the week an upgrade fixed more typos but split "soi", as in khao soi, into "so I". It went back.</p>
+    <p>The guardrails matter. Late in the week one upgrade fixed more typos but started splitting “soi”, as in khao soi, into “so I”. It got rolled back.</p>
   </section>
 
   <section>
-    <h2>What it took</h2>
-    <p>A few hours of my attention in total, maybe less, and the $50. At API prices, the Claude part would have cost about $800, mostly from the lead agent rereading its own long notes.<sup><a href="#n2">2</a></sup> Then there's Apple's $99 developer account, which is Apple charging me for permission to stop using its keyboard.</p>
+    <h2>What it cost</h2>
+    <p>A few hours of my attention, probably less. The agents came to about $50 of the $400 a month I already pay for Claude Max and Codex. At API prices the Claude part would have been around $800, mostly from the lead agent rereading its own long notes.<sup><a href="#n2">2</a></sup> Plus Apple's $99 developer account, so I could stop using Apple's keyboard.</p>
+    <p>No one would put a human engineer on one guy's slightly annoying typing. Agents are cheap enough that it doesn't matter, and they still go through my typing regularly. When a change passes the tests, one of them installs it on my phone.</p>
   </section>
 
   <section>
-    <h2>It isn't done</h2>
-    <p>Really long typos still trip it up. And on the old iPhone, with taps sloppier than mine, Keys gets about 7% of individual letters wrong to Apple's 4%. Every so often the old iPhone also wants its passcode before the agents can drive it, so I walk home and type it in. The superintelligence can rebuild my keyboard overnight and still needs me to type a passcode into a phone.</p>
+    <h2>It's not done</h2>
+    <p>Really long typos still trip it up. On the old iPhone I use as a test rig, with taps sloppier than mine, Keys gets about 7% of letters wrong to Apple's 4%. And every so often that phone wants its passcode before the agents can drive it, so I have to go home and type it in.</p>
+    <p>It also finds new ways to be wrong. This week I noticed it suggesting “uou” every time I typed “you”. The keyboard had been learning every word I sent, typos included, so one slip stuck around for good. The agents traced it in the logs and had a fix on my phone the same day.</p>
   </section>
 
   <section>
-    <h2>Your turn</h2>
-    <p>Pick something you fix by hand every week, like the categories your budgeting app keeps getting wrong, or the email you open and wish you hadn't. If it leaves a record you can export and runs on a system you can change, you can put a loop on it. For budgeting, a baseline takes an afternoon:</p>
-    <ol>
-      <li>Export a year of transactions from your bank, with its guessed categories, and from your budgeting app, with the ones you kept.</li>
-      <li>Hold back the newest month.</li>
-      <li>Have one coding agent match them up and count how often the bank guessed wrong, before it changes anything.</li>
-    </ol>
-    <p>That count is the number to beat. Then let it try merchant rules your app can import, and keep a version only if that count drops with no mistakes on big charges. The appendix has a brief you can paste.</p>
+    <h2>Try it on something</h2>
+    <p>If something bugs you every week, leaves a record you can export, and runs on a system you're allowed to change, you can probably put a loop like this on it. Budgeting apps are an easy one, since they always get categories wrong. Export a year of transactions, hold back the newest month, and have an agent count how often the bank's categories were wrong before it changes anything. That's your number to beat. There's a brief you can paste in the appendix.</p>
   </section>
 
   <section class="appendix">
